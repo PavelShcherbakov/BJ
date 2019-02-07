@@ -10,6 +10,6 @@ namespace BJ.Entities
         public virtual Game Game { get; set; }
         public Guid CardId { get; set; }
         [ForeignKey("CardId")]
-        public virtual Game Card { get; set; }
+        public virtual Card Card { get; set; }
     }
 }

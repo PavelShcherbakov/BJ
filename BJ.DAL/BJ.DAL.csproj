@@ -5,6 +5,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190204111344_Init.cs" />
+    <Compile Remove="Migrations\20190204112018_Init2.cs" />
+    <Compile Remove="Migrations\20190204115538_Init3.cs" />
+    <Compile Remove="Migrations\20190204115724_Init4.cs" />
+    <Compile Remove="Migrations\20190206153427_AddModel.cs" />
+    <Compile Remove="Migrations\20190206154846_AddModel2.cs" />
+    <Compile Remove="Migrations\20190207073846_ModelRestructuring.cs" />
+    <Compile Remove="Migrations\20190207075404_DbSetsDeleted.cs" />
+    <Compile Remove="Migrations\20190207082054_CreateDBSets.cs" />
+    <Compile Remove="Migrations\20190207090142_UpdateModel.cs" />
+    <Compile Remove="Migrations\20190207090423_init.cs" />
+    <Compile Remove="Migrations\20190207091009_init.cs" />
+    <Compile Remove="Migrations\20190207093701_AddIdUserAndIdBotToSteps.cs" />
+    <Compile Remove="Migrations\20190207094228_AddVirtual.cs" />
+    <Compile Remove="Migrations\20190207094618_AddBotIdToBotsStep.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
@@ -18,6 +36,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BJ.Entities\BJ.Entities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Hosting">
+      <HintPath>..\..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.hosting\2.1.1\lib\netstandard2.0\Microsoft.AspNetCore.Hosting.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

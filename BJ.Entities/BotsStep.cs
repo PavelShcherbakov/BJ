@@ -9,7 +9,7 @@ namespace BJ.Entities
         public Guid GameId { get; set; }
         [ForeignKey("GameId")]
         public virtual Game Game { get; set; }
-        public Bot Bot { get; set; }
+        public virtual Bot Bot { get; set; }
 
     }
 }
