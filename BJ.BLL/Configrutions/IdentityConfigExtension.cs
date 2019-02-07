@@ -18,7 +18,7 @@ namespace BJ.BLL.Configrutions
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredUniqueChars = 0;
             })
-            .AddEntityFrameworkStores<DbContext>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
         }
     }

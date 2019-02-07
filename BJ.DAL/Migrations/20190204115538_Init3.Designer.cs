@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BJ.DAL.Migrations
 {
-    [DbContext(typeof(DbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20190204115538_Init3")]
     partial class Init3
     {

@@ -12,7 +12,7 @@ namespace BJ.BLL.Configrutions
     {
         public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<DAL.DbContext>();
+            services.AddDbContext<ApplicationDbContext>();
         }
     }
 }

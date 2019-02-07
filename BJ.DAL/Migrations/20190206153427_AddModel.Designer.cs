@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BJ.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190204115724_Init4")]
-    partial class Init4
+    [Migration("20190206153427_AddModel")]
+    partial class AddModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,75 @@ namespace BJ.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BJ.DAL.Entities.Role", b =>
+            modelBuilder.Entity("BJ.Entities.Bot", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("GameId1");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId1");
+
+                    b.ToTable("Bot");
+                });
+
+            modelBuilder.Entity("BJ.Entities.BotsStep", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("BotId");
+
+                    b.Property<int>("GameId");
+
+                    b.Property<int>("StepNumder");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BotId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("BotsStep");
+                });
+
+            modelBuilder.Entity("BJ.Entities.Card", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("GameId1");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId1");
+
+                    b.ToTable("Card");
+                });
+
+            modelBuilder.Entity("BJ.Entities.Game", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Games");
+                });
+
+            modelBuilder.Entity("BJ.Entities.Role", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -45,7 +113,7 @@ namespace BJ.DAL.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("BJ.DAL.Entities.User", b =>
+            modelBuilder.Entity("BJ.Entities.User", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -94,6 +162,27 @@ namespace BJ.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("BJ.Entities.UsersStep", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("GameId");
+
+                    b.Property<int>("StepNumder");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UsersStep");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -182,9 +271,54 @@ namespace BJ.DAL.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("BJ.Entities.Bot", b =>
+                {
+                    b.HasOne("BJ.Entities.Game")
+                        .WithMany("Bots")
+                        .HasForeignKey("GameId1");
+                });
+
+            modelBuilder.Entity("BJ.Entities.BotsStep", b =>
+                {
+                    b.HasOne("BJ.Entities.Bot", "Bot")
+                        .WithMany()
+                        .HasForeignKey("BotId");
+
+                    b.HasOne("BJ.Entities.Game", "Game")
+                        .WithMany("BotsSteps")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BJ.Entities.Card", b =>
+                {
+                    b.HasOne("BJ.Entities.Game")
+                        .WithMany("Cards")
+                        .HasForeignKey("GameId1");
+                });
+
+            modelBuilder.Entity("BJ.Entities.Game", b =>
+                {
+                    b.HasOne("BJ.Entities.User", "User")
+                        .WithMany("Games")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("BJ.Entities.UsersStep", b =>
+                {
+                    b.HasOne("BJ.Entities.Game", "Game")
+                        .WithMany("UsersSteps")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BJ.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("BJ.DAL.Entities.Role")
+                    b.HasOne("BJ.Entities.Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -192,7 +326,7 @@ namespace BJ.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("BJ.DAL.Entities.User")
+                    b.HasOne("BJ.Entities.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -200,7 +334,7 @@ namespace BJ.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("BJ.DAL.Entities.User")
+                    b.HasOne("BJ.Entities.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -208,12 +342,12 @@ namespace BJ.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("BJ.DAL.Entities.Role")
+                    b.HasOne("BJ.Entities.Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("BJ.DAL.Entities.User")
+                    b.HasOne("BJ.Entities.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -221,7 +355,7 @@ namespace BJ.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("BJ.DAL.Entities.User")
+                    b.HasOne("BJ.Entities.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

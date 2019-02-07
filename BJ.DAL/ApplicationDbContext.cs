@@ -7,9 +7,17 @@ using System.IO;
 
 namespace BJ.DAL
 {
-    public class DbContext : IdentityDbContext<User, Role, string>
+    public class ApplicationDbContext : IdentityDbContext<User, Role, string>
     {
-        public DbContext() { }
+        public ApplicationDbContext() { }
+
+        public DbSet<Game> Games { get; set; }
+        public DbSet<Bot> Bots { get; set; }
+        public DbSet<BotsStep> BotsSteps { get; set; }
+        public DbSet<UsersStep> UsersSteps { get; set; }
+        public DbSet<Deck> Decks { get; set; }
+        public DbSet<Card> Cards { get; set; }
+  
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
