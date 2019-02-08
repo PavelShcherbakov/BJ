@@ -7,18 +7,19 @@ using System.Linq;
 
 namespace BJ.DAL.Repositories.EF
 {
-    public class EFBotRepository : IBotRepository
+    class BaseRepository:IRepository<BaseEntity>
     {
         private ApplicationDbContext _db;
 
-        public EFBotRepository(ApplicationDbContext context)
+        public BaseRepository(ApplicationDbContext context)
         {
-            this._db = context;
+            _db = context;
         }
 
-        public void Create(Bot item)
+        public void Create(BaseEntity entity)
         {
-            _db.Bots.Add(item);
+            //_db.Bots.Add(item);
+            _db.Entry(entity).State = EntityState.Added;
         }
 
         public Bot Get(int id)

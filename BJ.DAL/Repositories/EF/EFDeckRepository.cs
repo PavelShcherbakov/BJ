@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace BJ.DAL.Repositories.EF
 {
-    public class EFDeckRepository : IRepository<Deck>
+    public class EFDeckRepository : IDeckRepository
     {
         private ApplicationDbContext _db;
 

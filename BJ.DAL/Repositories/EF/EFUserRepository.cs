@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace BJ.DAL.Repositories.EF
 {
-    public class EFUserRepository : IRepository<User>
+    public class EFUserRepository : IUserRepository
     {
         private ApplicationDbContext _db;
 

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace BJ.DAL.Repositories.EF
 {
-    public class EFBotsStepRepository : IRepository<BotsStep>
+    public class EFBotsStepRepository : IBotsStepRepository
     {
         private ApplicationDbContext _db;
 

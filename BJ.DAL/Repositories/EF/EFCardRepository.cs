@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace BJ.DAL.Repositories.EF
 {
-    public class EFCardRepository : IRepository<Card>
+    public class EFCardRepository : ICardRepository
     {
         private ApplicationDbContext _db;
 

@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using BJ.ViewModels.AccountViews;
 using BJ.BLL.Services;
+using System.Net;
+using Microsoft.AspNetCore.Authorization;
+using System.Linq;
+using System.Security.Claims;
 
 namespace BJ.WEB.Controllers
 {
@@ -25,7 +29,28 @@ namespace BJ.WEB.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterAccountView model)
         {
+
             return await Execute(() => _accountService.Register(model));
-        }  
+        }
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> GetUser()
+        {
+
+            var qq = UserId;
+
+            //Claim identityClaim = identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            //return await Execute(async () =>
+            //{
+            //     return await Funk(user);
+            //});
+
+            return null;
+        }
+
+        public async Task<object> Funk(object model)
+        { 
+            return model;
+        }
     }
 }

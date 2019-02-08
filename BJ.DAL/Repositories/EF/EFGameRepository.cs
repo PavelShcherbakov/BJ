@@ -8,7 +8,7 @@ using System.Text;
 
 namespace BJ.DAL.Repositories.EF
 {
-    public class EFGameRepository : IRepository<Game>
+    public class EFGameRepository : IGameRepository
     {
         private ApplicationDbContext _db;
 

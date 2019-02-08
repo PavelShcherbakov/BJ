@@ -7,5 +7,11 @@ namespace BJ.Entities
         public string UserId { get; set; }
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
+        //public Game(User user)
+        //{
+        //    User = user;
+        //    UserId = user.Id;
+
+        //}
     }
 }

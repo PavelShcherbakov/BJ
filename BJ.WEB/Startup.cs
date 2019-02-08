@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BJ.WEB
@@ -25,11 +25,15 @@ namespace BJ.WEB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
-            
+
+            // Настройка параметров и DI
+            services.AddOptions();
+            // создание объекта Person по ключам из конфигурации
+            services.Configure<DBOptions>(Configuration.GetSection("DBOptions"));
+
             services.ConfigureDbContext(Configuration);
             services.ConfigureIdentity();
-            services.Inject();
+            services.Inject("EF");
 
             //services.Configure<CookiePolicyOptions>(options =>
             //{

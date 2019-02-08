@@ -2,13 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using BJ.WEB.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
+using BJ.BLL.Configrutions;
 
 namespace BJ.WEB.Controllers
 {
     public class HomeController : Controller
     {
 
-        public IActionResult Index()
+        public IActionResult Index([FromServices]IOptions<DBOptions> settings)
         {
             return View();
         }
