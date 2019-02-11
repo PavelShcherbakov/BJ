@@ -19,20 +19,19 @@ namespace BJ.BLL.Configrutions
             services.AddTransient<AccountService>();
 
             //if (configuration.GetValue<string>("ORM") == "EF") if (configuration.GetValue<string>("ORM") == "EF")
-            //if (dbOptions.Value.ORM == "EF")
-            //{
+            if (dbType == "EF")
+            {
                 services.AddTransient<IBotRepository, EFBotRepository>();
                 services.AddTransient<IBotsStepRepository, EFBotsStepRepository>();
-                services.AddTransient<ICardRepository, EFCardRepository>();
                 services.AddTransient<IDeckRepository, EFDeckRepository>();
                 services.AddTransient<IGameRepository, EFGameRepository>();
                 services.AddTransient<IUserRepository, EFUserRepository>();
                 services.AddTransient<IUsersStepRepository, EFUsersStepRepository>();
-            //}
-            //else
-            //{
-            //    throw new CustomServiceException("ORM not defined");
-            //}
+            }
+            else
+            {
+                throw new CustomServiceException("ORM not defined");
+            }
 
         }
     }

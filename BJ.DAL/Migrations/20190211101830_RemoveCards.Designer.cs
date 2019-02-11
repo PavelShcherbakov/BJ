@@ -4,14 +4,16 @@ using BJ.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BJ.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190211101830_RemoveCards")]
+    partial class RemoveCards
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,6 +45,8 @@ namespace BJ.DAL.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<Guid>("BotId");
+
+                    b.Property<Guid>("CardId");
 
                     b.Property<DateTime>("CreationDate");
 
@@ -176,6 +180,8 @@ namespace BJ.DAL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("CardId");
 
                     b.Property<DateTime>("CreationDate");
 

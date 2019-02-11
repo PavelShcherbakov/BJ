@@ -4,14 +4,16 @@ using BJ.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BJ.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190211091823_AddGameIdAndCardIdToSteps")]
+    partial class AddGameIdAndCardIdToSteps
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,15 +46,13 @@ namespace BJ.DAL.Migrations
 
                     b.Property<Guid>("BotId");
 
+                    b.Property<Guid>("CardId");
+
                     b.Property<DateTime>("CreationDate");
 
                     b.Property<Guid>("GameId");
 
-                    b.Property<int>("Rank");
-
                     b.Property<int>("StepNumder");
-
-                    b.Property<int>("Suit");
 
                     b.HasKey("Id");
 
@@ -61,20 +61,36 @@ namespace BJ.DAL.Migrations
                     b.ToTable("BotsSteps");
                 });
 
-            modelBuilder.Entity("BJ.Entities.Deck", b =>
+            modelBuilder.Entity("BJ.Entities.Card", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreationDate");
 
-                    b.Property<Guid>("GameId");
-
                     b.Property<int>("Rank");
 
                     b.Property<int>("Suit");
 
                     b.HasKey("Id");
+
+                    b.ToTable("Cards");
+                });
+
+            modelBuilder.Entity("BJ.Entities.Deck", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("CardId");
+
+                    b.Property<DateTime>("CreationDate");
+
+                    b.Property<Guid>("GameId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CardId");
 
                     b.HasIndex("GameId");
 
@@ -177,15 +193,13 @@ namespace BJ.DAL.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid>("CardId");
+
                     b.Property<DateTime>("CreationDate");
 
                     b.Property<Guid>("GameId");
 
-                    b.Property<int>("Rank");
-
                     b.Property<int>("StepNumder");
-
-                    b.Property<int>("Suit");
 
                     b.Property<string>("UserId");
 
@@ -300,6 +314,11 @@ namespace BJ.DAL.Migrations
 
             modelBuilder.Entity("BJ.Entities.Deck", b =>
                 {
+                    b.HasOne("BJ.Entities.Card", "Card")
+                        .WithMany()
+                        .HasForeignKey("CardId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("BJ.Entities.Game", "Game")
                         .WithMany()
                         .HasForeignKey("GameId")

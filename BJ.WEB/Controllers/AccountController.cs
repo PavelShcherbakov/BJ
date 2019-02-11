@@ -47,10 +47,5 @@ namespace BJ.WEB.Controllers
 
             return null;
         }
-
-        public async Task<object> Funk(object model)
-        { 
-            return model;
-        }
     }
 }

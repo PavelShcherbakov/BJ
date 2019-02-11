@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BJ.DAL.Interfaces
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<T,TId> where T : class
     {
-        IEnumerable<T> GetAll();
-        T Get(int id);
-        IEnumerable<T> Find(Func<T, Boolean> predicate);
-        void Create(T item);
-        void Update(T item);
-        void Delete(int id);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetByIdAsync(TId id);
+        Task<IEnumerable<T>> FindAsync(Func<T, Boolean> predicate);
+        Task CreateAsync(T item);
+        Task UpdateAsync(T item);
+        Task RemoveAsync(T item);
     }
 }

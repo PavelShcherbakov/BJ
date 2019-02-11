@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using BJ.BLL.Configrutions;
+using BJ.BLL.Exceptions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,7 +34,10 @@ namespace BJ.WEB
 
             services.ConfigureDbContext(Configuration);
             services.ConfigureIdentity();
-            services.Inject("EF");
+
+            if (Configuration["ORM"] == "EF") services.Inject("EF");
+            else throw new CustomServiceException("ORM not defined");
+
 
             //services.Configure<CookiePolicyOptions>(options =>
             //{
