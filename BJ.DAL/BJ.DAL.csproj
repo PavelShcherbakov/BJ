@@ -20,6 +20,7 @@
     <Compile Remove="Migrations\20190207093701_AddIdUserAndIdBotToSteps.cs" />
     <Compile Remove="Migrations\20190207094228_AddVirtual.cs" />
     <Compile Remove="Migrations\20190207094618_AddBotIdToBotsStep.cs" />
+    <Compile Remove="Migrations\20190211115438_RemoveCards3.cs" />
   </ItemGroup>
 
   <ItemGroup>

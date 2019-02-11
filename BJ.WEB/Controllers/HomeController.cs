@@ -10,7 +10,7 @@ namespace BJ.WEB.Controllers
     public class HomeController : Controller
     {
 
-        public IActionResult Index([FromServices]IOptions<DBOptions> settings)
+        public IActionResult Index()
         {
             return View();
         }

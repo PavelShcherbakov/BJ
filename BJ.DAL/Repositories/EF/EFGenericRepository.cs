@@ -10,7 +10,7 @@ namespace BJ.DAL.Repositories.EF
     public class EFGenericRepository<TEntity, TId> : IRepository<TEntity, TId> where TEntity : class
     {
         private ApplicationDbContext _context;
-        private DbSet<TEntity> _dbSet;
+        protected DbSet<TEntity> _dbSet;
 
         public EFGenericRepository(ApplicationDbContext context)
         {
@@ -21,6 +21,12 @@ namespace BJ.DAL.Repositories.EF
         public async Task CreateAsync(TEntity item)
         {
             await _dbSet.AddAsync(item);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddRangeAsync(IEnumerable<TEntity> collection)
+        {
+            await _dbSet.AddRangeAsync(collection);
             await _context.SaveChangesAsync();
         }
 

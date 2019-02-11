@@ -27,15 +27,15 @@ namespace BJ.WEB
         public void ConfigureServices(IServiceCollection services)
         {
 
-            // Настройка параметров и DI
-            services.AddOptions();
-            // создание объекта Person по ключам из конфигурации
-            services.Configure<DBOptions>(Configuration.GetSection("DBOptions"));
+            //// Настройка параметров и DI
+            //services.AddOptions();
+            //// создание объекта Person по ключам из конфигурации
+            //services.Configure<DBOptions>(Configuration.GetSection("DBOptions"));
 
             services.ConfigureDbContext(Configuration);
             services.ConfigureIdentity();
-
-            if (Configuration["ORM"] == "EF") services.Inject("EF");
+            var ORM = Configuration.GetSection("DBOptions:ORM").Value;
+            if (ORM == "EF") services.Inject("EF");
             else throw new CustomServiceException("ORM not defined");
 
 

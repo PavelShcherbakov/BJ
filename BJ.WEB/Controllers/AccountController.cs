@@ -32,6 +32,7 @@ namespace BJ.WEB.Controllers
 
             return await Execute(() => _accountService.Register(model));
         }
+
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> GetUser()
