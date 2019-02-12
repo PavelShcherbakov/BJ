@@ -4,7 +4,6 @@ using BJ.BLL.Services;
 using BJ.DAL.Interfaces;
 using BJ.DAL.Repositories.EF;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace BJ.BLL.Configrutions
 {
@@ -18,7 +17,7 @@ namespace BJ.BLL.Configrutions
             services.AddTransient<JwtTokenHelper>();
             services.AddTransient<AccountService>();
             services.AddTransient<GameService>();
-            services.AddTransient<CardHelper>();
+            services.AddTransient<CardService>();
             
 
             //if (configuration.GetValue<string>("ORM") == "EF") if (configuration.GetValue<string>("ORM") == "EF")

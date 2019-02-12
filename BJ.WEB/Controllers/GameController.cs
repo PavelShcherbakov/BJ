@@ -23,5 +23,17 @@ namespace BJ.WEB.Controllers
         {
             return await Execute(() => _gameService.StartGame(UserId, model));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetCard([FromBody]GetCardView model)
+        {
+            return await Execute(() => _gameService.GetCard(UserId, model));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EndGame([FromBody]EndGameView model)
+        {
+            return await Execute(() => _gameService.EndGame(UserId, model));
+        }
     }
 }

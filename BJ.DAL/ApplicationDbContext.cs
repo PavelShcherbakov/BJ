@@ -15,7 +15,7 @@ namespace BJ.DAL
         public DbSet<Bot> Bots { get; set; }
         public DbSet<BotsStep> BotsSteps { get; set; }
         public DbSet<UsersStep> UsersSteps { get; set; }
-        public DbSet<Deck> Decks { get; set; }
+        public DbSet<Card> Decks { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

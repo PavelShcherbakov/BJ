@@ -8,20 +8,7 @@ namespace BJ.Entities
         public int StepNumder { get; set; }
         public Guid BotId { get; set; }
         [ForeignKey("BotId")]
-        private Bot bot;
-        public virtual Bot Bot
-        {
-            get
-            {
-                return bot;
-            }
-            set
-            {
-                bot = value;
-                BotId = bot.Id;
-                GameId = bot.GameId;
-            }
-        }
+        public virtual Bot Bot { get; set; }
         public Guid GameId { get; set; }
         public Rank Rank { get; set; }
         public Suit Suit { get; set; }

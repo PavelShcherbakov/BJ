@@ -6,18 +6,6 @@ namespace BJ.Entities
     {
         public string UserId { get; set; }
         [ForeignKey("UserId")]
-        private User user;
-        public virtual User User
-        {
-            get
-            {
-                return user;
-            }
-            set
-            {
-                user = value;
-                UserId = user.Id;
-            }
-        }
+        public virtual User User { get; set; }
     }
 }

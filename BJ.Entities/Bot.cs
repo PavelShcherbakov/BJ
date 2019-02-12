@@ -8,18 +8,6 @@ namespace BJ.Entities
         public string Name { get; set; }
         public Guid GameId { get; set; }
         [ForeignKey("GameId")]
-        private Game game;
-        public virtual Game Game
-        {
-            get
-            {
-                return game;
-            }
-            set
-            {
-                game = value;
-                GameId = game.Id;
-            }
-        }
+        public virtual Game Game { get; set; }
     }
 }

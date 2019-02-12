@@ -2,6 +2,7 @@
 using BJ.DAL.Interfaces;
 using BJ.Entities;
 using BJ.ViewModels.GameViews;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BJ.BLL.Services
@@ -11,9 +12,9 @@ namespace BJ.BLL.Services
         private IUserRepository _userRepository;
         private readonly IBotRepository _botRepository;
         private readonly IGameRepository _gameRepository;
-        private readonly CardHelper _cardHelper;
+        private readonly CardService _cardHelper;
 
-        public GameService(IUserRepository userRepository, IBotRepository botRepository, IGameRepository gameRepository, CardHelper cardHelper)
+        public GameService(IUserRepository userRepository, IBotRepository botRepository, IGameRepository gameRepository, CardService cardHelper)
         {
             _userRepository = userRepository;
             _botRepository = botRepository;
@@ -25,23 +26,36 @@ namespace BJ.BLL.Services
 
         public async Task StartGame(string userId, StartGameView model)
         {
-            var user = await _userRepository.GetByIdAsync(userId);
-            Game game = new Game() { User = user};
-            Bot[] bots = new Bot[model.NumberOfBots];
-            for(int i = 0; i < bots.Length; i++)
+            Game game = new Game() { UserId = userId };
+            List<Bot> bots = new List<Bot>();
+            for(int i = 0; i < model.NumberOfBots; i++)
             {
-                bots[i] = new Bot();
-                bots[i].Name = "bot" + i;
-                bots[i].Game = game;
+                var bot = new Bot()
+                {
+                    Name = "bot" + i,
+                    GameId = game.Id
+                };
+                bots.Add(bot);
             }
             await _gameRepository.CreateAsync(game);
             await _botRepository.AddRangeAsync(bots);
-            await _cardHelper.CreateDecksAsync(model.NumberOfBots, game);
-            await _cardHelper.CardsDeal(game, user, bots);
-
-            //await CreateDeck(model.NumberOfBots + 1);
-
-
+            await _cardHelper.CreateDecksAsync(model.NumberOfBots, game.Id);
+            await _cardHelper.CardsDeal(game.Id, userId, bots);
         }
+
+        public async Task GetCard(string userId, GetCardView model)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            List<Bot> bots = await _botRepository.FindAsync(x => x.GameId == model.GameId) as List<Bot>;
+            await _cardHelper.RoundCardsDeal(model.GameId, userId, bots);
+        }
+
+        public async Task EndGame(string userId, EndGameView model)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            List<Bot> bots = await _botRepository.FindAsync(x => x.GameId == model.GameId) as List<Bot>;
+            await _cardHelper.RoundCardsDeal(model.GameId, userId, bots);
+        }
+
     }
 }

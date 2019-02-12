@@ -3,23 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BJ.Entities
 {
-    public class Deck : BaseEntity
+    public class Card : BaseEntity
     {
         public Guid GameId { get; set; }
         [ForeignKey("GameId")]
-        private Game game;
-        public virtual Game Game
-        {
-            get
-            {
-                return game;
-            }
-            set
-            {
-                game = value;
-                GameId = game.Id;
-            }
-        }
+        public virtual Game Game { get; set; }
         public Rank Rank { get; set; }
         public Suit Suit { get; set; }
     }
