@@ -4,8 +4,8 @@ using System.Text;
 
 namespace BJ.ViewModels.GameViews
 {
-    public class GetCardView
+    public class GetCardGameResponseView
     {
-        public Guid GameId { get; set; }
+        public string State { get; set; }
     }
 }

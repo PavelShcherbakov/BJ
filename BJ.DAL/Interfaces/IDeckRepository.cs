@@ -8,6 +8,6 @@ namespace BJ.DAL.Interfaces
     public interface IDeckRepository : IRepository<Card, Guid>
     {
         Task<IEnumerable<Card>> GetRandomCardsByGameId(Guid gameId, int numOfCards);
-        int GetCountCards(Guid gameId);
+        Task<int> GetCountCardsAsync(Guid gameId);
     }
 }

@@ -20,9 +20,9 @@ namespace BJ.DAL.Repositories.EF
             return decks;
         }
 
-        public int GetCountCards(Guid gameId)
+        public async Task<int> GetCountCardsAsync(Guid gameId)
         {
-            var count = _dbSet.Where(x => x.GameId == gameId).Count();
+            var count = await _dbSet.Where(x => x.GameId == gameId).CountAsync();
             return count;
         }
     }
