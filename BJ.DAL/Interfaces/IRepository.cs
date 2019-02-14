@@ -8,10 +8,12 @@ namespace BJ.DAL.Interfaces
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetByIdAsync(TId id);
-        Task<IEnumerable<T>> FindAsync(Func<T, Boolean> predicate);
+        IEnumerable<T> Find(Func<T, Boolean> predicate);
         Task CreateAsync(T item);
         Task AddRangeAsync(IEnumerable<T> collection);
+        void AddRange(IEnumerable<T> collection);
         Task UpdateAsync(T item);
         Task RemoveAsync(T item);
+        int Count(Func<T, bool> predicate);
     }
 }

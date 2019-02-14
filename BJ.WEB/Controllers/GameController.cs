@@ -21,7 +21,7 @@ namespace BJ.WEB.Controllers
         [HttpPost]
         public async Task<IActionResult> Start([FromBody] StartGameView model)
         {
-            return await Execute(() => _gameService.StartGame(UserId, model));
+            return await Execute(() => _gameService.StartGame(UserId, model)); 
         }
 
         [HttpPost]

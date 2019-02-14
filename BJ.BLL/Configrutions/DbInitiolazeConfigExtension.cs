@@ -1,16 +1,16 @@
-﻿using BJ.DAL;
-using BJ.DAL.Interfaces;
+﻿using BJ.DAL.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace BJ.BLL.Configrutions
 {
-    public static class DbContextConfigExtension
+    public static class DbInitiolazeConfigExtension
     {
-        public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
+        public static void InitiolazeDb(this IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>();
             Initialize(services.BuildServiceProvider());
         }
 
@@ -19,9 +19,8 @@ namespace BJ.BLL.Configrutions
             using (var serviceScope = service.CreateScope())
             {
                 var scopeServiceProvider = serviceScope.ServiceProvider;
-                var db = scopeServiceProvider.GetService<IBotRepository>();
-                //db.CreateAsync()
-                //BotsData.Initialize(db);
+                var botRepository = scopeServiceProvider.GetService<IBotRepository>();
+                BotsData.Initialize(botRepository);
             }
         }
     }

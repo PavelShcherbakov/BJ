@@ -28,6 +28,8 @@ namespace BJ.BLL.Configrutions
                 services.AddTransient<IGameRepository, EFGameRepository>();
                 services.AddTransient<IUserRepository, EFUserRepository>();
                 services.AddTransient<IUsersStepRepository, EFUsersStepRepository>();
+                services.AddTransient<IUsersPointsRepository, EFUsersPointsRepository>();
+                services.AddTransient<IBotsPointsRepository, EFBotsPointsRepository>();
             }
             else
             {

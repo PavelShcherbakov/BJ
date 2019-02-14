@@ -1,5 +1,4 @@
 ﻿using BJ.BLL.Commons;
-using BJ.BLL.Helpers;
 using BJ.DAL.Interfaces;
 using BJ.Entities;
 using BJ.ViewModels.GameViews;
@@ -7,6 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+
+
+
+
 
 namespace BJ.BLL.Services
 {
@@ -38,6 +42,9 @@ namespace BJ.BLL.Services
         private readonly IGameRepository _gameRepository;
         private readonly IBotsStepRepository _botsStepRepository;
         private readonly IUsersStepRepository _usersStepRepository;
+        private readonly IUsersPointsRepository _usersPointsRepository;
+        private readonly IBotsPointsRepository _botsPointsRepository;
+
 
 
         public GameService(
@@ -46,7 +53,9 @@ namespace BJ.BLL.Services
             IGameRepository gameRepository,
             IDeckRepository deckRepository,
             IUsersStepRepository usersStepRepository,
-            IBotsStepRepository botsStepRepository)
+            IBotsStepRepository botsStepRepository,
+            IUsersPointsRepository usersPointsRepository,
+            IBotsPointsRepository botsPointsRepository)
         {
             _userRepository = userRepository;
             _botRepository = botRepository;
@@ -54,25 +63,39 @@ namespace BJ.BLL.Services
             _usersStepRepository = usersStepRepository;
             _deckRepository = deckRepository;
             _botsStepRepository = botsStepRepository;
+            _usersPointsRepository = usersPointsRepository;
+            _botsPointsRepository = botsPointsRepository;
         }
 
         public async Task<StartGameResponseView> StartGame(string userId, StartGameView model)
         {
-            Game game = new Game() { UserId = userId, CountStep=0};
-            List<Bot> bots = new List<Bot>();
-            for(int i = 0; i < model.NumberOfBots; i++)
+            Game game = new Game() { UserId = userId };
+
+            UsersPoints userPoints = new UsersPoints()
             {
-                var bot = new Bot()
+                UserId = userId,
+                GameId = game.Id,
+                Points = Constants.InitionalPoints
+            };
+
+            List<Bot> bots = await _botRepository.GetRandomBotsAsync(model.NumberOfBots) as List<Bot>;
+            List<BotsPoints> botsPointsList = new List<BotsPoints>();
+            foreach (var bot in bots)
+            {
+                BotsPoints botsPoints = new BotsPoints()
                 {
-                    Name = "bot" + i,
+                    BotId = bot.Id,
                     GameId = game.Id,
                     Points = Constants.InitionalPoints
                 };
-                bots.Add(bot);
+                botsPointsList.Add(botsPoints);
             }
+
             await _gameRepository.CreateAsync(game);
-            await _botRepository.AddRangeAsync(bots);
-            game.CountStep = await InitialCardsDeal(game.Id, userId, bots);
+            await _usersPointsRepository.CreateAsync(userPoints);
+            await _botsPointsRepository.AddRangeAsync(botsPointsList);
+
+            game.CountStep = await InitialCardsDeal(game.Id, userId, userPoints, bots, botsPointsList);
             await _gameRepository.UpdateAsync(game);
             var response = new StartGameResponseView() { GameId = game.Id };
             return response;
@@ -81,17 +104,23 @@ namespace BJ.BLL.Services
 
         public async Task<GetCardGameResponseView> GetCard(string userId, GetCardGameView model)
         {
-            if (await GetUserPoints(userId)>Constants.WinningNumber) return new GetCardGameResponseView() { State = "Lose" };
-
+            var usersPoints = _usersPointsRepository.Find(x => x.GameId == model.GameId).FirstOrDefault();
+            if (usersPoints.Points > Constants.WinningNumber) return new GetCardGameResponseView() { State = "Lose" };
             var game = await _gameRepository.GetByIdAsync(model.GameId);
-            List<Bot> bots = await _botRepository.FindAsync(x => x.GameId == model.GameId) as List<Bot>;
+            var botsPointsList = _botsPointsRepository.Find(x => x.GameId == model.GameId) as List<BotsPoints>;
+            List<Bot> bots = new List<Bot>();
+            foreach (var botsPoints in botsPointsList)
+            {
+                bots.Add(botsPoints.Bot);
+            }
+            
             var countStep = game.CountStep;
-            countStep = await RoundCardsDeal(model.GameId, userId, bots, countStep);
+            countStep = await RoundCardsDeal(model.GameId, userId, usersPoints, botsPointsList, countStep);
             game.CountStep = countStep;
             await _gameRepository.UpdateAsync(game);
 
             GetCardGameResponseView response;
-            if (await GetUserPoints(userId) > Constants.WinningNumber) response = new GetCardGameResponseView() { State = "Lose" };
+            if (usersPoints.Points > Constants.WinningNumber) response = new GetCardGameResponseView() { State = "Lose" };
             else response = new GetCardGameResponseView() { State = "In game" };
 
             return response;
@@ -99,38 +128,39 @@ namespace BJ.BLL.Services
 
         public async Task<EndGameResponseView> EndGame(string userId, EndGameView model)
         {
-           
+
             var game = await _gameRepository.GetByIdAsync(model.GameId);
-            List<Bot> bots = await _botRepository.FindAsync(x => x.GameId == model.GameId) as List<Bot>;
+            var usersPoints = _usersPointsRepository.Find(x => x.GameId == model.GameId).FirstOrDefault();
+            var botsPointsList = _botsPointsRepository.Find(x => x.GameId == model.GameId) as List<BotsPoints>;
+            List<Bot> bots = new List<Bot>();
+            foreach (var botsPoints in botsPointsList)
+            {
+                bots.Add(botsPoints.Bot);
+            }
             var countStep = game.CountStep;
-            countStep = await LastCardsDeal(model.GameId, userId, bots, countStep);
+            countStep = await LastCardsDeal(model.GameId, userId, usersPoints, botsPointsList, countStep);
             game.CountStep = countStep;
             await _gameRepository.UpdateAsync(game);
 
             int WinningPoints = 0;
-            foreach (var bot in bots)
+            foreach (var botsPoints in botsPointsList)
             {
-                if (bot.Points > WinningPoints && bot.Points <= Constants.WinningNumber) WinningPoints = bot.Points;
+                if (botsPoints.Points > WinningPoints && botsPoints.Points <= Constants.WinningNumber) WinningPoints = botsPoints.Points;
             }
 
             EndGameResponseView response;
-            int userPoints = await GetUserPoints(userId);
-            if (userPoints < WinningPoints && userPoints > Constants.WinningNumber) response = new EndGameResponseView() { state = "Lose" };
+            
+            if (usersPoints.Points < WinningPoints && usersPoints.Points > Constants.WinningNumber) response = new EndGameResponseView() { state = "Lose" };
             else response = new EndGameResponseView() { state = "Win" };
 
             return response;
         }
 
-        private async Task<int> GetUserPoints(string userId)
-        {
-            int sum = 0;
-            var usersSteps = await _usersStepRepository.FindAsync(x => x.UserId == userId) as List<UsersStep>;
-            foreach (var userStep in usersSteps)
-            {
-                sum += (int)userStep.Rank;
-            }
-            return sum;
-        }
+        //private int GetUserPoints(Guid gameId)
+        //{
+        //    var userPoints = _usersPointsRepository.Find(x => x.GameId == gameId).FirstOrDefault().Points;
+        //    return userPoints;
+        //}
 
 
 
@@ -140,35 +170,35 @@ namespace BJ.BLL.Services
         ///////////////////////////////////CardsDeal////////////////////////////////////////////////
 
 
-        private async Task<int> InitialCardsDeal(Guid gameId, string userId, List<Bot> bots)
+        private async Task<int> InitialCardsDeal(Guid gameId, string userId, UsersPoints usersPoints, List<Bot> bots,  List<BotsPoints> botsPointsList)
         {
             int stepCount = Constants.InitialStep;
             for (int i = 0; i < Constants.InitialNumOfCard; i++)
             {
-                stepCount = await CardsDeal(gameId, userId, bots, stepCount, true);
+                stepCount = await CardsDeal(gameId, userId, usersPoints, bots, botsPointsList, stepCount, true);
             }
             return stepCount;
         }
 
-        private async Task<int> RoundCardsDeal(Guid gameId, string userId, List<Bot> bots, int stepNumber)
+        private async Task<int> RoundCardsDeal(Guid gameId, string userId, UsersPoints usersPoints, List<BotsPoints> botsPointsList, int stepNumber)
         {
 
-            var playingBots = GetPlayingBots(bots);
-            var countStep = await CardsDeal(gameId, userId, playingBots, stepNumber, true);
+            var playingBots = GetPlayingBots(botsPointsList);
+            var countStep = await CardsDeal(gameId, userId, usersPoints, playingBots, botsPointsList, stepNumber, true);
             return countStep;
 
         }
 
-        private async Task<int> LastCardsDeal(Guid gameId, string userId, List<Bot> bots, int stepNumber)
+        private async Task<int> LastCardsDeal(Guid gameId, string userId, UsersPoints usersPoints, List<BotsPoints> botsPointsList, int stepNumber)
         {
             List<Bot> playingBots;
             var countStep = stepNumber;
 
-            playingBots = GetPlayingBots(bots);
+            playingBots = GetPlayingBots(botsPointsList);
             while (playingBots.Count != 0)
             {
-                countStep = await CardsDeal(gameId, userId, playingBots, countStep, false);
-                playingBots = GetPlayingBots(bots);
+                countStep = await CardsDeal(gameId, userId, usersPoints, playingBots, botsPointsList, stepNumber, false);
+                playingBots = GetPlayingBots(botsPointsList);
             }
 
             return countStep;
@@ -196,7 +226,7 @@ namespace BJ.BLL.Services
         //    return numOfDecks;
         //}
 
-        private async Task<int> CardsDeal(Guid gameId, string userId, List<Bot> bots, int stepNumber, bool userPlaying)
+        private async Task<int> CardsDeal(Guid gameId, string userId, UsersPoints usersPoints, List<Bot> bots,  List<BotsPoints> botsPointsList, int stepNumber, bool userPlaying)
         {
             var usersSteps = new List<UsersStep>();
             var botsSteps = new List<BotsStep>();
@@ -216,13 +246,12 @@ namespace BJ.BLL.Services
 
             if (userPlaying)
             {
-                var us = await UserGetCardAsync(takenСards, gameId, userId, ++stepNum);
+                var us = await UserGetCardAsync(takenСards, gameId, userId, usersPoints,++stepNum);
                 usersSteps.Add(us);
             }
 
             foreach (var bot in bots)
             {
-                bot.Points += (int)takenСards.Last().Rank;
                 var bs = await BotGetCardAsync(takenСards, gameId, bot.Id, ++stepNum);
                 botsSteps.Add(bs);
                 await _botRepository.UpdateAsync(bot);
@@ -233,7 +262,7 @@ namespace BJ.BLL.Services
             return stepNum;
         }
 
-        private async Task<UsersStep> UserGetCardAsync(List<Card> cards, Guid gameId, string userId, int stepNumder)
+        private async Task<UsersStep> UserGetCardAsync(List<Card> cards, Guid gameId, string userId,UsersPoints usersPoints, int stepNumder)
         {
             var card = cards.Last();
 
@@ -245,11 +274,17 @@ namespace BJ.BLL.Services
                 Rank = card.Rank,
                 Suit = card.Suit
             };
-
+            await SetUsersPointsAsync(gameId, card.Rank);
             await _deckRepository.RemoveAsync(card);
             cards.Remove(card);
-
             return usersStep;
+        }
+
+        private async Task SetUsersPointsAsync(Guid gameId, Rank rank)
+        {
+            var usersPoints = _usersPointsRepository.Find(x => x.GameId == gameId).FirstOrDefault();
+            usersPoints.Points += (int)rank;
+            await _usersPointsRepository.UpdateAsync(usersPoints);
         }
 
         private async Task<BotsStep> BotGetCardAsync(List<Card> cards, Guid gameId, Guid botId, int stepNumder)
@@ -263,11 +298,18 @@ namespace BJ.BLL.Services
                 Rank = card.Rank,
                 Suit = card.Suit,
             };
+            await SetBotsPointsAsync(gameId, botId, card.Rank);
             await _deckRepository.RemoveAsync(card);
             cards.Remove(card);
             return botsStep;
         }
 
+        private async Task SetBotsPointsAsync(Guid gameId, Guid botId, Rank rank)
+        {
+            var botsPoints = _botsPointsRepository.Find(x => x.GameId == gameId).Where(x => x.BotId == botId).FirstOrDefault();
+            botsPoints.Points += (int)rank;
+            await _botsPointsRepository.UpdateAsync(botsPoints);
+        }
         //private async Task<bool> DoesBotNeedCardAsync(Guid botId)
         //{
         //    int sum = 0;
@@ -280,13 +322,12 @@ namespace BJ.BLL.Services
         //    else return false;
         //}
 
-        private List<Bot> GetPlayingBots(List<Bot> bots)
+        private List<Bot> GetPlayingBots(List<BotsPoints> botsPointsList)
         {
             var playingBots = new List<Bot>();
-
-            foreach (var bot in bots)
+            foreach (var botsPoints in botsPointsList)
             {
-                if (bot.Points < Constants.BotStopGame) playingBots.Add(bot);
+                if(botsPoints.Points<Constants.BotStopGame) playingBots.Add(botsPoints.Bot);
             }
             return playingBots;
         }

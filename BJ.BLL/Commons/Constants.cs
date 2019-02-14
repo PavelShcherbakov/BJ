@@ -9,6 +9,7 @@
         public const int BotStopGame = 17;
         public const int WinningNumber = 21;
         public const int InitionalPoints = 0;
+        public const int MaxCountBots = 100;
 
 
         public static class Messages

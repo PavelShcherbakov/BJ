@@ -22,6 +22,7 @@
     <Compile Remove="Migrations\20190207094618_AddBotIdToBotsStep.cs" />
     <Compile Remove="Migrations\20190211115438_RemoveCards3.cs" />
     <Compile Remove="Migrations\20190212095849_RenameDeckInCard.cs" />
+    <Compile Remove="Migrations\20190214071734_AddBotsPointsTable2.cs" />
   </ItemGroup>
 
   <ItemGroup>

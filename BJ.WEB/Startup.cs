@@ -37,7 +37,7 @@ namespace BJ.WEB
             var ORM = Configuration.GetSection("DBOptions:ORM").Value;
             if (ORM == "EF") services.Inject("EF");
             else throw new CustomServiceException("ORM not defined");
-
+            services.InitiolazeDb();
 
             //services.Configure<CookiePolicyOptions>(options =>
             //{

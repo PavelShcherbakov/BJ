@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace BJ.DAL.Repositories.EF
@@ -30,7 +31,7 @@ namespace BJ.DAL.Repositories.EF
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> FindAsync(Func<TEntity, bool> predicate)
+        public IEnumerable<TEntity> Find(Func<TEntity, bool> predicate)
         {
             var result = _dbSet.AsNoTracking().Where(predicate).ToList();
             return result;
@@ -58,6 +59,18 @@ namespace BJ.DAL.Repositories.EF
         {
             var result = await _dbSet.FindAsync(id);
             return result;
+        }
+
+        public void AddRange(IEnumerable<TEntity> collection)
+        {
+             _dbSet.AddRange(collection);
+             _context.SaveChanges();
+        }
+
+        public int Count(Func<TEntity, bool> predicate)
+        {
+            var count = _dbSet.Where(predicate).Count();
+            return count;
         }
     }
 }
