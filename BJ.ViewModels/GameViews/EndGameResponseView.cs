@@ -6,6 +6,6 @@ namespace BJ.ViewModels.GameViews
 {
     public class EndGameResponseView
     {
-        public string state { get; set; }
+        public int State { get; set; }
     }
 }

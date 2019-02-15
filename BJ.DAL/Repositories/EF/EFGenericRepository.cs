@@ -19,39 +19,55 @@ namespace BJ.DAL.Repositories.EF
             _dbSet = context.Set<TEntity>();
         }
 
-        public async Task CreateAsync(TEntity item)
+        public async Task CreateAsync(TEntity entity)
         {
-            await _dbSet.AddAsync(item);
+            await _dbSet.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddRangeAsync(IEnumerable<TEntity> collection)
+        public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
-            await _dbSet.AddRangeAsync(collection);
+            await _dbSet.AddRangeAsync(entities);
             await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<TEntity> Find(Func<TEntity, bool> predicate)
+        public virtual IEnumerable<TEntity> Find(Func<TEntity, bool> predicate)
         {
-            var result = _dbSet.AsNoTracking().Where(predicate).ToList();
+            var result = _dbSet.Where(predicate).ToList();
             return result;
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            var result = await _dbSet.AsNoTracking().ToListAsync();
+            var result = await _dbSet.ToListAsync();
             return result;
         }
 
-        public async Task UpdateAsync(TEntity item)
+        public async Task UpdateAsync(TEntity entity)
         {
-            _context.Entry(item).State = EntityState.Modified;
+            DeleteTrackedEntities();
+            _dbSet.Update(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveAsync(TEntity item)
+        public async Task UpdateRangeAsync(IEnumerable<TEntity> entities)
         {
-            _dbSet.Remove(item);
+            DeleteTrackedEntities();
+            _dbSet.UpdateRange(entities);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveAsync(TEntity entity)
+        {
+            DeleteTrackedEntities();
+            _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveRangeAsync(IEnumerable<TEntity> entities)
+        {
+            DeleteTrackedEntities();
+            _dbSet.RemoveRange(entities);
             await _context.SaveChangesAsync();
         }
 
@@ -61,9 +77,9 @@ namespace BJ.DAL.Repositories.EF
             return result;
         }
 
-        public void AddRange(IEnumerable<TEntity> collection)
+        public void AddRange(IEnumerable<TEntity> entities)
         {
-             _dbSet.AddRange(collection);
+             _dbSet.AddRange(entities);
              _context.SaveChanges();
         }
 
@@ -71,6 +87,15 @@ namespace BJ.DAL.Repositories.EF
         {
             var count = _dbSet.Where(predicate).Count();
             return count;
+        }
+
+        private void DeleteTrackedEntities()
+        {
+            var changedEntriesCopy = _context.ChangeTracker.Entries().ToList();
+            foreach (var entity in changedEntriesCopy)
+            {
+                _context.Entry(entity.Entity).State = EntityState.Detached;
+            }
         }
     }
 }
