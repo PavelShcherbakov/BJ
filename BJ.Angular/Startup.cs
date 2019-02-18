@@ -1,19 +1,19 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using BJ.BLL.Configrutions;
+﻿using BJ.BLL.Configrutions;
 using BJ.BLL.Exceptions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
-namespace BJ.WEB
+namespace BJ.Angular
 {
     public class Startup
     {
@@ -102,7 +102,7 @@ namespace BJ.WEB
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller}/{action}/{id?}");
+                    template: "{controller}/{action=Index}/{id?}");
             });
 
             app.UseSpa(spa =>

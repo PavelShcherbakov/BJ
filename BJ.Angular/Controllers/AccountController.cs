@@ -1,19 +1,19 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using BJ.BLL.Services;
 using BJ.ViewModels.AccountViews;
-using BJ.BLL.Services;
-using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
+using System.Threading.Tasks;
 
-namespace BJ.WEB.Controllers
+namespace BJ.Angular.Controllers
 {
     [Route("[controller]/[action]")]
     public class AccountController : BaseController
     {
         private readonly AccountService _accountService;
-        
+
 
         public AccountController(AccountService accountService)
         {
@@ -23,7 +23,7 @@ namespace BJ.WEB.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginAccountView model)
         {
-            return await Execute(()=>_accountService.Login(model));
+            return await Execute(() => _accountService.Login(model));
         }
 
         [HttpPost]
@@ -33,10 +33,20 @@ namespace BJ.WEB.Controllers
             return await Execute(() => _accountService.Register(model));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> GetUser()
         {
-            return await Execute(() => _accountService.GetAllUsers());
+
+            var qq = UserId;
+
+            //Claim identityClaim = identity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            //return await Execute(async () =>
+            //{
+            //     return await Funk(user);
+            //});
+
+            return null;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BJ.BLL.Helpers;
 using BJ.BLL.Exceptions;
 using BJ.Entities;
+using System.Collections.Generic;
 
 namespace BJ.BLL.Services
 {
@@ -71,6 +72,15 @@ namespace BJ.BLL.Services
   
         }
 
-        
+        public async Task<GetAllUserAccountResponseView> GetAllUsers()
+        {
+            List<string> userNameList = new List<string>();
+            _userManager.Users.ToList().ForEach(x=> userNameList.Add(x.UserName));
+
+            GetAllUserAccountResponseView response = new GetAllUserAccountResponseView() { UserNameList = userNameList };
+            return response;
+        }
+
+
     }
 }

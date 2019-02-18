@@ -1,0 +1,8 @@
+<form>
+  <input type="text" list="names" placeholder="Input your name" />
+  <datalist id="names">
+    <option *ngFor="let name of userNames"> {{name}} </option>
+  </datalist>
+  <input type="password" name="pass">
+  <input type="submit">
+</form>
