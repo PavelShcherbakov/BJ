@@ -1,0 +1,15 @@
+<form [formGroup]="myForm" novalidate (ngSubmit)="submit()">
+  <div class="form-group">
+    <label>Enter number of bots</label>
+    <input class="form-control" name="NumberOfBots" formControlName="NumberOfBots" />
+
+    <div class="alert alert-danger" *ngIf="myForm.controls['NumberOfBots'].invalid && myForm.controls['NumberOfBots'].touched">
+      Enter number!
+    </div>
+  </div>
+  <div class="form-group">
+    <button class="btn btn-default" [disabled]="myForm.invalid">
+      Отправить
+    </button>
+  </div>
+</form>
