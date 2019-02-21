@@ -6,6 +6,6 @@ namespace BJ.ViewModels.AccountViews
 {
     public class GetAllUserAccountResponseView
     {
-        public List<string> UserNameList { set; get; }
+        public List<string> UserNames { set; get; }
     }
 }

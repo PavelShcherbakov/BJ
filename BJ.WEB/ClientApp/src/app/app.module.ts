@@ -6,8 +6,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { AuthService} from './auth/auth.service';
-import { TokenInterceptor} from './auth/token.interceptor'
+import { AuthService} from './shared/services/account/auth.service';
+import { TokenInterceptor} from './shared/interceptors/token.interceptor'
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 

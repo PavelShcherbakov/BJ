@@ -2,21 +2,26 @@
 
   <div class='row justify-content-center align-items-center'>
     <div class='col-4'>
-
-      <form class="form-signin" #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+      <form class="form-signin" [formGroup]="loginForm" (submit)="onSubmit()">
         <div class="container-fluid">
           <h1 class=' row justify-content-center form-signin-heading'>BlackJack</h1>
-          <div *ngIf="invalidLogin" class="alert alert-danger">Invalid username or password.</div>
-          <input type="email" id="email" name="email" list="names" ngModel class="form-control"
-            placeholder="Еnter your name" required autofocus />
+          
+          <div *ngIf="isControlInvalid('email')" class="alert alert-danger" >Invalid username.</div>
+          <input type="email" id="email" name="email" list="names" formControlName="email"
+            placeholder="Еnter your name" />
           <datalist id="names">
             <option *ngFor="let name of userNames"> {{name}} </option>
           </datalist>
-          <input type="password" id="password" name="password" ngModel class="form-control"
-            placeholder="Еnter your password" required>
-          <button class="btn btn-primary btn-block justify-content-center" type="submit">Sign in</button>
+
+          <div *ngIf="isControlInvalid('password')" class="alert alert-danger">Invalid password.</div>
+          <!-- <div *ngIf="isControlInvalid(password)" class="alert alert-danger">Authorisation Error. Invalid password.</div> -->
+          <input type="password" id="password" name="password" formControlName="password"
+            placeholder="Еnter your password">
+          <button class="btn btn-primary btn-block justify-content-center" type="submit" [disabled]="loginForm.invalid">Sign in</button>
         </div>
       </form>
+
+
     </div>
   </div>
 </div>

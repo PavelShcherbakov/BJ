@@ -1,14 +1,13 @@
 import { NgModule }      from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule }   from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormsModule,ReactiveFormsModule }   from '@angular/forms';
 import { CreateGameComponent } from './create-game/create-game.component';
-
-import { ReactiveFormsModule }   from '@angular/forms';
+// import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [CreateGameComponent],
   imports: [
-    BrowserModule,
+    CommonModule,
     FormsModule,
     ReactiveFormsModule
   ],

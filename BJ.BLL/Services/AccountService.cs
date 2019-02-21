@@ -77,7 +77,7 @@ namespace BJ.BLL.Services
             List<string> userNameList = new List<string>();
             _userManager.Users.ToList().ForEach(x=> userNameList.Add(x.UserName));
 
-            GetAllUserAccountResponseView response = new GetAllUserAccountResponseView() { UserNameList = userNameList };
+            GetAllUserAccountResponseView response = new GetAllUserAccountResponseView() { UserNames = userNameList };
             return response;
         }
 
