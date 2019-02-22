@@ -23,7 +23,7 @@ export class CreateGameComponent implements OnInit {
       console.log(this.startGameForm.errors);
       console.log(status);
     })
-    debugger
+
   }
 
   isControlInvalid(controlName: string): boolean {

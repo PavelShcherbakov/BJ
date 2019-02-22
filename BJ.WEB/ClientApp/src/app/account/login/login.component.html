@@ -2,6 +2,7 @@
 
   <div class='row justify-content-center align-items-center'>
     <div class='col-4'>
+
       <form class="form-signin" [formGroup]="loginForm" (submit)="onSubmit()">
         <div class="container-fluid">
           <h1 class=' row justify-content-center form-signin-heading'>BlackJack</h1>
@@ -20,8 +21,8 @@
           <button class="btn btn-primary btn-block justify-content-center" type="submit" [disabled]="loginForm.invalid">Sign in</button>
         </div>
       </form>
-
-
+      
     </div>
   </div>
+
 </div>

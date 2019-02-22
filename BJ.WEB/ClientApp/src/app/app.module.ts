@@ -5,31 +5,39 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { AuthService} from './shared/services/account/auth.service';
-import { TokenInterceptor} from './shared/interceptors/token.interceptor'
+import { AuthService } from './shared/services/account/auth.service';
+import { TokenInterceptor } from './shared/interceptors/token.interceptor'
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
+import { SharedModule } from './shared/shared.module';
 
 
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    NavMenuComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AccountModule,
-    HttpClientModule
+    HttpClientModule,
+    SharedModule
   ],
   providers: [
-    AuthService, {
-    provide: HTTP_INTERCEPTORS,
-    useClass: TokenInterceptor,
-    multi: true
-  }],
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

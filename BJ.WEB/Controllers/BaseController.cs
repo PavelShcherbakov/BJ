@@ -24,8 +24,8 @@ namespace BJ.WEB.Controllers
         protected async Task<IActionResult> Execute<TempType>(Func<Task<TempType>> func)
         {
             GenericResponseView<TempType> response = new GenericResponseView<TempType>();
-            //try
-            //{
+            try
+            {
                 if (!ModelState.IsValid)
                 {
                     var errorResult = new GenericResponseView<string>();
@@ -36,25 +36,26 @@ namespace BJ.WEB.Controllers
                 var result = await func();
                 response.Model = result;
                 return Ok(response);
-            //}
-            //catch (CustomServiceException ex)
-            //{
-            //    response.Error = ex.Message;
-            //    return BadRequest(response);
-            //}
-            //catch (Exception ex)
-            //{
-            //    //await _loggerService.LogException(ex);
-            //    response.Error = ex.Message;//Constants.Messages.ServerError;
-            //    return BadRequest(response);
-            //}
+            }
+            catch (CustomServiceException ex)
+            {
+                response.Error = ex.Message;
+                return BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                //await _loggerService.LogException(ex);
+                //response.Error = ex.Message;
+                response.Error = Constants.Messages.ServerError;
+                return BadRequest(response);
+            }
         }
 
         protected async Task<IActionResult> Execute(Func<Task> func)
         {
             var response = new GenericResponseView<string>();
-            //try
-            //{
+            try
+            {
 
                 if (!ModelState.IsValid)
                 {
@@ -65,18 +66,19 @@ namespace BJ.WEB.Controllers
 
                 await func();
                 return Ok(response);
-            //}
-            //catch (CustomServiceException ex)
-            //{
-            //    response.Error = ex.Message;
-            //    return BadRequest(response);
-            //}
-            //catch (Exception ex)
-            //{
-            //    //await _loggerService.LogException(ex);
-            //    response.Error = ex.Message;//Constants.Messages.ServerError;
-            //    return BadRequest(response);
-            //}
+            }
+            catch (CustomServiceException ex)
+            {
+                response.Error = ex.Message;
+                return BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                //await _loggerService.LogException(ex);
+                //response.Error = ex.Message;
+                response.Error = Constants.Messages.ServerError;
+                return BadRequest(response);
+            }
         }
     }
 }

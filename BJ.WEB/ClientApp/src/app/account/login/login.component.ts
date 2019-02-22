@@ -52,28 +52,31 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
- 
+
     let loginView = new LoginAccountView();
-    loginView = {...this.loginForm.value};
-    debugger
+    loginView = { ...this.loginForm.value };
+
 
     const isExistUser = this.userNames.findIndex(x => x === loginView.email);
     if (isExistUser > -1) {
       this.authService.login(loginView).subscribe(data => {
-        this.router.navigate(["/create-game"]);
-      },(err) => {     
-        
+        this.router.navigate(["/game/create"]);
+
+      }, (err) => {
+        alert(err.message);
       });
       return;
     }
 
-    debugger
+
     this.authService.register(loginView).subscribe(data => {
-      this.router.navigate(["/create-game"]);
-    },(err) => {     
-        
+      this.router.navigate(["/game/create"]);
+      debugger;
+    }, (err) => {
+
+      alert(err.message);
     });
-    debugger
+
     console.log(this.loginForm.value);
   }
 }

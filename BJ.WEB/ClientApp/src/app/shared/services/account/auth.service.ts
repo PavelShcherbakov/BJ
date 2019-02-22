@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { LoginAccountView } from '../../entities/account.views/login.account.view';
 import { LoginAccountResponseView } from '../../entities/account.views/login-response.account.view';
 import { GenericResponseView } from "../../entities/generic-response.view";
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Config } from '../../configure/config';
 import { RegisterAccountView } from '../../entities/account.views/register.account.view';
@@ -34,30 +34,33 @@ export class AuthService {
 
   public login(loginView: LoginAccountView): Observable<LoginAccountResponseView> {
     // let credentials = JSON.stringify(loginView);
-    debugger
+
     return this.http.post<GenericResponseView<LoginAccountResponseView>>(Config.baseUrl + "/Account/Login", loginView).pipe(map(data => {
-      debugger
+
       let token = data.model.token;
       localStorage.setItem("accesToken", token);
       let model: LoginAccountResponseView = data.model;
       return model
-    }), catchError((err: HttpErrorResponse) => {
-      return Observable.throw(err);
+    }), catchError((error:HttpErrorResponse) => {
+
+      
+      return throwError(error);
     })
     );
   }
 
   public register(registerView: RegisterAccountView): Observable<LoginAccountResponseView> {
     // let credentials = JSON.stringify(registerView);
-    debugger
+
     return this.http.post<GenericResponseView<LoginAccountResponseView>>(Config.baseUrl + "/Account/Register", registerView).pipe(map(data => {
-      debugger
+
       let token = data.model.token;
       localStorage.setItem("accesToken", token);
       let model: LoginAccountResponseView = data.model;
       return model
-    }), catchError((err: HttpErrorResponse) => {
-      return Observable.throw(err);
+    }), catchError((error: HttpErrorResponse) => {
+
+      return throwError(error);
     })
     );
   }

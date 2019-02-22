@@ -1,21 +1,19 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './account/login/login.component';
-import { CreateGameComponent } from './game/create-game/create-game.component';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import{GameModule}from './game/game.module';
-import { from } from 'rxjs';
  
 
 const appRoutes: Routes = [
-  {path:"",component:LoginComponent},
-  {path:"create-game",component:CreateGameComponent}
+  {path:"",loadChildren: './account/account.module#AccountModule'},
+  {path:"game",loadChildren:'./game/game.module#GameModule'},
+  {path:"history",loadChildren:'./history/history.module#HistoryModule'}
 ];
 
 @NgModule({
   imports: [
     BrowserModule,
-    RouterModule.forRoot(appRoutes),
+    RouterModule.forRoot(appRoutes, { preloadingStrategy:PreloadAllModules}),
     GameModule
   ],
 
