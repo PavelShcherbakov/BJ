@@ -1,5 +1,5 @@
-import { Guid } from "guid-typescript";
+import { Guid } from 'guid-typescript';
 
-export class StartGameResponseView{
-    public gameId:Guid;
+export class StartGameResponseView {
+    public gameId: Guid;
 }

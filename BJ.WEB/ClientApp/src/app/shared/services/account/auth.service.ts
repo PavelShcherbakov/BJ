@@ -41,9 +41,9 @@ export class AuthService {
       localStorage.setItem("accesToken", token);
       let model: LoginAccountResponseView = data.model;
       return model
-    }), catchError((error:HttpErrorResponse) => {
+    }), catchError((error: HttpErrorResponse) => {
 
-      
+
       return throwError(error);
     })
     );
@@ -63,6 +63,18 @@ export class AuthService {
       return throwError(error);
     })
     );
+  }
+
+  isAuth():boolean{
+    if (localStorage.getItem("accesToken") === null) {
+      return false;
+    }
+    return true;
+
+  }
+
+  logout(){
+    localStorage.clear();
   }
 
 }

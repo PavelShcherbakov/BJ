@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/account/auth.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -8,9 +10,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavMenuComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authService:AuthService,private router:Router ) { }
 
   ngOnInit() {
   }
 
+  logout() {
+    const res:boolean=confirm("Are you sure?")
+    if(res){
+      this.authService.logout();
+      debugger;
+      this.router.navigate(["/account/login"]);
+    }
+    this.router.navigate(["/game/create"]);
+  }
+
+
+  
 }

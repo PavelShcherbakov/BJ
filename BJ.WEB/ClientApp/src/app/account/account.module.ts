@@ -7,10 +7,12 @@ import { AccountComponent } from './account.component';
 import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes = [
-
-  { path: '', component: LoginComponent},
-  { path: 'login', component: LoginComponent}
-
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  {
+    path: '', component: AccountComponent, children: [
+      { path: 'login', component: LoginComponent }
+    ]
+  },
 ];
 
 

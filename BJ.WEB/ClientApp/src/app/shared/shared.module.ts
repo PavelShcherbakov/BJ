@@ -4,9 +4,6 @@ import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-
-
-
 @NgModule({
   declarations: [NavMenuComponent],
   imports: [

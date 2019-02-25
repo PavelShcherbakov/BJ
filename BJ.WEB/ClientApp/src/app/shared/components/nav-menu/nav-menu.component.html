@@ -1,23 +1,26 @@
 <div class=" navbar-container bg-light">
-<nav class="navbar navbar-expand-md navbar-light">
-  <a class="navbar-brand" [routerLink]="['/']">BlackJack</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
-    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbar">
-    <!-- Пункты вертикального меню -->
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/game/create']">Game</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/']">History</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/']">Logout</a>
-      </li>
-    </ul>
-  </div>
-</nav>
+  <nav class="navbar navbar-expand-md navbar-light">
+    <a class="navbar-brand" [routerLink]="['/account/login']">BlackJack</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbar">
+      <!-- Пункты вертикального меню -->
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/game/create']">Game</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/history']">History</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="logout()">Logout</a>
+        </li>
+        <li class="nav-item">
+
+        </li>
+      </ul>
+    </div>
+  </nav>
 </div>

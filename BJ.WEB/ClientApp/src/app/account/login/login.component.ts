@@ -25,8 +25,8 @@ export class LoginComponent implements OnInit {
     // загрузка данных при старте компонента  
     this.loadUserNames();
     this.loginForm = this.fb.group({
-      email: ["", Validators.required],
-      password: ["", [Validators.required, Validators.minLength(6)]]
+      email: ["2WE3qwe@mail.com", Validators.required],
+      password: ["2WE3qwe@mail.com", [Validators.required, Validators.minLength(6)]]
     });
     this.loginForm.valueChanges.subscribe((value) => console.log(value));
     this.loginForm.statusChanges.subscribe((status) => {

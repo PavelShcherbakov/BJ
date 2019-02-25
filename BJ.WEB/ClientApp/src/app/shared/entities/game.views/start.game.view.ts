@@ -1,3 +1,3 @@
-export class StartGameView{
-    public numberOfBots:Number;
+export class StartGameView {
+    public numberOfBots: number;
 }

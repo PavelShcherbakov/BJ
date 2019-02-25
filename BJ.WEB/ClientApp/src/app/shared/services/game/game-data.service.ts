@@ -5,6 +5,7 @@ import { StartGameResponseView } from '../../entities/game.views/start-response.
 import { GenericResponseView } from '../../entities/generic-response.view';
 import { Config } from '../../configure/config';
 import { map } from 'rxjs/operators';
+import { StartGameView } from '../../entities/game.views/start.game.view';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,12 @@ export class GameDataService {
 
   constructor(private http: HttpClient) { }
 
-  public startGame(StartGameView): Observable<StartGameResponseView> {
-    return this.http.post<GenericResponseView<StartGameResponseView>>(Config.baseUrl + "/Game/Start",StartGameView).pipe(map(data=>{
-      let model:StartGameResponseView = data.model;
-      return model}));
-    
+  public startGame(startGameView: StartGameView): Observable<StartGameResponseView> {
+    return this.http.post<GenericResponseView<StartGameResponseView>>(Config.baseUrl + '/Game/Start', startGameView).pipe(map(data => {
+      const model: StartGameResponseView = data.model;
+      return model;
+    }));
+
   }
 
 }

@@ -10,6 +10,8 @@ import { TokenInterceptor } from './shared/interceptors/token.interceptor'
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorInterceptor } from './shared/interceptors/error.interceptor';
 import { SharedModule } from './shared/shared.module';
+import { OnlyLoginGuard } from './shared/guards/only-login.guard';
+import { OnlyLogoutGuard } from './shared/guards/only-logout.guard';
 
 
 
@@ -21,7 +23,6 @@ import { SharedModule } from './shared/shared.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AccountModule,
     HttpClientModule,
     SharedModule
   ],
@@ -37,6 +38,8 @@ import { SharedModule } from './shared/shared.module';
       useClass: ErrorInterceptor,
       multi: true
     }
+    //     AuthGuard,
+    // LogoutGuard
   ],
   bootstrap: [AppComponent]
 })
