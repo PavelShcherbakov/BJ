@@ -15,6 +15,8 @@ namespace BJ.Entities
         [ForeignKey("GameId")]
         public virtual Game Game { get; set; }
 
+        public int CardsInHand { get; set; }
+
         public int Points { get; set; }
     }
 }

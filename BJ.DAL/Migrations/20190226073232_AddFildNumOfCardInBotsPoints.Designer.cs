@@ -4,14 +4,16 @@ using BJ.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BJ.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190226073232_AddFildNumOfCardInBotsPoints")]
+    partial class AddFildNumOfCardInBotsPoints
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,11 +42,11 @@ namespace BJ.DAL.Migrations
 
                     b.Property<Guid>("BotId");
 
-                    b.Property<int>("CardsInHand");
-
                     b.Property<DateTime>("CreationDate");
 
                     b.Property<Guid>("GameId");
+
+                    b.Property<int>("NumOfCard");
 
                     b.Property<int>("Points");
 
@@ -111,8 +113,6 @@ namespace BJ.DAL.Migrations
                     b.Property<int>("CountStep");
 
                     b.Property<DateTime>("CreationDate");
-
-                    b.Property<int>("State");
 
                     b.Property<string>("UserId");
 

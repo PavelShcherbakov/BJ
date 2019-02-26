@@ -37,7 +37,6 @@ export class CreateGameComponent implements OnInit {
   onSubmit() {
     let startGameView = new StartGameView();
     startGameView = { ...this.startGameForm.value };
-    debugger;
     this.dataService.startGame(startGameView).subscribe(x => x);
     this.router.navigate(['/game/table']);
   }

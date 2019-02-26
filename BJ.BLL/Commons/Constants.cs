@@ -4,6 +4,7 @@
     {
         public const int NumOfCardsInDeck = 36;
         public const int InitialNumOfCard = 2;
+        public const int InitialCardsInHand = 0;
         public const int InitialStep = 0;
         public const int NumOfUserInGame = 1;
         public const int BotStopGame = 17;

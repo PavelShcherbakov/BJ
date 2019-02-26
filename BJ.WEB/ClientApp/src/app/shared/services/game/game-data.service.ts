@@ -6,6 +6,7 @@ import { GenericResponseView } from '../../entities/generic-response.view';
 import { Config } from '../../configure/config';
 import { map } from 'rxjs/operators';
 import { StartGameView } from '../../entities/game.views/start.game.view';
+import { GetStateResponseGameView } from '../../entities/game.views/get-state-response.game.view';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,27 @@ export class GameDataService {
       return model;
     }));
 
+  }
+
+  public getState(): Observable<GetStateResponseGameView> {
+    return this.http.get<GenericResponseView<GetStateResponseGameView>>(Config.baseUrl + '/Game/GetState').pipe(map(data => {
+      const model: GetStateResponseGameView = data.model;
+      return model;
+    }));
+  }
+
+  public getCard(): Observable<GetStateResponseGameView> {
+    return this.http.get<GenericResponseView<GetStateResponseGameView>>(Config.baseUrl + '/Game/GetState').pipe(map(data => {
+      const model: GetStateResponseGameView = data.model;
+      return model;
+    }));
+  }
+
+  public endGame(): Observable<GetStateResponseGameView> {
+    return this.http.get<GenericResponseView<GetStateResponseGameView>>(Config.baseUrl + '/Game/GetState').pipe(map(data => {
+      const model: GetStateResponseGameView = data.model;
+      return model;
+    }));
   }
 
 }

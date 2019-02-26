@@ -13,12 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BJ.ViewModels", "BJ.ViewMod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BJ.Entities", "BJ.Entities\BJ.Entities.csproj", "{2C7B4A5C-155E-41AD-805D-2077421F9691}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BJ.Angular", "BJ.Angular\BJ.Angular.csproj", "{AFA1BA69-59FB-46ED-81B7-BD8DE029A08B}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7B5F758F-696A-49B6-8A5D-1D3DCDC43C9C} = {7B5F758F-696A-49B6-8A5D-1D3DCDC43C9C}
-		{2035A69E-06F4-44D2-B301-7BBFBFD5B0B2} = {2035A69E-06F4-44D2-B301-7BBFBFD5B0B2}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,10 +39,6 @@ Global
 		{2C7B4A5C-155E-41AD-805D-2077421F9691}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C7B4A5C-155E-41AD-805D-2077421F9691}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C7B4A5C-155E-41AD-805D-2077421F9691}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AFA1BA69-59FB-46ED-81B7-BD8DE029A08B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AFA1BA69-59FB-46ED-81B7-BD8DE029A08B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AFA1BA69-59FB-46ED-81B7-BD8DE029A08B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AFA1BA69-59FB-46ED-81B7-BD8DE029A08B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

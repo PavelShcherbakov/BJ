@@ -25,15 +25,21 @@ namespace BJ.WEB.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetCard([FromBody]GetCardGameView model)
+        public async Task<IActionResult> GetCard()
         {
-            return await Execute(() => _gameService.GetCard(UserId, model));
+            return await Execute(() => _gameService.GetCard(UserId));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetState()
+        {
+            return await Execute(() => _gameService.GetState(UserId));
         }
 
         [HttpPost]
-        public async Task<IActionResult> End([FromBody]EndGameView model)
+        public async Task<IActionResult> End()
         {
-            return await Execute(() => _gameService.EndGame(UserId, model));
+            return await Execute(() => _gameService.EndGame(UserId));
         }
     }
 }

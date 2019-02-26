@@ -4,28 +4,29 @@ using System.Text;
 
 namespace BJ.ViewModels.GameViews
 {
-    public class GetCardGameResponseView
+    public class GetStateGameResponseView
     {
-        public List<BotGetCardGameResponseViewItem> Bots { get; set; }
-        public UserGetCardGameResponseView User { get; set; }
+        public List<BotGetStateGameResponseViewItem> Bots { get; set; }
+        public UserGetStateGameResponseView User { get; set; }
     }
 
-    public class BotGetCardGameResponseViewItem
+    public class BotGetStateGameResponseViewItem
     {
         public string Name { get; set; }
         public int CardsInHand { get; set; }
     }
 
-    public class UserGetCardGameResponseView
+    public class UserGetStateGameResponseView
     {
         public string Name { get; set; }
-        public List<CardGetCardGameResponseViewItem> Cards { get; set; }
+        public List<CardGetStateGameResponseViewItem> Cards { get; set; }
         public int State { get; set; }
     }
 
-    public class CardGetCardGameResponseViewItem
+    public class CardGetStateGameResponseViewItem
     {
         public int Suit { get; set; }
         public int Rank { get; set; }
     }
+    
 }
