@@ -6,6 +6,8 @@
       <form class="form-signin" [formGroup]="loginForm" (submit)="onSubmit()">
         <div class="container-fluid">
           <h1 class=' row justify-content-center form-signin-heading'>BlackJack</h1>
+
+          <div class='row justify-content-center'><img  src="../../assets/images/deck/1_11.png"></div>
           
           <div *ngIf="isControlInvalid('email')" class="alert alert-danger" >Invalid username.</div>
           <input type="email" id="email" name="email" list="names" formControlName="email"

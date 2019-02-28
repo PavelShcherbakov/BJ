@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountDataService } from '../../shared/services/account/account-data.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from "@angular/router";
-import { AuthService } from "../../shared/services/account/auth.service";
-import { LoginAccountView } from "../../shared/entities/account.views/login.account.view";
+import { Router } from '@angular/router';
+import { AuthService } from '../../shared/services/account/auth.service';
+import { LoginAccountView } from '../../shared/entities/account.views/login.account.view';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap';
+import { ConfirmRegistrationModalComponent } from '../confirm-registration-modal/confirm-registration-modal.component';
 
 
 @Component({
@@ -14,26 +16,22 @@ import { LoginAccountView } from "../../shared/entities/account.views/login.acco
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private dataService: AccountDataService, private router: Router, private authService: AuthService, private fb: FormBuilder) {
+  // tslint:disable-next-line: max-line-length
+  constructor(private dataService: AccountDataService, private router: Router, private authService: AuthService, private fb: FormBuilder, private modalService: BsModalService) {
   }
 
+  bsModalRef: BsModalRef;
   private userNames: string[];
   loginForm: FormGroup;
 
   ngOnInit() {
 
-    // загрузка данных при старте компонента  
+    // загрузка данных при старте компонента
     this.loadUserNames();
     this.loginForm = this.fb.group({
-      email: ["2WE3qwe@mail.com", Validators.required],
-      password: ["2WE3qwe@mail.com", [Validators.required, Validators.minLength(6)]]
+      email: ['2WE3qwe@mail.com', Validators.required],
+      password: ['2WE3qwe@mail.com', [Validators.required, Validators.minLength(6)]]
     });
-    this.loginForm.valueChanges.subscribe((value) => console.log(value));
-    this.loginForm.statusChanges.subscribe((status) => {
-      console.log(this.loginForm.errors);
-      console.log(status);
-
-    })
 
   }
 
@@ -60,23 +58,18 @@ export class LoginComponent implements OnInit {
     const isExistUser = this.userNames.findIndex(x => x === loginView.email);
     if (isExistUser > -1) {
       this.authService.login(loginView).subscribe(data => {
-        this.router.navigate(["/game/create"]);
+        this.router.navigate(['/game/create']);
 
       }, (err) => {
         alert(err.message);
       });
       return;
     }
-
-
-    this.authService.register(loginView).subscribe(data => {
-      this.router.navigate(["/game/create"]);
-      debugger;
-    }, (err) => {
-
-      alert(err.message);
-    });
-
-    console.log(this.loginForm.value);
+    const initialState = {
+      loginView: loginView
+    };
+    this.bsModalRef = this.modalService.show(ConfirmRegistrationModalComponent, { initialState });
   }
+
+
 }

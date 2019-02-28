@@ -16,5 +16,5 @@ export class UserGetStateGameResponseView {
 
 export class CardGetStateGameResponseViewItem {
     public suit: number;
-    public Rank: number;
+    public rank: number;
 }

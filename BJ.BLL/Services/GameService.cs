@@ -105,7 +105,7 @@ namespace BJ.BLL.Services
 
         public async Task<GetStateGameResponseView> GetState(string userId)
         {
-            var game = _gameRepository.Find(x => x.UserId == userId && x.State == UserGameState.InGame).FirstOrDefault();
+            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameState.InGame).FirstOrDefault();
             var botsPoints = _botsPointsRepository.Find(x => x.GameId == game.Id).ToList();
             var user = await _userRepository.GetByIdAsync(userId);
             var usersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
@@ -147,12 +147,12 @@ namespace BJ.BLL.Services
         public async Task<GetCardGameResponseView> GetCard(string userId)
         {
 
-            var response = await CreateGetCardGameResponseView(userId);
+            GetCardGameResponseView response;
 
-            var game = _gameRepository.Find(x => x.UserId == userId).FirstOrDefault(); 
+            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameState.InGame).FirstOrDefault(); 
             if (game.State==UserGameState.Lose)
             {
-                
+                response = await CreateGetCardGameResponseView(userId, game);
                 return response;
             }
 
@@ -161,15 +161,14 @@ namespace BJ.BLL.Services
 
             await RoundCardsDeal(usersPoints, botsPointsList, game.CountStep);
 
-            response = await CreateGetCardGameResponseView(userId);
+            response = await CreateGetCardGameResponseView(userId, game);
 
             return response;
         }
 
 
-        private async Task<GetCardGameResponseView> CreateGetCardGameResponseView(string userId)
+        private async Task<GetCardGameResponseView> CreateGetCardGameResponseView(string userId, Game game)
         {
-            var game = _gameRepository.Find(x => x.UserId == userId && x.State == UserGameState.InGame).FirstOrDefault();
             var botsPoints = _botsPointsRepository.Find(x => x.GameId == game.Id).ToList();
             var user = await _userRepository.GetByIdAsync(userId);
             var usersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
@@ -209,7 +208,7 @@ namespace BJ.BLL.Services
 
         public async Task<EndGameResponseView> EndGame(string userId)
         {
-            var game = _gameRepository.Find(x => x.UserId == userId).FirstOrDefault();
+            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameState.InGame).FirstOrDefault();
             var usersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
             var botsPointsList = _botsPointsRepository.Find(x => x.GameId == game.Id) as List<BotsPoints>;
 
@@ -230,22 +229,62 @@ namespace BJ.BLL.Services
             });
 
             var resultUsersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
-            EndGameResponseView response;
+            
             if (resultUsersPoints.Points > WinningPoints && resultUsersPoints.Points <= Constants.WinningNumber)
             {
                 game.State = UserGameState.Win;
-                response = new EndGameResponseView() { State = (int)UserGameState.Win };
             }
             else
             {
                 game.State = UserGameState.Lose;
-                response = new EndGameResponseView() { State = (int)UserGameState.Lose };
             }
 
             await _gameRepository.UpdateAsync(game);
 
+            EndGameResponseView response = await CreateEndGameResponseView(userId, game);
+
             return response;
         }
+
+        private async Task<EndGameResponseView> CreateEndGameResponseView(string userId, Game game)
+        {
+            
+            var botsPoints = _botsPointsRepository.Find(x => x.GameId == game.Id).ToList();
+            var user = await _userRepository.GetByIdAsync(userId);
+            var usersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
+            var userSteps = _usersStepRepository.Find(x => x.UserId == userId && x.GameId == game.Id).ToList();
+
+            var response = new EndGameResponseView();
+            var bots = new List<BotEndGameResponseViewItem>();
+            foreach (var bp in botsPoints)
+            {
+                bots.Add(new BotEndGameResponseViewItem()
+                {
+                    CardsInHand = bp.CardsInHand,
+                    Name = bp.Bot.Name
+                });
+            };
+            response.Bots = bots;
+            var userName = user.UserName;
+            var cards = new List<CardEndGameResponseViewItem>();
+            userSteps.ForEach(
+                x => cards.Add(new CardEndGameResponseViewItem()
+                {
+                    Rank = (int)x.Rank,
+                    Suit = (int)x.Suit
+                })
+            );
+            var userGetStatusGameViewItem = new UserEndGameResponseView()
+            {
+                Name = userName,
+                Cards = cards,
+                State = (int)game.State
+            };
+            response.User = userGetStatusGameViewItem;
+
+            return response;
+        }
+
 
         ///////////////////////////////////Private////////////////////////////////////////////////
 
@@ -333,6 +372,23 @@ namespace BJ.BLL.Services
             return stepNum;
         }
 
+        public async Task<HasActiveGameGameResponseView> HasActiveGame(string userId)
+        {
+            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameState.InGame).FirstOrDefault();
+            var response = new HasActiveGameGameResponseView();
+            if (game == null)
+            {
+                response.HasActiveGame = false;
+                return response;
+            }
+            else
+            {
+                response.HasActiveGame = true;
+                return response;
+            }
+        }
+
+        
         ///////////////////////////////////Additional////////////////////////////////////////////////
 
         private async Task AddDeckAsync(Guid gameId)

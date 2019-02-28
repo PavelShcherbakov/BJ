@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { User } from './../../shared/models/table.model';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-user-hand',
@@ -8,6 +9,8 @@ import { Component, OnInit } from '@angular/core';
 export class UserHandComponent implements OnInit {
 
   constructor() { }
+
+  @Input() user: User = new User();
 
   ngOnInit() {
   }

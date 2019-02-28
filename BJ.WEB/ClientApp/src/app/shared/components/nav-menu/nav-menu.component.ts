@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/account/auth.service';
-import { Router } from '@angular/router';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { ConfirmLogoutModalComponent } from '../confirm-logout-modal/confirm-logout-modal.component';
 
 
 @Component({
@@ -8,23 +8,14 @@ import { Router } from '@angular/router';
   templateUrl: './nav-menu.component.html',
   styleUrls: ['./nav-menu.component.scss']
 })
-export class NavMenuComponent implements OnInit {
+export class NavMenuComponent {
 
-  constructor(private authService:AuthService,private router:Router ) { }
+  bsModalRef: BsModalRef;
 
-  ngOnInit() {
+  constructor(private modalService: BsModalService) { }
+
+  openModalWithComponent() {
+    this.bsModalRef = this.modalService.show(ConfirmLogoutModalComponent);
   }
 
-  logout() {
-    const res:boolean=confirm("Are you sure?")
-    if(res){
-      this.authService.logout();
-      debugger;
-      this.router.navigate(["/account/login"]);
-    }
-    this.router.navigate(["/game/create"]);
-  }
-
-
-  
 }

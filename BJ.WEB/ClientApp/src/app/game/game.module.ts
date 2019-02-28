@@ -1,3 +1,4 @@
+import { WithoutActiveGamesGuard } from './../shared/guards/without-active-games.guard';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,7 +16,7 @@ const routes: Routes = [
 
   {
     path: '', component: GameComponent, children: [
-      { path: 'create', component: CreateGameComponent },
+      { path: 'create', canActivate: [WithoutActiveGamesGuard], component: CreateGameComponent },
       { path: 'table', component: TableComponent }
     ]
   }
@@ -27,6 +28,9 @@ const routes: Routes = [
   imports: [
     RouterModule.forChild(routes),
     SharedModule
+  ],
+  providers: [
+    WithoutActiveGamesGuard
   ],
   exports: [
     RouterModule

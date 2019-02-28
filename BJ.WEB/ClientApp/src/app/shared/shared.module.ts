@@ -3,16 +3,22 @@ import { CommonModule } from '@angular/common';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { ModalModule } from 'ngx-bootstrap';
+import { ConfirmLogoutModalComponent } from './components/confirm-logout-modal/confirm-logout-modal.component';
 
 @NgModule({
-  declarations: [NavMenuComponent],
+  declarations: [NavMenuComponent, ConfirmLogoutModalComponent],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    ModalModule.forRoot()
   ],
-  exports:[
+  entryComponents: [
+    ConfirmLogoutModalComponent
+  ],
+  exports: [
     NavMenuComponent,
     CommonModule,
     FormsModule,

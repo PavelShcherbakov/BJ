@@ -31,6 +31,12 @@ namespace BJ.WEB.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> HasActiveGame()
+        {
+            return await Execute(() => _gameService.HasActiveGame(UserId));
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetState()
         {
             return await Execute(() => _gameService.GetState(UserId));

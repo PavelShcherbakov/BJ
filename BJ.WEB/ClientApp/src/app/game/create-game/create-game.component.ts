@@ -19,11 +19,6 @@ export class CreateGameComponent implements OnInit {
     this.startGameForm = this.fb.group({
       numberOfBots: [1, [Validators.required, Validators.min(1), Validators.max(100), Validators.pattern('^[0-9]+$')]]
     });
-    this.startGameForm.valueChanges.subscribe((value) => console.log(value));
-    this.startGameForm.statusChanges.subscribe((status) => {
-      console.log(this.startGameForm.errors);
-      console.log(status);
-    });
 
   }
 
@@ -37,7 +32,7 @@ export class CreateGameComponent implements OnInit {
   onSubmit() {
     let startGameView = new StartGameView();
     startGameView = { ...this.startGameForm.value };
-    this.dataService.startGame(startGameView).subscribe(x => x);
-    this.router.navigate(['/game/table']);
+    this.dataService.startGame(startGameView).subscribe(x => this.router.navigate(['/game/table']));
+
   }
 }
