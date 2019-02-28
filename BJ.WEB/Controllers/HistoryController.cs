@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BJ.BLL.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BJ.WEB.Controllers
 {
@@ -6,6 +7,11 @@ namespace BJ.WEB.Controllers
     [ApiController]
     public class HistoryController : BaseController
     {
+        private readonly HistoryService _historyService;
 
+        public HistoryController(HistoryService historyService)
+        {
+            _historyService = historyService;
+        }
     }
 }

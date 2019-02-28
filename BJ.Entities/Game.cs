@@ -8,6 +8,7 @@ namespace BJ.Entities
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
         public int CountStep { get; set; }
+        public int NumberOfPlayers { get; set; }
         public UserGameState State { get; set; }
     }
     public enum UserGameState { InGame, Lose, Win };

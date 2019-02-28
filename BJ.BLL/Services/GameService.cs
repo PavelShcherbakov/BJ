@@ -69,7 +69,8 @@ namespace BJ.BLL.Services
             var game = new Game()
             {
                 UserId = userId,
-                State = UserGameState.InGame
+                State = UserGameState.InGame,
+                NumberOfPlayers = model.NumberOfBots+1
             };
             await _gameRepository.CreateAsync(game);
 
@@ -329,7 +330,7 @@ namespace BJ.BLL.Services
         {
             var usersSteps = new List<UsersStep>();
             var botsSteps = new List<BotsStep>();
-            int stepNum = stepNumber;
+            int stepNum = ++stepNumber;
             var game = await _gameRepository.GetByIdAsync(usersPoints.GameId);
 
             var numOfCards = bots.Count;
@@ -346,7 +347,7 @@ namespace BJ.BLL.Services
 
             if (userPlaying)
             {
-                var us = await UserGetCardAsync(takenСards, usersPoints, ++stepNum, --numOfCards);
+                var us = await UserGetCardAsync(takenСards, usersPoints, stepNum, --numOfCards);
                 usersSteps.Add(us);
             }
 
@@ -356,7 +357,7 @@ namespace BJ.BLL.Services
             {
                 var botsPoints = botsPointsList.Where(x => x.BotId == bot.Id).FirstOrDefault();
 
-                var botInfo = BotGetCard(takenСards, botsPoints, ++stepNum, --numOfCards);
+                var botInfo = BotGetCard(takenСards, botsPoints, stepNum, --numOfCards);
 
                 botsSteps.Add(botInfo.botsStep);
                 modifiedBotsPointsList.Add(botInfo.botsPoints);
