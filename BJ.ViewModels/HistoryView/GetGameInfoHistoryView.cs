@@ -6,6 +6,6 @@ namespace BJ.ViewModels.HistoryView
 {
     public class GetGameInfoHistoryView
     {
-        public Guid GamaId { get; set; }
+        public Guid GameId { get; set; }
     }
 }

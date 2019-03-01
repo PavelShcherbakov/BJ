@@ -1,6 +1,7 @@
 ﻿using BJ.BLL.Commons;
 using BJ.DAL.Interfaces;
 using BJ.Entities;
+using BJ.Entities.Enums;
 using BJ.ViewModels.GameViews;
 using System;
 using System.Collections.Generic;

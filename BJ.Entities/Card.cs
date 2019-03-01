@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BJ.Entities.Enums;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BJ.Entities
@@ -11,7 +12,5 @@ namespace BJ.Entities
         public Rank Rank { get; set; }
         public Suit Suit { get; set; }
     }
-
-    public enum Rank { Six = 6, Seven = 7, Eight = 8, Nine = 9, Ten = 10, Jack = 2, Queen = 3, King = 4, Ace = 11 }
-    public enum Suit { Hearts, Clubs, Diamonds, Spades }
+    
 }

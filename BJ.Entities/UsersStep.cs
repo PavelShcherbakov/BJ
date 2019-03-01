@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BJ.Entities.Enums;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BJ.Entities

@@ -17,7 +17,8 @@ namespace BJ.BLL.Configrutions
             services.AddTransient<JwtTokenHelper>();
             services.AddTransient<AccountService>();
             services.AddTransient<GameService>();
-            
+            services.AddTransient<HistoryService>();
+
 
             //if (configuration.GetValue<string>("ORM") == "EF") if (configuration.GetValue<string>("ORM") == "EF")
             if (dbType == "EF")

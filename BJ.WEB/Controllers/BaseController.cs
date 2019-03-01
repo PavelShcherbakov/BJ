@@ -45,8 +45,8 @@ namespace BJ.WEB.Controllers
             catch (Exception ex)
             {
                 //await _loggerService.LogException(ex);
-                //response.Error = ex.Message;
-                response.Error = Constants.Messages.ServerError;
+                response.Error = ex.Message;
+                //response.Error = Constants.Messages.ServerError;
                 return BadRequest(response);
             }
         }

@@ -7,6 +7,7 @@ namespace BJ.ViewModels.HistoryView
     public class GetGameInfoHistoryResponseView
     {
         public List<StepGetGameInfoHistoryResponseViewItem> Steps { get; set; }
+        public List<PlayersSummaryGetGameInfoHistoryResponseViewItem> Summary { get; set; }
     }
 
     public class StepGetGameInfoHistoryResponseViewItem
@@ -19,6 +20,12 @@ namespace BJ.ViewModels.HistoryView
         public string Name { get; set; }
         public int Suit { get; set; }
         public int Rank { get; set; }
+    }
+
+    public class PlayersSummaryGetGameInfoHistoryResponseViewItem
+    {
+        public string Name { get; set; }
         public int Points { get; set; }
+        public int State { get; set; }
     }
 }

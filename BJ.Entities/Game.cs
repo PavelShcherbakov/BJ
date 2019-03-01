@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using BJ.Entities.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BJ.Entities
 {
@@ -11,5 +12,5 @@ namespace BJ.Entities
         public int NumberOfPlayers { get; set; }
         public UserGameState State { get; set; }
     }
-    public enum UserGameState { InGame, Lose, Win };
+    
 }
