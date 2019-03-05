@@ -1,6 +1,8 @@
 ﻿using BJ.BLL.Exceptions;
-using BJ.BLL.Helpers;
+using BJ.BLL.Providers;
+using BJ.BLL.Providers.Interfaces;
 using BJ.BLL.Services;
+using BJ.BLL.Services.Interfaces;
 using BJ.DAL.Interfaces;
 using BJ.DAL.Repositories.EF;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,17 +10,15 @@ using Microsoft.Extensions.DependencyInjection;
 namespace BJ.BLL.Configrutions
 {
 
-    public static class DependencyInjectionConfigExtension
+    public static class DependencyInjectionConfig
     {
-        
-        public static void Inject(this IServiceCollection services, string dbType)
+
+        public static void ConfigureDependencyInjection(this IServiceCollection services, string dbType)
         {
 
-            services.AddTransient<JwtTokenHelper>();
-            services.AddTransient<AccountService>();
-            services.AddTransient<GameService>();
-            services.AddTransient<HistoryService>();
 
+            services.AddTransient<ITokenProvider, JwtTokenProvider>();
+            
 
             //if (configuration.GetValue<string>("ORM") == "EF") if (configuration.GetValue<string>("ORM") == "EF")
             if (dbType == "EF")
@@ -36,6 +36,11 @@ namespace BJ.BLL.Configrutions
             {
                 throw new CustomServiceException("ORM not defined");
             }
+
+
+            services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IGameService, GameService>();
+            services.AddTransient<IHistoryService, HistoryService>();
 
         }
     }

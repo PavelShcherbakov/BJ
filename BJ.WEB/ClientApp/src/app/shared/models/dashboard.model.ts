@@ -12,5 +12,10 @@ export class Game {
     gameId: Guid;
     creationDate: Date;
     numberOfPlayers: number;
-    result: number;
+    result: Result;
+}
+
+export class Result {
+    public State: number;
+    public StateAsString: string;
 }

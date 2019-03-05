@@ -13,6 +13,12 @@ namespace BJ.ViewModels.HistoryView
         public Guid GameId { get; set; }
         public DateTime CreationDate { get; set; }
         public int NumberOfPlayers { get; set; }
-        public int Result { get; set; }
+        public ResultGetAllGamesHistoryResponseViewItem Result { get; set; }
+    }
+
+    public class ResultGetAllGamesHistoryResponseViewItem
+    {
+        public int State { get; set; }
+        public string StateAsString { get; set; }
     }
 }

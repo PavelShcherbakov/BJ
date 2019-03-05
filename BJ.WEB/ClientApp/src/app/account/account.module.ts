@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { AccountComponent } from './account.component';
 import { SharedModule } from '../shared/shared.module';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule, AlertModule } from 'ngx-bootstrap';
 import { ConfirmRegistrationModalComponent } from './confirm-registration-modal/confirm-registration-modal.component';
 
 const routes: Routes = [
@@ -26,7 +26,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     RouterModule.forChild(routes),
     SharedModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    AlertModule.forRoot()
   ],
   entryComponents: [
     ConfirmRegistrationModalComponent

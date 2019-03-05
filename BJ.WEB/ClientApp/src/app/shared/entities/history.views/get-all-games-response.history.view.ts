@@ -9,5 +9,9 @@ export class GameGetAllGamesResponseHistoryViewItem {
     gameId: Guid;
     creationDate: Date;
     numberOfPlayers: number;
-    result: number;
+    result: ResultGetAllGamesHistoryResponseViewItem;
+}
+export class ResultGetAllGamesHistoryResponseViewItem {
+    public State: number;
+    public StateAsString: string;
 }

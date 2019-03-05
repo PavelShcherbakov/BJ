@@ -10,12 +10,18 @@ import { ConfirmLogoutModalComponent } from '../confirm-logout-modal/confirm-log
 })
 export class NavMenuComponent {
 
+  constructor(private modalService: BsModalService) { }
+
   bsModalRef: BsModalRef;
 
-  constructor(private modalService: BsModalService) { }
+  // navbarOpen = false;
 
   openModalWithComponent() {
     this.bsModalRef = this.modalService.show(ConfirmLogoutModalComponent);
   }
+
+  // toggleNavbar() {
+  //   this.navbarOpen = !this.navbarOpen;
+  // }
 
 }

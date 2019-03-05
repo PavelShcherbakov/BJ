@@ -1,7 +1,4 @@
 import { Guid } from 'guid-typescript';
-import { GetAllGamesResponseHistoryView } from '../../shared/entities/history.views/get-all-games-response.history.view';
-
-
 import { HistoryDataService } from './../../shared/services/history/history-data.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';

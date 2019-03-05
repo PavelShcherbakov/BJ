@@ -1,12 +1,34 @@
+
+ 
+<nav class="navbar navbar-expand navbar-light navbar-container bg-light flex-md-column flex-row align-items-start p-0 m-0">
+  
+  <a class="navbar-brand" [routerLink]="['/game/create']">BlackJack</a>
+  <div class="collapse navbar-collapse">
+    <ul class="flex-md-column flex-row navbar-nav justify-content-between">
+      <li class="nav-item">
+        <a class="nav-link pl-0 text-nowrap" [routerLink]="['/game/create']">Game</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link pl-0 text-nowrap" [routerLink]="['/history']">History</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link pl-0 text-nowrap" (click)="openModalWithComponent()">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- 
 <div class=" navbar-container bg-light">
   <nav class="navbar navbar-expand-md navbar-light">
-    <a class="navbar-brand" [routerLink]="['/account/login']">BlackJack</a>
+    <a class="navbar-brand" [routerLink]="['/game/create']">BlackJack</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbar">
-      <!-- Пункты вертикального меню -->
+      
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/game/create']">Game</a>
@@ -18,12 +40,7 @@
         <li class="nav-item">
           <a class="nav-link" (click)="openModalWithComponent()">Logout</a>
         </li>
-        <li class="nav-item">
-
-        </li>
       </ul>
     </div>
   </nav>
-</div>
-
-
+</div> -->

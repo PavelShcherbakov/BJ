@@ -5,12 +5,12 @@
 
 <app-user-hand [user]="model.user"></app-user-hand>
 
-<div *ngIf="model.user.state==0">
+<div *ngIf="model.user.state.state==0">
     <button class='btn-dark' (click)="hit()">Hit</button>
     <button class='btn-dark' (click)="save()">Save</button>
 </div>
-<div *ngIf="model.user.state!=0">
+<div *ngIf="model.user.state.state!=0">
     <button class='btn-dark' [routerLink]="['/game/create']">New game</button>
-    <button class='btn-dark' [routerLink]="['/history']">Details</button>
+    <button class='btn-dark' (click)='goToGame()'>Details</button>
 </div>
 

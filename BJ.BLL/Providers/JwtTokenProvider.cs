@@ -1,4 +1,5 @@
-﻿using BJ.Entities;
+﻿using BJ.BLL.Providers.Interfaces;
+using BJ.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -7,13 +8,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace BJ.BLL.Helpers
+namespace BJ.BLL.Providers
 {
-    public class JwtTokenHelper
+    public class JwtTokenProvider : ITokenProvider
     {
         private readonly IConfiguration _configuration;
 
-        public JwtTokenHelper(IConfiguration configuration)
+        public JwtTokenProvider(IConfiguration configuration)
         {
             _configuration = configuration;
         }

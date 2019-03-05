@@ -3,24 +3,26 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-using BJ.BLL.Helpers;
+using BJ.BLL.Providers;
 using BJ.BLL.Exceptions;
 using BJ.Entities;
 using System.Collections.Generic;
+using BJ.BLL.Providers.Interfaces;
+using BJ.BLL.Services.Interfaces;
 
 namespace BJ.BLL.Services
 {
-    public class AccountService
+    public class AccountService: IAccountService
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
-        private readonly JwtTokenHelper _jwtTokentHelper;
+        private readonly ITokenProvider _jwtTokentHelper;
 
 
         public AccountService(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            JwtTokenHelper jwtTokentHelper
+            ITokenProvider jwtTokentHelper
             )
         {
             _userManager = userManager;
@@ -62,7 +64,7 @@ namespace BJ.BLL.Services
                 throw new CustomServiceException("Invalid user");
             }
 
-            await _signInManager.SignInAsync(user, false);
+
             var token = _jwtTokentHelper.GenerateJwtToken(model.Email, user);
             var response = new LoginAccountResponseView()
             {
@@ -74,10 +76,14 @@ namespace BJ.BLL.Services
 
         public async Task<GetAllUserAccountResponseView> GetAllUsers()
         {
-            List<string> userNameList = new List<string>();
-            _userManager.Users.ToList().ForEach(x=> userNameList.Add(x.UserName));
+            var userNameList = new List<string>();
+            var names = _userManager.Users.ToList().Select(x => x.UserName);
+            userNameList.AddRange(names);
 
-            GetAllUserAccountResponseView response = new GetAllUserAccountResponseView() { UserNames = userNameList };
+            var response = new GetAllUserAccountResponseView()
+            {
+                UserNames = userNameList
+            };
             return response;
         }
 

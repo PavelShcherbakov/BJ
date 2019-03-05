@@ -23,6 +23,8 @@ export class LoginComponent implements OnInit {
   bsModalRef: BsModalRef;
   private userNames: string[];
   loginForm: FormGroup;
+  showMessage = true;
+  alertMessage: string;
 
   ngOnInit() {
 
@@ -61,7 +63,8 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/game/create']);
 
       }, (err) => {
-        alert(err.message);
+        this.showMessage = true;
+        this.alertMessage = err.message;
       });
       return;
     }
@@ -70,6 +73,4 @@ export class LoginComponent implements OnInit {
     };
     this.bsModalRef = this.modalService.show(ConfirmRegistrationModalComponent, { initialState });
   }
-
-
 }

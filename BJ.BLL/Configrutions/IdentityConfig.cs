@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BJ.BLL.Configrutions
 {
-    public static class IdentityConfigExtension
+    public static class IdentityConfig
     {
         public static void ConfigureIdentity(this IServiceCollection services)
         {

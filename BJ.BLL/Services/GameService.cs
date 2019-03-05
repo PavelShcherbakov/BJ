@@ -1,4 +1,5 @@
 ﻿using BJ.BLL.Commons;
+using BJ.BLL.Services.Interfaces;
 using BJ.DAL.Interfaces;
 using BJ.Entities;
 using BJ.Entities.Enums;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BJ.BLL.Services
 {
-    public class GameService
+    public class GameService: IGameService
     {
         private static readonly List<Rank> _ranks;
         private static readonly List<Suit> _suits;
@@ -79,7 +80,7 @@ namespace BJ.BLL.Services
             {
                 UserId = userId,
                 GameId = game.Id,
-                Points = Constants.InitionalPoints
+                Points = Constants.GameSettings.InitionalPoints
             };
             await _usersPointsRepository.CreateAsync(usersPoints);
 
@@ -89,8 +90,8 @@ namespace BJ.BLL.Services
             {
                 BotId = x.Id,
                 GameId = game.Id,
-                Points = Constants.InitionalPoints,
-                CardsInHand = Constants.InitialCardsInHand
+                Points = Constants.GameSettings.InitionalPoints,
+                CardsInHand = Constants.GameSettings.InitialCardsInHand
             })
             .ToList();
             await _botsPointsRepository.AddRangeAsync(botsPointsList);
@@ -114,6 +115,9 @@ namespace BJ.BLL.Services
             var userSteps = _usersStepRepository.Find(x => x.UserId == userId && x.GameId == game.Id).ToList();
 
             var response = new GetStateGameResponseView();
+
+            response.GameId = game.Id;
+
             var bots = new List<BotGetStateGameResponseViewItem>();
             foreach (var bp in botsPoints)
             {
@@ -137,7 +141,11 @@ namespace BJ.BLL.Services
             {
                 Name = userName,
                 Cards = cards,
-                State = (int)game.State
+                State = new StateGetStateGameResponseView()
+                {
+                    State = (int)game.State,
+                    StateAsString = game.State.ToString()
+                }
             };
             response.User = userGetStatusGameViewItem;
 
@@ -177,6 +185,9 @@ namespace BJ.BLL.Services
             var userSteps = _usersStepRepository.Find(x => x.UserId == userId && x.GameId == game.Id).ToList();
 
             var response = new GetCardGameResponseView();
+
+            response.GameId = game.Id;
+
             var bots = new List<BotGetCardGameResponseViewItem>();
             foreach (var bp in botsPoints)
             {
@@ -200,7 +211,11 @@ namespace BJ.BLL.Services
             {
                 Name = userName,
                 Cards = cards,
-                State = (int)game.State
+                State = new StateGetCardGameResponseView()
+                {
+                    State = (int)game.State,
+                    StateAsString = game.State.ToString()
+                }
             };
             response.User = userGetStatusGameViewItem;
 
@@ -224,7 +239,7 @@ namespace BJ.BLL.Services
             int WinningPoints = 0;
             botsPointsList.ForEach(botsPoints =>
             {
-                if (botsPoints.Points > WinningPoints && botsPoints.Points <= Constants.WinningNumber)
+                if (botsPoints.Points > WinningPoints && botsPoints.Points <= Constants.GameSettings.WinningNumber)
                 {
                     WinningPoints = botsPoints.Points;
                 }
@@ -232,7 +247,7 @@ namespace BJ.BLL.Services
 
             var resultUsersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
             
-            if (resultUsersPoints.Points > WinningPoints && resultUsersPoints.Points <= Constants.WinningNumber)
+            if (resultUsersPoints.Points > WinningPoints && resultUsersPoints.Points <= Constants.GameSettings.WinningNumber)
             {
                 game.State = UserGameState.Win;
             }
@@ -257,6 +272,9 @@ namespace BJ.BLL.Services
             var userSteps = _usersStepRepository.Find(x => x.UserId == userId && x.GameId == game.Id).ToList();
 
             var response = new EndGameResponseView();
+
+            response.GameId = game.Id;
+
             var bots = new List<BotEndGameResponseViewItem>();
             foreach (var bp in botsPoints)
             {
@@ -280,13 +298,32 @@ namespace BJ.BLL.Services
             {
                 Name = userName,
                 Cards = cards,
-                State = (int)game.State
+                State = new StateEndGameResponseView()
+                {
+                    State = (int)game.State,
+                    StateAsString = game.State.ToString()
+                }
             };
             response.User = userGetStatusGameViewItem;
 
             return response;
         }
 
+        public async Task<HasActiveGameGameResponseView> HasActiveGame(string userId)
+        {
+            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameState.InGame).FirstOrDefault();
+            var response = new HasActiveGameGameResponseView();
+            if (game == null)
+            {
+                response.HasActiveGame = false;
+                return response;
+            }
+            else
+            {
+                response.HasActiveGame = true;
+                return response;
+            }
+        }
 
         ///////////////////////////////////Private////////////////////////////////////////////////
 
@@ -295,8 +332,8 @@ namespace BJ.BLL.Services
 
         private async Task<int> InitialCardsDeal(UsersPoints usersPoints, List<Bot> bots, List<BotsPoints> botsPointsList)
         {
-            int stepCount = Constants.InitialStep;
-            for (int i = 0; i < Constants.InitialNumOfCard; i++)
+            int stepCount = Constants.GameSettings.InitialStep;
+            for (int i = 0; i < Constants.GameSettings.InitialNumOfCard; i++)
             {
                 stepCount = await CardsDeal(usersPoints, bots, botsPointsList, stepCount, true);
             }
@@ -320,7 +357,7 @@ namespace BJ.BLL.Services
             playingBots = GetPlayingBots(botsPointsList);
             while (playingBots.Count != 0)
             {
-                countStep = await CardsDeal(usersPoints, playingBots, botsPointsList, stepNumber, false);
+                countStep = await CardsDeal(usersPoints, playingBots, botsPointsList, countStep, false);
                 playingBots = GetPlayingBots(botsPointsList);
             }
 
@@ -335,7 +372,7 @@ namespace BJ.BLL.Services
             var game = await _gameRepository.GetByIdAsync(usersPoints.GameId);
 
             var numOfCards = bots.Count;
-            if (userPlaying) numOfCards += Constants.NumOfUserInGame;
+            if (userPlaying) numOfCards += Constants.GameSettings.NumOfUserInGame;
 
             int countCardInDeck = await _deckRepository.GetCountCardsAsync(usersPoints.GameId);
             while (countCardInDeck < numOfCards)
@@ -374,21 +411,7 @@ namespace BJ.BLL.Services
             return stepNum;
         }
 
-        public async Task<HasActiveGameGameResponseView> HasActiveGame(string userId)
-        {
-            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameState.InGame).FirstOrDefault();
-            var response = new HasActiveGameGameResponseView();
-            if (game == null)
-            {
-                response.HasActiveGame = false;
-                return response;
-            }
-            else
-            {
-                response.HasActiveGame = true;
-                return response;
-            }
-        }
+        
 
         
         ///////////////////////////////////Additional////////////////////////////////////////////////
@@ -429,7 +452,7 @@ namespace BJ.BLL.Services
         private async Task SetUsersPointsAsync(UsersPoints usersPoints, Rank rank)
         {
             usersPoints.Points += (int)rank;
-            if (usersPoints.Points > Constants.WinningNumber)
+            if (usersPoints.Points > Constants.GameSettings.WinningNumber)
             {
                 var game = await _gameRepository.GetByIdAsync(usersPoints.GameId);
                 game.State = UserGameState.Lose;
@@ -466,7 +489,7 @@ namespace BJ.BLL.Services
             var playingBots = new List<Bot>();
             botsPointsList.ForEach(botsPoints =>
             {
-                if (botsPoints.Points < Constants.BotStopGame)
+                if (botsPoints.Points < Constants.GameSettings.BotStopGame)
                 {
                     playingBots.Add(botsPoints.Bot);
                 }

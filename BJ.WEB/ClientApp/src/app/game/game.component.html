@@ -1,8 +1,11 @@
-<div class="row">
-  <div class="col-3">
-    <app-nav-menu></app-nav-menu>
-  </div>
-  <div class="col-9">
-    </router-outlet>
+<div class="container-fluid">
+  <div class="row">
+    <aside class="col-12 col-md-2 ">
+      <app-nav-menu></app-nav-menu>
+
+    </aside>
+    <main class="col">
+      <router-outlet></router-outlet>
+    </main>
   </div>
 </div>

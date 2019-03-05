@@ -1,25 +1,29 @@
+<div class="row justify-content-center">
+
+  <div class="col-10">
 <h2>Sumary</h2>
 <table class="table table-hover">
   <thead class="thead-light">
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">Name</th>
-      <th scope="col">Points</th>
-      <th scope="col">State</th>
+      <th scope="col" class ="index">#</th>
+      <th scope="col" class ="name">Name</th>
+      <th scope="col" class ="name">Points</th>
+      <th scope="col" class ="state">State</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let player of model.summary,let i = index">
-      <th scope="row">{{i+1}}</th>
-      <td>{{player.name}}</td>
-      <td>{{player.points}}</td>
-      <td>{{player.state}}</td>
+    <tr  *ngFor="let player of model.summary,let i = index">
+      <th class ="index" scope="row">{{i+1}}</th>
+      <td class ="name">{{player.name}}</td>
+      <td class ="points">{{player.points}}</td>
+      <td class ="state">{{player.state.stateAsString}}</td>
     </tr>
   </tbody>
 </table>
 
-<br>
-<h2>Steps</h2>
+<hr />
+
+<h2 >Steps</h2>
 <table class="table table-hover" *ngFor="let step of model.steps,let i = index">
 
   <thead class="thead-light">
@@ -27,18 +31,20 @@
       <th class="text-center" colspan="4">Step {{i+1}}</th>
     </tr>
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">Name</th>
-      <th scope="col">Suit</th>
-      <th scope="col">Rank</th>
+      <th scope="col" class ="index">#</th>
+      <th scope="col" class ="Name">Name</th>
+      <th scope="col" class ="points">Suit</th>
+      <th scope="col" class ="state">Rank</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let playerInfo of step.playerInfo,let i = index">
-      <th scope="row">{{i+1}}</th>
-      <td>{{playerInfo.name}}</td>
-      <td>{{playerInfo.suit}}</td>
-      <td>{{playerInfo.rank}}</td>
+      <th scope="row" class ="index">{{i+1}}</th>
+      <td class ="Name">{{playerInfo.name}}</td>
+      <td class ="points">{{playerInfo.card.suit.suit|suit}}</td>
+      <td class ="state">{{playerInfo.card.rank.rankAsString}}</td>
     </tr>
   </tbody>
 </table>
+</div>
+</div>

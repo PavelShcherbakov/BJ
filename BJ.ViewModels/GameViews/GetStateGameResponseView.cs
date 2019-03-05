@@ -8,6 +8,7 @@ namespace BJ.ViewModels.GameViews
     {
         public List<BotGetStateGameResponseViewItem> Bots { get; set; }
         public UserGetStateGameResponseView User { get; set; }
+        public Guid GameId { get; set; }
     }
 
     public class BotGetStateGameResponseViewItem
@@ -20,7 +21,13 @@ namespace BJ.ViewModels.GameViews
     {
         public string Name { get; set; }
         public List<CardGetStateGameResponseViewItem> Cards { get; set; }
+        public StateGetStateGameResponseView State { get; set; }
+    }
+
+    public class StateGetStateGameResponseView
+    {
         public int State { get; set; }
+        public string StateAsString { get; set; }
     }
 
     public class CardGetStateGameResponseViewItem

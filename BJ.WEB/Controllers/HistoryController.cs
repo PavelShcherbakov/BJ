@@ -1,4 +1,6 @@
 ﻿using BJ.BLL.Services;
+using BJ.BLL.Services.Interfaces;
+using BJ.ViewModels;
 using BJ.ViewModels.HistoryView;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,22 +13,28 @@ namespace BJ.WEB.Controllers
     [ApiController]
     public class HistoryController : BaseController
     {
-        private readonly HistoryService _historyService;
+        private readonly IHistoryService _historyService;
 
-        public HistoryController(HistoryService historyService)
+        public HistoryController(IHistoryService historyService)
         {
             _historyService = historyService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllGames()
+        public async Task<GenericResponseView<GetAllGamesHistoryResponseView>> GetAllGames()
         {
-            return await Execute(() => _historyService.GetAllGames(UserId));
+            var response = new GenericResponseView<GetAllGamesHistoryResponseView>();
+            response.Model = await _historyService.GetAllGames(UserId);
+            return response;
+            //return await Execute(() => _historyService.GetAllGames(UserId));
         }
         [HttpPost]
-        public async Task<IActionResult> GetGameInfo(GetGameInfoHistoryView model)
+        public async Task<GenericResponseView<GetGameInfoHistoryResponseView>> GetGameInfo(GetGameInfoHistoryView model)
         {
-            return await Execute(() => _historyService.GetGameInfo(UserId, model));
+            var response = new GenericResponseView<GetGameInfoHistoryResponseView>();
+            response.Model = await _historyService.GetGameInfo(UserId, model);
+            return response;
+            //return await Execute(() => _historyService.GetGameInfo(UserId, model));
         }
     }
 }

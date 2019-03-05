@@ -1,3 +1,4 @@
+import { SuitPipe } from './pipes/suit.pipe';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
@@ -6,8 +7,9 @@ import { RouterModule } from '@angular/router';
 import { ModalModule } from 'ngx-bootstrap';
 import { ConfirmLogoutModalComponent } from './components/confirm-logout-modal/confirm-logout-modal.component';
 
+
 @NgModule({
-  declarations: [NavMenuComponent, ConfirmLogoutModalComponent],
+  declarations: [NavMenuComponent, ConfirmLogoutModalComponent, SuitPipe],
   imports: [
     CommonModule,
     FormsModule,
@@ -22,7 +24,8 @@ import { ConfirmLogoutModalComponent } from './components/confirm-logout-modal/c
     NavMenuComponent,
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SuitPipe,
   ]
 })
 export class SharedModule { }

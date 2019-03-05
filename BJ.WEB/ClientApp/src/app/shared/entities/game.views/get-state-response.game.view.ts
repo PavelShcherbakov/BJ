@@ -1,6 +1,9 @@
+import { Guid } from 'guid-typescript';
+
 export class GetStateResponseGameView {
     public bots: BotGetStateGameResponseViewItem[];
     public user: UserGetStateGameResponseView;
+    public gameId: Guid;
 }
 
 export class BotGetStateGameResponseViewItem {
@@ -11,7 +14,12 @@ export class BotGetStateGameResponseViewItem {
 export class UserGetStateGameResponseView {
     public name: string;
     public cards: CardGetStateGameResponseViewItem[];
+    public state: StateGetStateGameResponseView;
+}
+
+export class StateGetStateGameResponseView {
     public state: number;
+    public stateAsString: string;
 }
 
 export class CardGetStateGameResponseViewItem {

@@ -1,0 +1,23 @@
+
+table {
+  table-layout: fixed;
+  word-wrap: break-word;
+  margin-top: 2rem;
+}
+
+.index {
+  width: 15%;
+}
+.create-data {
+  width: 35%;
+}
+.num-of-player {
+  width: 25%;
+}
+.result{
+  width: 25%;
+}
+
+.index,.create-data ,.num-of-player,.result{
+    text-align: center;
+}

@@ -1,42 +1,46 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using BJ.BLL.Services.Interfaces;
+using BJ.ViewModels;
 using BJ.ViewModels.AccountViews;
-using BJ.BLL.Services;
-using System.Net;
-using Microsoft.AspNetCore.Authorization;
-using System.Linq;
-using System.Security.Claims;
+using BJ.WEB.Filters;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BJ.WEB.Controllers
 {
+    [CheckModelStateFilter]
     [Route("[controller]/[action]")]
     public class AccountController : BaseController
     {
-        private readonly AccountService _accountService;
-        
+        private readonly IAccountService _accountService;
 
-        public AccountController(AccountService accountService)
+
+        public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginAccountView model)
+        public async Task<GenericResponseView<LoginAccountResponseView>> Login([FromBody] LoginAccountView model)
         {
-            return await Execute(()=>_accountService.Login(model));
+            var response = new GenericResponseView<LoginAccountResponseView>();
+            response.Model = await _accountService.Login(model);
+            return response;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterAccountView model)
+        public async Task<GenericResponseView<LoginAccountResponseView>> Register([FromBody] RegisterAccountView model)
         {
-
-            return await Execute(() => _accountService.Register(model));
+            var response = new GenericResponseView<LoginAccountResponseView>();
+            response.Model = await _accountService.Register(model);
+            return response;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<GenericResponseView<GetAllUserAccountResponseView>> GetAllUsers()
         {
-            return await Execute(() => _accountService.GetAllUsers());
+            var response = new GenericResponseView<GetAllUserAccountResponseView>();
+            response.Model = await _accountService.GetAllUsers();
+            return response;
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using BJ.BLL.Services;
+using BJ.BLL.Services.Interfaces;
+using BJ.ViewModels;
 using BJ.ViewModels.GameViews;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,41 +13,51 @@ namespace BJ.WEB.Controllers
     [ApiController]
     public class GameController : BaseController
     {
-        private readonly GameService _gameService;
+        private readonly IGameService _gameService;
 
-        public GameController(GameService gameService)
+        public GameController(IGameService gameService)
         {
             _gameService = gameService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Start([FromBody] StartGameView model)
+        public async Task<GenericResponseView<StartGameResponseView>> Start([FromBody] StartGameView model)
         {
-            return await Execute(() => _gameService.StartGame(UserId, model)); 
+            var response = new GenericResponseView<StartGameResponseView>();
+            response.Model = await _gameService.StartGame(UserId, model);
+            return response;
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetCard()
+        public async Task<GenericResponseView<GetCardGameResponseView>> GetCard()
         {
-            return await Execute(() => _gameService.GetCard(UserId));
+            var response = new GenericResponseView<GetCardGameResponseView>();
+            response.Model = await _gameService.GetCard(UserId);
+            return response;
         }
 
         [HttpGet]
-        public async Task<IActionResult> HasActiveGame()
+        public async Task<GenericResponseView<HasActiveGameGameResponseView>> HasActiveGame()
         {
-            return await Execute(() => _gameService.HasActiveGame(UserId));
+            var response = new GenericResponseView<HasActiveGameGameResponseView>();
+            response.Model = await _gameService.HasActiveGame(UserId);
+            return response;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetState()
+        public async Task<GenericResponseView<GetStateGameResponseView>> GetState()
         {
-            return await Execute(() => _gameService.GetState(UserId));
+            var response = new GenericResponseView<GetStateGameResponseView>();
+            response.Model = await _gameService.GetState(UserId);
+            return response;
         }
 
         [HttpPost]
-        public async Task<IActionResult> End()
+        public async Task<GenericResponseView<EndGameResponseView>> End()
         {
-            return await Execute(() => _gameService.EndGame(UserId));
+            var response = new GenericResponseView<EndGameResponseView>();
+            response.Model = await _gameService.EndGame(UserId);
+            return response;
         }
     }
 }

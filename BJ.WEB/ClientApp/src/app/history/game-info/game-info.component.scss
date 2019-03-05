@@ -1,0 +1,28 @@
+h2 {
+  text-align: center;
+  margin: 1rem;
+}
+
+
+table {
+    table-layout: fixed;
+    word-wrap: break-word;
+    margin-top: 2rem;
+  }
+  
+  .index {
+    width: 15%;
+  }
+  .name {
+    width: 35%;
+  }
+  .points {
+    width: 25%;
+  }
+  .state{
+    width: 25%;
+  }
+  
+  .index,.name ,.points,.state{
+      text-align: left;
+  }

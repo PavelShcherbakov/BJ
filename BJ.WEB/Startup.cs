@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using BJ.BLL.Configrutions;
 using BJ.BLL.Exceptions;
+using BJ.WEB.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,9 +37,11 @@ namespace BJ.WEB
             services.ConfigureDbContext(Configuration);
             services.ConfigureIdentity();
             var ORM = Configuration.GetSection("DBOptions:ORM").Value;
-            if (ORM == "EF") services.Inject("EF");
+            if (ORM == "EF") services.ConfigureDependencyInjection("EF");
             else throw new CustomServiceException("ORM not defined");
-            services.InitiolazeDb();
+            services.InitializeDatabase();
+
+            
 
             //services.Configure<CookiePolicyOptions>(options =>
             //{
@@ -81,13 +84,10 @@ namespace BJ.WEB
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
+
+            if (!env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error ");
                 app.UseHsts();
             }
 

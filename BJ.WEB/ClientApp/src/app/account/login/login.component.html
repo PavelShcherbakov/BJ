@@ -15,7 +15,7 @@
           <datalist id="names">
             <option *ngFor="let name of userNames"> {{name}} </option>
           </datalist>
-
+          <alert *ngIf="showMessage" type= "danger" [dismissible]="true" >{{alertMessage}}</alert>
           <div *ngIf="isControlInvalid('password')" class="alert alert-danger">Invalid password.</div>
           <!-- <div *ngIf="isControlInvalid(password)" class="alert alert-danger">Authorisation Error. Invalid password.</div> -->
           <input type="password" id="password" name="password" formControlName="password"
@@ -28,3 +28,6 @@
   </div>
 
 </div>
+
+
+  

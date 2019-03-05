@@ -3,7 +3,7 @@
     <div class='col-4'>
       <form [formGroup]="startGameForm" (submit)="onSubmit()">
         <div class="form-group">
-          <label class=' row justify-content-center form-signin-heading'>Enter number of bots</label>
+          <label class=' row justify-content-center form-signin-heading text-nowrap'>Enter number of bots</label>
           <div class="alert alert-danger" *ngIf="isControlInvalid('numberOfBots')">
             Enter a number between 1 and 100!
           </div>
@@ -11,7 +11,7 @@
         </div>
         <div class="form-group">
           <!-- <button class="btn btn-primary btn-block justify-content-center" [disabled]="myForm.invalid"> -->
-          <button class="btn btn-primary btn-block justify-content-center" type="submit" [disabled]="startGameForm.invalid" >
+          <button class="btn btn-primary btn-block justify-content-center text-nowrap" type="submit" [disabled]="startGameForm.invalid" >
             Submit
           </button>
         </div>

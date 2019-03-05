@@ -16,12 +16,33 @@ export class Step {
 
 export class PlayerInfo {
     public name: string;
-    public suit: number;
-    public rank: number;
+    public card: Card;
 }
+
+export class Card {
+    public suit: Suit;
+    public rank: Rank;
+}
+
+export class Suit {
+    public suit: number;
+    public suitAsString: string;
+}
+
+export class Rank {
+    public rank: number;
+    public rankAsString: string;
+}
+
 
 export class Sammury {
     public name: string;
     public points: number;
-    public state: number;
+    public state: State;
 }
+
+export class State {
+    public state: number;
+    public stateAsString: string;
+}
+

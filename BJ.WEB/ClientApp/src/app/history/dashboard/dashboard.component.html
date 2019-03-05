@@ -1,20 +1,32 @@
-<table class="table table-hover">
-  <thead class="thead-light">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Data creation</th>
-      <th scope="col">Number of players</th>
-      <th scope="col">Result</th>
-      <th scope="col"></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let game of model.games,let i = index" (click)='goToGame(game.gameId)'>
-      <th scope="row">{{i+1}}</th>
-      <td>{{game.creationDate| date:'short'}}</td>
-      <td>{{game.numberOfPlayers}}</td>
-      <td>{{game.result}}</td>
-      <!-- <td><button class="bnt btn-light" (click)='goToGame(game.gameId)'>details</button></td> -->
-    </tr>
-  </tbody>
-</table>
+<div class="row justify-content-center">
+  <div class="col-10">
+    <div *ngIf=" model.games.length!==0; then thenBlock else elseBlock"></div>
+  </div>
+</div>
+
+<ng-template #thenBlock>
+  <table class="table table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th class ="index" scope="col">#</th>
+        <th class ="create-data" scope="col">Data creation</th>
+        <th class ="num-of-player" scope="col">Number of players</th>
+        <th class ="result" scope="col">Result</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let game of model.games,let i = index" (click)='goToGame(game.gameId)'>
+        <th class ="index" scope="row">{{i+1}}</th>
+        <td class ="create-data">{{game.creationDate| date:'short'}}</td>
+        <td class ="num-of-player">{{game.numberOfPlayers}}</td>
+        <td class ="result" >{{game.result.stateAsString}}</td>
+      </tr>
+    </tbody>
+  </table>
+</ng-template>
+
+<ng-template #elseBlock>
+
+  You have not played games
+
+</ng-template>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GameDataService } from 'src/app/shared/services/game/game-data.service';
 import { TableModel } from 'src/app/shared/models/table.model';
 import { Router } from '@angular/router';
+import { Guid } from 'guid-typescript';
 
 @Component({
   selector: 'app-table',
@@ -23,5 +24,9 @@ export class TableComponent implements OnInit {
 
   save() {
     this.dataService.endGame().subscribe(x => this.model = x);
+  }
+
+  goToGame() {
+    this.router.navigate(['/history/game', this.model.gameId]);
   }
 }
