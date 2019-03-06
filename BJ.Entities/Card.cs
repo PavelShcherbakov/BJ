@@ -9,8 +9,8 @@ namespace BJ.Entities
         public Guid GameId { get; set; }
         [ForeignKey("GameId")]
         public virtual Game Game { get; set; }
-        public Rank Rank { get; set; }
-        public Suit Suit { get; set; }
+        public RankType Rank { get; set; }
+        public SuitType Suit { get; set; }
     }
     
 }

@@ -10,7 +10,7 @@ namespace BJ.Entities
         public virtual User User { get; set; }
         public int CountStep { get; set; }
         public int NumberOfPlayers { get; set; }
-        public UserGameState State { get; set; }
+        public UserGameStateType State { get; set; }
     }
     
 }

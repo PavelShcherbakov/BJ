@@ -24,6 +24,7 @@ export class User {
 
     constructor() {
         this.cards = [];
+        this.state = new State();
     }
 }
 

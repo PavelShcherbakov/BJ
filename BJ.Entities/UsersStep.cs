@@ -11,8 +11,8 @@ namespace BJ.Entities
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
         public Guid GameId { get; set; }
-        public Rank Rank { get; set; }
-        public Suit Suit { get; set; }
+        public RankType Rank { get; set; }
+        public SuitType Suit { get; set; }
     }
 }
 

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BJ.Entities.Enums
 {
-    public enum Suit
+    public enum SuitType
     {
         Hearts = 0,
         Clubs = 1,

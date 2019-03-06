@@ -47,7 +47,7 @@ namespace BJ.BLL.Services
         {
             var response = new GetAllGamesHistoryResponseView();
             response.Games = new List<GameGetAllGamesHistoryResponseViewItem>();
-            var games = _gameRepository.Find(x => x.UserId == userId && (int)x.State != (int)UserGameState.InGame).ToList();
+            var games = _gameRepository.Find(x => x.UserId == userId && (int)x.State != (int)UserGameStateType.InGame).ToList();
             games.ForEach(
                 x =>
                 {
@@ -176,8 +176,8 @@ namespace BJ.BLL.Services
                 Points = userPoints.Points,
                 State = new StateGetGameInfoHistoryResponseView()
                 {
-                    State = userPoints.Points == winningPoints ? (int)UserGameState.Win : (int)UserGameState.Lose,
-                    StateAsString = userPoints.Points == winningPoints ? UserGameState.Win.ToString() : UserGameState.Lose.ToString()
+                    State = userPoints.Points == winningPoints ? (int)UserGameStateType.Win : (int)UserGameStateType.Lose,
+                    StateAsString = userPoints.Points == winningPoints ? UserGameStateType.Win.ToString() : UserGameStateType.Lose.ToString()
 
                 }
             });
@@ -191,8 +191,8 @@ namespace BJ.BLL.Services
                         Points = bp.Points,
                         State = new StateGetGameInfoHistoryResponseView()
                         {
-                            State = bp.Points == winningPoints ? (int)UserGameState.Win : (int)UserGameState.Lose,
-                            StateAsString = bp.Points == winningPoints ? UserGameState.Win.ToString() : UserGameState.Lose.ToString()
+                            State = bp.Points == winningPoints ? (int)UserGameStateType.Win : (int)UserGameStateType.Lose,
+                            StateAsString = bp.Points == winningPoints ? UserGameStateType.Win.ToString() : UserGameStateType.Lose.ToString()
                         }
                     });
                 });

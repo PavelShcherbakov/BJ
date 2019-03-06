@@ -11,8 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using BJ.BLL.Configrutions.Options;
+using BJ.WEB.Filters;
 
 namespace BJ.WEB
 {
@@ -25,63 +26,32 @@ namespace BJ.WEB
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            //// Настройка параметров и DI
-            //services.AddOptions();
-            //// создание объекта Person по ключам из конфигурации
-            //services.Configure<DBOptions>(Configuration.GetSection("DBOptions"));
-
-            services.ConfigureDbContext(Configuration);
-            services.ConfigureIdentity();
-            var ORM = Configuration.GetSection("DBOptions:ORM").Value;
-            if (ORM == "EF") services.ConfigureDependencyInjection("EF");
-            else throw new CustomServiceException("ORM not defined");
-            services.InitializeDatabase();
+            services.Configure<JwtOptions>(Configuration.GetSection("JwtOptions"));
 
             
 
-            //services.Configure<CookiePolicyOptions>(options =>
-            //{
-            //    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-            //    options.CheckConsentNeeded = context => true;
-            //    options.MinimumSameSitePolicy = SameSiteMode.None;
-            //});
+            services.ConfigureDbContext(Configuration);
 
+            services.ConfigureIdentity(Configuration);
 
-            // ===== Add Jwt Authentication ========
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            services.ConfigureDependencyInjection(Configuration);
 
-                })
-                .AddJwtBearer(cfg =>
-                {
-                    cfg.RequireHttpsMetadata = false;
-                    cfg.SaveToken = true;
-                    cfg.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidIssuer = Configuration["JwtIssuer"],
-                        ValidAudience = Configuration["JwtIssuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtKey"])),
-                        ClockSkew = TimeSpan.Zero // remove delay of token when expire
-                    };
-                });
+            services.InitializeDatabase();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new ValidateModelFilter());
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseMiddleware<ExceptionHandlerMiddleware>();
@@ -94,7 +64,7 @@ namespace BJ.WEB
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-            //app.UseCookiePolicy();
+
 
             app.UseAuthentication();
 
@@ -107,9 +77,6 @@ namespace BJ.WEB
 
             app.UseSpa(spa =>
             {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
                 spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())

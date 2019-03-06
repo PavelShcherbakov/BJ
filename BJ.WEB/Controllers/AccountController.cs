@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BJ.WEB.Controllers
 {
-    [CheckModelStateFilter]
+    
     [Route("[controller]/[action]")]
     public class AccountController : BaseController
     {

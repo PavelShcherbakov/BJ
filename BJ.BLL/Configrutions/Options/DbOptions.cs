@@ -1,4 +1,4 @@
-﻿namespace BJ.BLL.Configrutions
+﻿namespace BJ.BLL.Configrutions.Options
 {
     public class DbOptions
     {

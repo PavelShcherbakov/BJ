@@ -1,6 +1,8 @@
-﻿using BJ.BLL.Providers.Interfaces;
+﻿using BJ.BLL.Configrutions.Options;
+using BJ.BLL.Providers.Interfaces;
 using BJ.Entities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -12,11 +14,12 @@ namespace BJ.BLL.Providers
 {
     public class JwtTokenProvider : ITokenProvider
     {
-        private readonly IConfiguration _configuration;
+        private readonly JwtOptions _options;
 
-        public JwtTokenProvider(IConfiguration configuration)
+        public JwtTokenProvider(IOptions<JwtOptions> options)
         {
-            _configuration = configuration;
+            _options = options.Value;
+
         }
 
         public string GenerateJwtToken(string email, User user)
@@ -28,13 +31,13 @@ namespace BJ.BLL.Providers
                 new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.JwtKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtExpireDays"]));
+            var expires = DateTime.Now.AddDays(Convert.ToDouble(_options.JwtExpireDays));
 
             var token = new JwtSecurityToken(
-                _configuration["JwtIssuer"],
-                _configuration["JwtIssuer"],
+                _options.JwtIssuer,
+                _options.JwtIssuer,
                 claims,
                 expires: expires,
                 signingCredentials: creds

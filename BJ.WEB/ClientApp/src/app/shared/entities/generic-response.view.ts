@@ -1,5 +1,4 @@
-export class GenericResponseView<T>
-{
+export class GenericResponseView<T> {
     public model: T;
     public error: string;
 }

@@ -13,8 +13,8 @@ namespace BJ.BLL.Services
 {
     public class GameService: IGameService
     {
-        private static readonly List<Rank> _ranks;
-        private static readonly List<Suit> _suits;
+        private static readonly List<RankType> _ranks;
+        private static readonly List<SuitType> _suits;
 
         static GameService()
         {
@@ -22,14 +22,14 @@ namespace BJ.BLL.Services
             _suits = GetSuits();
         }
 
-        private static List<Rank> GetRanks()
+        private static List<RankType> GetRanks()
         {
-            var ranks = Enum.GetValues(typeof(Rank)).Cast<Rank>().ToList();
+            var ranks = Enum.GetValues(typeof(RankType)).Cast<RankType>().ToList();
             return ranks;
         }
-        private static List<Suit> GetSuits()
+        private static List<SuitType> GetSuits()
         {
-            return Enum.GetValues(typeof(Suit)).Cast<Suit>().ToList();
+            return Enum.GetValues(typeof(SuitType)).Cast<SuitType>().ToList();
         }
 
 
@@ -71,7 +71,7 @@ namespace BJ.BLL.Services
             var game = new Game()
             {
                 UserId = userId,
-                State = UserGameState.InGame,
+                State = UserGameStateType.InGame,
                 NumberOfPlayers = model.NumberOfBots+1
             };
             await _gameRepository.CreateAsync(game);
@@ -108,7 +108,7 @@ namespace BJ.BLL.Services
 
         public async Task<GetStateGameResponseView> GetState(string userId)
         {
-            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameState.InGame).FirstOrDefault();
+            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameStateType.InGame).FirstOrDefault();
             var botsPoints = _botsPointsRepository.Find(x => x.GameId == game.Id).ToList();
             var user = await _userRepository.GetByIdAsync(userId);
             var usersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
@@ -159,8 +159,8 @@ namespace BJ.BLL.Services
 
             GetCardGameResponseView response;
 
-            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameState.InGame).FirstOrDefault(); 
-            if (game.State==UserGameState.Lose)
+            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameStateType.InGame).FirstOrDefault(); 
+            if (game.State==UserGameStateType.Lose)
             {
                 response = await CreateGetCardGameResponseView(userId, game);
                 return response;
@@ -225,7 +225,7 @@ namespace BJ.BLL.Services
 
         public async Task<EndGameResponseView> EndGame(string userId)
         {
-            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameState.InGame).FirstOrDefault();
+            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameStateType.InGame).FirstOrDefault();
             var usersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
             var botsPointsList = _botsPointsRepository.Find(x => x.GameId == game.Id) as List<BotsPoints>;
 
@@ -249,11 +249,11 @@ namespace BJ.BLL.Services
             
             if (resultUsersPoints.Points > WinningPoints && resultUsersPoints.Points <= Constants.GameSettings.WinningNumber)
             {
-                game.State = UserGameState.Win;
+                game.State = UserGameStateType.Win;
             }
             else
             {
-                game.State = UserGameState.Lose;
+                game.State = UserGameStateType.Lose;
             }
 
             await _gameRepository.UpdateAsync(game);
@@ -311,7 +311,7 @@ namespace BJ.BLL.Services
 
         public async Task<HasActiveGameGameResponseView> HasActiveGame(string userId)
         {
-            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameState.InGame).FirstOrDefault();
+            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameStateType.InGame).FirstOrDefault();
             var response = new HasActiveGameGameResponseView();
             if (game == null)
             {
@@ -420,9 +420,9 @@ namespace BJ.BLL.Services
         {
             List<Card> deck = new List<Card>();
 
-            for (int i = 0; i < Enum.GetNames(typeof(Rank)).Length; i++)
+            for (int i = 0; i < Enum.GetNames(typeof(RankType)).Length; i++)
             {
-                for (int j = 0; j < Enum.GetNames(typeof(Suit)).Length; j++)
+                for (int j = 0; j < Enum.GetNames(typeof(SuitType)).Length; j++)
                 {
                     deck.Add(new Card() { GameId = gameId, Rank = _ranks[i], Suit = _suits[j] });
                 }
@@ -449,13 +449,13 @@ namespace BJ.BLL.Services
             return usersStep;
         }
 
-        private async Task SetUsersPointsAsync(UsersPoints usersPoints, Rank rank)
+        private async Task SetUsersPointsAsync(UsersPoints usersPoints, RankType rank)
         {
             usersPoints.Points += (int)rank;
             if (usersPoints.Points > Constants.GameSettings.WinningNumber)
             {
                 var game = await _gameRepository.GetByIdAsync(usersPoints.GameId);
-                game.State = UserGameState.Lose;
+                game.State = UserGameStateType.Lose;
                 await _gameRepository.UpdateAsync(game);
             }
             await _usersPointsRepository.UpdateAsync(usersPoints);
@@ -477,7 +477,7 @@ namespace BJ.BLL.Services
             return (botsStep, botsPoints);
         }
 
-        private BotsPoints SetBotsPointsAsync(BotsPoints botsPoints, Rank rank)
+        private BotsPoints SetBotsPointsAsync(BotsPoints botsPoints, RankType rank)
         {
             botsPoints.Points += (int)rank;
             botsPoints.CardsInHand++;

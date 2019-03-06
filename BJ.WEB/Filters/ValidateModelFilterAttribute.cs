@@ -6,7 +6,7 @@ using System;
 
 namespace BJ.WEB.Filters
 {
-    public class CheckModelStateFilterAttribute : Attribute, IActionFilter
+    public class ValidateModelFilter : IActionFilter
     {
 
         public void OnActionExecuting(ActionExecutingContext context)

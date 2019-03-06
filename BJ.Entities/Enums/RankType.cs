@@ -1,6 +1,6 @@
 ﻿namespace BJ.Entities.Enums
 {
-    public enum Rank
+    public enum RankType
     {
         Six = 6,
         Seven = 7,

@@ -5,7 +5,14 @@ using BJ.BLL.Services;
 using BJ.BLL.Services.Interfaces;
 using BJ.DAL.Interfaces;
 using BJ.DAL.Repositories.EF;
+using BJ.BLL.Configrutions.Options;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System;
 
 namespace BJ.BLL.Configrutions
 {
@@ -13,15 +20,14 @@ namespace BJ.BLL.Configrutions
     public static class DependencyInjectionConfig
     {
 
-        public static void ConfigureDependencyInjection(this IServiceCollection services, string dbType)
+        public static void ConfigureDependencyInjection(this IServiceCollection services, IConfiguration configuration)
         {
-
 
             services.AddTransient<ITokenProvider, JwtTokenProvider>();
             
+            var dbOptions = configuration.GetSection("DbOptions").Get<DbOptions>();
 
-            //if (configuration.GetValue<string>("ORM") == "EF") if (configuration.GetValue<string>("ORM") == "EF")
-            if (dbType == "EF")
+            if (dbOptions.ORM == "EF")
             {
                 services.AddTransient<IBotRepository, EFBotRepository>();
                 services.AddTransient<IBotsStepRepository, EFBotsStepRepository>();
@@ -37,11 +43,9 @@ namespace BJ.BLL.Configrutions
                 throw new CustomServiceException("ORM not defined");
             }
 
-
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IGameService, GameService>();
             services.AddTransient<IHistoryService, HistoryService>();
-
         }
     }
 }
