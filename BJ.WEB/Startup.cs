@@ -1,19 +1,13 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using BJ.BLL.Configrutions;
-using BJ.BLL.Exceptions;
+﻿using BJ.BLL.Configrutions;
+using BJ.BLL.Configrutions.Options;
+using BJ.WEB.Filters;
 using BJ.WEB.Middlewares;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using BJ.BLL.Configrutions.Options;
-using BJ.WEB.Filters;
 
 namespace BJ.WEB
 {
@@ -28,9 +22,12 @@ namespace BJ.WEB
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+
+
             services.Configure<JwtOptions>(Configuration.GetSection("JwtOptions"));
 
-            
+            services.ConfigureOptions(Configuration);
 
             services.ConfigureDbContext(Configuration);
 

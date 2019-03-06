@@ -17,9 +17,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         return next.handle(req)
             .pipe(
                 catchError((error: HttpErrorResponse) => {
-                    debugger
                     const err = new Error(error.error.error);
-                    debugger
                     return throwError(err);
                 })
             );

@@ -28,10 +28,10 @@ namespace BJ.BLL.Configrutions
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-            // ===== Add Jwt Authentication ========
+            
             var jwtOption = configuration.GetSection("JwtOptions").Get<JwtOptions>();
 
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             services
                 .AddAuthentication(options =>
                 {
@@ -49,7 +49,7 @@ namespace BJ.BLL.Configrutions
                         ValidIssuer = jwtOption.JwtIssuer,
                         ValidAudience = jwtOption.JwtIssuer,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOption.JwtKey)),
-                        ClockSkew = TimeSpan.Zero // remove delay of token when expire
+                        ClockSkew = TimeSpan.Zero
                     };
                 });
         }

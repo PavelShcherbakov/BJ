@@ -1,8 +1,9 @@
-﻿using BJ.DAL;
-using BJ.DAL.Interfaces;
+﻿using BJ.BLL.Configrutions.Options;
+using BJ.DAL;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+using System.Collections.Generic;
 
 namespace BJ.BLL.Configrutions
 {
@@ -10,7 +11,10 @@ namespace BJ.BLL.Configrutions
     {
         public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationDbContext>();
+            var initializeConnectionString = configuration.GetSection("DbOptions").Get<DbOptions>().InitializeConnectionString;
+            var connectionString = configuration.GetConnectionString(initializeConnectionString);
+
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
         }
     }
 }
