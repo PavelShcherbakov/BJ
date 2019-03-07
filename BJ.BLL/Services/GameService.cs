@@ -1,4 +1,5 @@
 ﻿using BJ.BLL.Commons;
+using BJ.BLL.Helpers.Interfaces;
 using BJ.BLL.Services.Interfaces;
 using BJ.DAL.Interfaces;
 using BJ.Entities;
@@ -11,28 +12,8 @@ using System.Threading.Tasks;
 
 namespace BJ.BLL.Services
 {
-    public class GameService: IGameService
+    public class GameService : IGameService
     {
-        private static readonly List<RankType> _ranks;
-        private static readonly List<SuitType> _suits;
-
-        static GameService()
-        {
-            _ranks = GetRanks();
-            _suits = GetSuits();
-        }
-
-        private static List<RankType> GetRanks()
-        {
-            var ranks = Enum.GetValues(typeof(RankType)).Cast<RankType>().ToList();
-            return ranks;
-        }
-        private static List<SuitType> GetSuits()
-        {
-            return Enum.GetValues(typeof(SuitType)).Cast<SuitType>().ToList();
-        }
-
-
         private readonly IDeckRepository _deckRepository;
         private readonly IUserRepository _userRepository;
         private readonly IBotRepository _botRepository;
@@ -41,7 +22,7 @@ namespace BJ.BLL.Services
         private readonly IUsersStepRepository _usersStepRepository;
         private readonly IUsersPointsRepository _usersPointsRepository;
         private readonly IBotsPointsRepository _botsPointsRepository;
-
+        private readonly IDeckHelper _deckHelper;
 
 
         public GameService(
@@ -52,7 +33,8 @@ namespace BJ.BLL.Services
             IUsersStepRepository usersStepRepository,
             IBotsStepRepository botsStepRepository,
             IUsersPointsRepository usersPointsRepository,
-            IBotsPointsRepository botsPointsRepository)
+            IBotsPointsRepository botsPointsRepository,
+            IDeckHelper deckHelper)
         {
             _userRepository = userRepository;
             _botRepository = botRepository;
@@ -62,6 +44,7 @@ namespace BJ.BLL.Services
             _botsStepRepository = botsStepRepository;
             _usersPointsRepository = usersPointsRepository;
             _botsPointsRepository = botsPointsRepository;
+            _deckHelper = deckHelper;
         }
 
         ///////////////////////////////////Public////////////////////////////////////////////////
@@ -72,7 +55,7 @@ namespace BJ.BLL.Services
             {
                 UserId = userId,
                 State = UserGameStateType.InGame,
-                NumberOfPlayers = model.NumberOfBots+1
+                NumberOfPlayers = model.NumberOfBots + 1
             };
             await _gameRepository.CreateAsync(game);
 
@@ -96,7 +79,8 @@ namespace BJ.BLL.Services
             .ToList();
             await _botsPointsRepository.AddRangeAsync(botsPointsList);
 
-            game.CountStep = await InitialCardsDeal(usersPoints, bots, botsPointsList);
+            await InitialCardsDeal(game, usersPoints, bots, botsPointsList);
+
             await _gameRepository.UpdateAsync(game);
 
             var response = new StartGameResponseView()
@@ -111,7 +95,6 @@ namespace BJ.BLL.Services
             var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameStateType.InGame).FirstOrDefault();
             var botsPoints = _botsPointsRepository.Find(x => x.GameId == game.Id).ToList();
             var user = await _userRepository.GetByIdAsync(userId);
-            var usersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
             var userSteps = _usersStepRepository.Find(x => x.UserId == userId && x.GameId == game.Id).ToList();
 
             var response = new GetStateGameResponseView();
@@ -159,29 +142,30 @@ namespace BJ.BLL.Services
 
             GetCardGameResponseView response;
 
-            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameStateType.InGame).FirstOrDefault(); 
-            if (game.State==UserGameStateType.Lose)
+            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameStateType.InGame).FirstOrDefault();
+            var usersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
+            var botsPoints = _botsPointsRepository.Find(x => x.GameId == game.Id).ToList();
+            
+
+            if (game.State == UserGameStateType.Lose)
             {
-                response = await CreateGetCardGameResponseView(userId, game);
+                response = await CreateGetCardGameResponseView(userId, game, botsPoints, usersPoints);
                 return response;
             }
 
-            var usersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
-            var botsPointsList = _botsPointsRepository.Find(x => x.GameId == game.Id).ToList();
+            
 
-            await RoundCardsDeal(usersPoints, botsPointsList, game.CountStep);
+            await RoundCardsDeal(game, usersPoints, botsPoints, game.CountStep);
 
-            response = await CreateGetCardGameResponseView(userId, game);
+            response = await CreateGetCardGameResponseView(userId, game, botsPoints, usersPoints);
 
             return response;
         }
 
 
-        private async Task<GetCardGameResponseView> CreateGetCardGameResponseView(string userId, Game game)
-        {
-            var botsPoints = _botsPointsRepository.Find(x => x.GameId == game.Id).ToList();
+        private async Task<GetCardGameResponseView> CreateGetCardGameResponseView(string userId, Game game, List<BotsPoints> botsPoints, UsersPoints usersPoints)
+        {           
             var user = await _userRepository.GetByIdAsync(userId);
-            var usersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
             var userSteps = _usersStepRepository.Find(x => x.UserId == userId && x.GameId == game.Id).ToList();
 
             var response = new GetCardGameResponseView();
@@ -227,9 +211,9 @@ namespace BJ.BLL.Services
         {
             var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameStateType.InGame).FirstOrDefault();
             var usersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
-            var botsPointsList = _botsPointsRepository.Find(x => x.GameId == game.Id) as List<BotsPoints>;
+            var botsPoints = _botsPointsRepository.Find(x => x.GameId == game.Id) as List<BotsPoints>;
 
-            game.CountStep = await LastCardsDeal(usersPoints, botsPointsList, game.CountStep);
+            await LastCardsDeal(game, usersPoints, botsPoints, game.CountStep);
 
 
 
@@ -237,16 +221,16 @@ namespace BJ.BLL.Services
             await _deckRepository.RemoveRangeAsync(remainingCards);
 
             int WinningPoints = 0;
-            botsPointsList.ForEach(botsPoints =>
+            botsPoints.ForEach(bp =>
             {
-                if (botsPoints.Points > WinningPoints && botsPoints.Points <= Constants.GameSettings.WinningNumber)
+                if (bp.Points > WinningPoints && bp.Points <= Constants.GameSettings.WinningNumber)
                 {
-                    WinningPoints = botsPoints.Points;
+                    WinningPoints = bp.Points;
                 }
             });
 
             var resultUsersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
-            
+
             if (resultUsersPoints.Points > WinningPoints && resultUsersPoints.Points <= Constants.GameSettings.WinningNumber)
             {
                 game.State = UserGameStateType.Win;
@@ -258,17 +242,15 @@ namespace BJ.BLL.Services
 
             await _gameRepository.UpdateAsync(game);
 
-            EndGameResponseView response = await CreateEndGameResponseView(userId, game);
+            EndGameResponseView response = await CreateEndGameResponseView(userId, game, usersPoints, botsPoints);
 
             return response;
         }
 
-        private async Task<EndGameResponseView> CreateEndGameResponseView(string userId, Game game)
+        private async Task<EndGameResponseView> CreateEndGameResponseView(string userId, Game game, UsersPoints usersPoints, List<BotsPoints> botsPoints)
         {
             
-            var botsPoints = _botsPointsRepository.Find(x => x.GameId == game.Id).ToList();
             var user = await _userRepository.GetByIdAsync(userId);
-            var usersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
             var userSteps = _usersStepRepository.Find(x => x.UserId == userId && x.GameId == game.Id).ToList();
 
             var response = new EndGameResponseView();
@@ -330,46 +312,41 @@ namespace BJ.BLL.Services
         ///////////////////////////////////CardsDeal////////////////////////////////////////////////
 
 
-        private async Task<int> InitialCardsDeal(UsersPoints usersPoints, List<Bot> bots, List<BotsPoints> botsPointsList)
+        private async Task InitialCardsDeal(Game game, UsersPoints usersPoints, List<Bot> bots, List<BotsPoints> botsPointsList)
         {
-            int stepCount = Constants.GameSettings.InitialStep;
+            
             for (int i = 0; i < Constants.GameSettings.InitialNumOfCard; i++)
             {
-                stepCount = await CardsDeal(usersPoints, bots, botsPointsList, stepCount, true);
+                await CardsDeal(game, usersPoints, bots, botsPointsList, true);
             }
-            return stepCount;
+            
         }
 
-        private async Task<int> RoundCardsDeal(UsersPoints usersPoints, List<BotsPoints> botsPointsList, int stepNumber)
+        private async Task RoundCardsDeal(Game game, UsersPoints usersPoints, List<BotsPoints> botsPointsList, int stepNumber)
         {
 
             var playingBots = GetPlayingBots(botsPointsList);
-            var countStep = await CardsDeal(usersPoints, playingBots, botsPointsList, stepNumber, true);
-            return countStep;
+            await CardsDeal(game, usersPoints, playingBots, botsPointsList, true);
+            
 
         }
 
-        private async Task<int> LastCardsDeal(UsersPoints usersPoints, List<BotsPoints> botsPointsList, int stepNumber)
+        private async Task LastCardsDeal(Game game, UsersPoints usersPoints, List<BotsPoints> botsPointsList, int stepNumber)
         {
             List<Bot> playingBots;
-            var countStep = stepNumber;
 
             playingBots = GetPlayingBots(botsPointsList);
             while (playingBots.Count != 0)
             {
-                countStep = await CardsDeal(usersPoints, playingBots, botsPointsList, countStep, false);
+                await CardsDeal(game, usersPoints, playingBots, botsPointsList, false);
                 playingBots = GetPlayingBots(botsPointsList);
             }
-
-            return countStep;
+            
         }
 
-        private async Task<int> CardsDeal(UsersPoints usersPoints, List<Bot> bots, List<BotsPoints> botsPointsList, int stepNumber, bool userPlaying)
+        private async Task CardsDeal(Game game, UsersPoints usersPoints, List<Bot> bots, List<BotsPoints> botsPointsList, bool userPlaying)
         {
-            var usersSteps = new List<UsersStep>();
-            var botsSteps = new List<BotsStep>();
-            int stepNum = ++stepNumber;
-            var game = await _gameRepository.GetByIdAsync(usersPoints.GameId);
+            game.CountStep += 1;
 
             var numOfCards = bots.Count;
             if (userPlaying) numOfCards += Constants.GameSettings.NumOfUserInGame;
@@ -383,56 +360,49 @@ namespace BJ.BLL.Services
 
             List<Card> takenСards = (await _deckRepository.GetRandomCardsByGameId(usersPoints.GameId, numOfCards)).ToList();
 
+
+            var usersSteps = new List<UsersStep>();
             if (userPlaying)
             {
-                var us = await UserGetCardAsync(takenСards, usersPoints, stepNum, --numOfCards);
+                var us = await UserGetCardAsync(game, takenСards, usersPoints, game.CountStep, --numOfCards);
                 usersSteps.Add(us);
             }
 
-            var newBotsSteps = new List<BotsStep>();
+            var botsSteps = new List<BotsStep>();
             var modifiedBotsPointsList = new List<BotsPoints>();
             bots.ForEach(bot =>
             {
                 var botsPoints = botsPointsList.Where(x => x.BotId == bot.Id).FirstOrDefault();
 
-                var botInfo = BotGetCard(takenСards, botsPoints, stepNum, --numOfCards);
+                var botInfo = BotGetCard(takenСards, botsPoints, game.CountStep, --numOfCards);
 
                 botsSteps.Add(botInfo.botsStep);
                 modifiedBotsPointsList.Add(botInfo.botsPoints);
             });
 
-            game.CountStep = stepNum;
-            await _gameRepository.UpdateAsync(game);
+
+            
             await _botsPointsRepository.UpdateRangeAsync(modifiedBotsPointsList);
             await _usersStepRepository.AddRangeAsync(usersSteps);
             await _botsStepRepository.AddRangeAsync(botsSteps);
             await _deckRepository.RemoveRangeAsync(takenСards);
-
-            return stepNum;
+            
         }
 
-        
 
-        
+
+
         ///////////////////////////////////Additional////////////////////////////////////////////////
 
         private async Task AddDeckAsync(Guid gameId)
         {
-            List<Card> deck = new List<Card>();
-
-            for (int i = 0; i < Enum.GetNames(typeof(RankType)).Length; i++)
-            {
-                for (int j = 0; j < Enum.GetNames(typeof(SuitType)).Length; j++)
-                {
-                    deck.Add(new Card() { GameId = gameId, Rank = _ranks[i], Suit = _suits[j] });
-                }
-            }
-            await _deckRepository.AddRangeAsync(deck);
+            var newDeck = _deckHelper.CreateDeck(gameId);
+            await _deckRepository.AddRangeAsync(newDeck);
         }
 
-        private async Task<UsersStep> UserGetCardAsync(List<Card> cards, UsersPoints usersPoints, int stepNumder, int numCard)
+        private async Task<UsersStep> UserGetCardAsync(Game game, List<Card> cards, UsersPoints usersPoints, int stepNumder, int numCard)
         {
-            
+
             var card = cards.ElementAt(numCard);
 
             var usersStep = new UsersStep()
@@ -444,19 +414,17 @@ namespace BJ.BLL.Services
                 Suit = card.Suit
             };
 
-            await SetUsersPointsAsync(usersPoints, card.Rank);
+            await SetUsersPointsAsync(game, usersPoints, card.Rank);
 
             return usersStep;
         }
 
-        private async Task SetUsersPointsAsync(UsersPoints usersPoints, RankType rank)
+        private async Task SetUsersPointsAsync(Game game, UsersPoints usersPoints, RankType rank)
         {
             usersPoints.Points += (int)rank;
             if (usersPoints.Points > Constants.GameSettings.WinningNumber)
             {
-                var game = await _gameRepository.GetByIdAsync(usersPoints.GameId);
                 game.State = UserGameStateType.Lose;
-                await _gameRepository.UpdateAsync(game);
             }
             await _usersPointsRepository.UpdateAsync(usersPoints);
         }

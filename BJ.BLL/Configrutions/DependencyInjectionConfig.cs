@@ -6,21 +6,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BJ.BLL.Configrutions
 {
-
     public static class DependencyInjectionConfig
     {
-
         public static void ConfigureDependencyInjection(this IServiceCollection services, IConfiguration configuration)
         {
-
-
-
-
-
             var dbOptions = configuration.GetSection("DbOptions").Get<DbOptions>();
 
             var namespaceRepository = (dbOptions.ORM == "EF") ? "BJ.DAL.Repositories.EF" : "BJ.DAL.Repositories.Dapper";
-
 
             services.Scan(scan => scan
                 .FromAssemblyOf<EFBotRepository>()
@@ -29,17 +21,16 @@ namespace BJ.BLL.Configrutions
                     .WithTransientLifetime()
             );
 
-
-
             services.Scan(scan => scan
                 .FromAssemblyOf<AccountService>()
 
-                   .AddClasses(classes => classes.Where(type => type.Name.EndsWith("Service") || type.Name.EndsWith("Provider")))
+                   .AddClasses(classes => classes.Where(type => type.Name.EndsWith("Service") ||
+                                                        type.Name.EndsWith("Provider") ||
+                                                        type.Name.EndsWith("Helper")))
                         .AsImplementedInterfaces()
                         .WithTransientLifetime()
             );
         }
     }
 }
-
 
