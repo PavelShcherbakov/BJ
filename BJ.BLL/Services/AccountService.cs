@@ -39,7 +39,7 @@ namespace BJ.BLL.Services
                 throw new CustomServiceException("Invalid login attempt");
             }
 
-            var user = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+            var user =await  _userManager.FindByEmailAsync(model.Email);
             var token = _jwtTokentHelper.GenerateJwtToken(model.Email, user);
             var response = new LoginAccountResponseView()
             {

@@ -47,7 +47,7 @@ namespace BJ.BLL.Services
         {
             var response = new GetAllGamesHistoryResponseView();
             response.Games = new List<GameGetAllGamesHistoryResponseViewItem>();
-            var games = _gameRepository.Find(x => x.UserId == userId && (int)x.State != (int)UserGameStateType.InGame).ToList();
+            var games = (await _gameRepository.GetСompletedGamesAsync(userId)).ToList();
             games.ForEach(
                 x =>
                 {
@@ -88,18 +88,9 @@ namespace BJ.BLL.Services
                     x.PlayerInfo = new List<PlayerInfoGetGameInfoHistoryResponseViewItem>();
                 });
 
-            var userSteps = _usersStepRepository.Find(x => x.GameId == model.GameId).ToList();
-            var botSteps = _botsStepRepository.Find(x => x.GameId == model.GameId).ToList();
+            var userSteps = (await _usersStepRepository.GetStepsByGameIdAsync(model.GameId)).ToList();
+            var botSteps = (await _botsStepRepository.GetStepsByGameIdAsync(model.GameId)).ToList();
             var userName = (await _userRepository.GetByIdAsync(userId)).UserName;
-
-
-
-            //var groupedUserSteps = userSteps.GroupBy(x => x.StepNumder);
-            //var groupedBotSteps = botSteps.GroupBy(x => x.StepNumder);
-
-
-
-
 
 
             userSteps.ForEach(
@@ -151,8 +142,8 @@ namespace BJ.BLL.Services
 
             response.Summary = new List<PlayersSummaryGetGameInfoHistoryResponseViewItem>();
 
-            var botPoints = _botsPointsRepository.Find(x => x.GameId == model.GameId).ToList();
-            var userPoints = _usersPointsRepository.Find(x => x.GameId == model.GameId).FirstOrDefault();
+            var botPoints = (await _botsPointsRepository.GetPointsByGameIdAsync(model.GameId)).ToList();
+            var userPoints = (await _usersPointsRepository.GetPointsByGameIdAsync(model.GameId));
 
             var winningPoints = Constants.GameSettings.InitionalPoints;
 

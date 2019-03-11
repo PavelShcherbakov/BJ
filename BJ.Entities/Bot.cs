@@ -1,8 +1,9 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Dapper.Contrib.Extensions;
+using System;
 
 namespace BJ.Entities
 {
+    [Table("Bots")]
     public class Bot : BaseEntity
     {
         public string Name { get; set; }

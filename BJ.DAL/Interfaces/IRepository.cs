@@ -7,8 +7,9 @@ namespace BJ.DAL.Interfaces
     public interface IRepository<T,TId> where T : class
     {
         Task<IEnumerable<T>> GetAllAsync();
-        Task<T> GetByIdAsync(TId id);
-        IEnumerable<T> Find(Func<T, Boolean> predicate);
+        IEnumerable<T> GetAll();
+        Task<int> GetTotalCount();
+        Task<T> GetByIdAsync(TId id);    
         Task CreateAsync(T entity);
         Task AddRangeAsync(IEnumerable<T> entities);
         void AddRange(IEnumerable<T> entities);
@@ -16,6 +17,5 @@ namespace BJ.DAL.Interfaces
         Task UpdateRangeAsync(IEnumerable<T> entities);
         Task RemoveAsync(T entity);
         Task RemoveRangeAsync(IEnumerable<T> entities);
-        int Count(Func<T, bool> predicate);
     }
 }

@@ -31,15 +31,21 @@ namespace BJ.DAL.Repositories.EF
             await _context.SaveChangesAsync();
         }
 
-        public virtual IEnumerable<TEntity> Find(Func<TEntity, bool> predicate)
-        {
-            var result = _dbSet.Where(predicate).ToList();
-            return result;
-        }
+        //public virtual IEnumerable<TEntity> Find(Func<TEntity, bool> predicate)
+        //{
+        //    var result = _dbSet.Where(predicate).ToList();
+        //    return result;
+        //}
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             var result = await _dbSet.ToListAsync();
+            return result;
+        }
+
+        public IEnumerable<TEntity> GetAll()
+        {
+            var result =  _dbSet.ToList();
             return result;
         }
 
@@ -83,12 +89,6 @@ namespace BJ.DAL.Repositories.EF
              _context.SaveChanges();
         }
 
-        public int Count(Func<TEntity, bool> predicate)
-        {
-            var count = _dbSet.Where(predicate).Count();
-            return count;
-        }
-
         private void DeleteTrackedEntities()
         {
             var changedEntriesCopy = _context.ChangeTracker.Entries().ToList();
@@ -96,6 +96,12 @@ namespace BJ.DAL.Repositories.EF
             {
                 _context.Entry(entity.Entity).State = EntityState.Detached;
             }
+        }
+
+        public async Task<int> GetTotalCount()
+        {
+            var result = await _dbSet.CountAsync();
+            return result;
         }
     }
 }

@@ -33,9 +33,10 @@ namespace BJ.BLL.Configrutions
         private static string[] _botsName = new string[] { "Olivia","Amelia","Isla","Emily","Ava","Lily","Mia", "Sofia", "Isabella","Grace",
                                                            "Oliver","Harry","Jack","George","Noah","Charlie", "Jacob","Alfie","Freddie","Oscar"};
 
-        public static void Initialize(IBotRepository botRepository)
+        public static async void Initialize(IBotRepository botRepository)
         {
-            if (botRepository.Count(x => true) == 0)
+            var totalCount = await botRepository.GetTotalCount();
+            if (totalCount == 0)
             {
                 List<Bot> bots = new List<Bot>(Constants.GameSettings.MaxCountBots);
                 for (int i = 0; i < Constants.GameSettings.MaxCountBots; i++)

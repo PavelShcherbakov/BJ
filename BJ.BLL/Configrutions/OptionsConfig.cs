@@ -10,6 +10,7 @@ namespace BJ.BLL.Configrutions
         public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
         {      
             services.Configure<JwtOptions>(configuration.GetSection("JwtOptions"));
+            services.Configure<DbOptions>(configuration.GetSection("DbOptions"));
         }
     }
 }

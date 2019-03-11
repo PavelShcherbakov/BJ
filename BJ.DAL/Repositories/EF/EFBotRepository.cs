@@ -19,5 +19,7 @@ namespace BJ.DAL.Repositories.EF
             var bots = await _dbSet.OrderBy(r => Guid.NewGuid()).Take(numOfBots).ToListAsync();
             return bots;
         }
+
+
     }
 }

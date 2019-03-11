@@ -25,8 +25,8 @@ namespace BJ.BLL.Configrutions
                 .FromAssemblyOf<AccountService>()
 
                    .AddClasses(classes => classes.Where(type => type.Name.EndsWith("Service") ||
-                                                        type.Name.EndsWith("Provider") ||
-                                                        type.Name.EndsWith("Helper")))
+                                                                type.Name.EndsWith("Provider") ||
+                                                                type.Name.EndsWith("Helper")))
                         .AsImplementedInterfaces()
                         .WithTransientLifetime()
             );

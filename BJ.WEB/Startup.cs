@@ -25,7 +25,7 @@ namespace BJ.WEB
 
 
 
-            services.Configure<JwtOptions>(Configuration.GetSection("JwtOptions"));
+            //services.Configure<JwtOptions>(Configuration.GetSection("JwtOptions"));
 
             services.ConfigureOptions(Configuration);
 

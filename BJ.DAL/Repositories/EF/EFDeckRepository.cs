@@ -25,5 +25,11 @@ namespace BJ.DAL.Repositories.EF
             var count = await _dbSet.Where(x => x.GameId == gameId).CountAsync();
             return count;
         }
+
+        public async Task<IEnumerable<Card>> GetCardsByGameIdAsync(Guid gameId)
+        {
+            var result = await _dbSet.Where(x => x.GameId == gameId).ToListAsync();
+            return result;
+        }
     }
 }

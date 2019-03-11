@@ -92,10 +92,10 @@ namespace BJ.BLL.Services
 
         public async Task<GetStateGameResponseView> GetState(string userId)
         {
-            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameStateType.InGame).FirstOrDefault();
-            var botsPoints = _botsPointsRepository.Find(x => x.GameId == game.Id).ToList();
+            var game = await _gameRepository.GetActiveGameAsync(userId);
+            var botsPoints = (await _botsPointsRepository.GetPointsByGameIdAsync(game.Id)).ToList();
             var user = await _userRepository.GetByIdAsync(userId);
-            var userSteps = _usersStepRepository.Find(x => x.UserId == userId && x.GameId == game.Id).ToList();
+            var userSteps = (await _usersStepRepository.GetStepsByGameIdAsync(game.Id)).ToList();
 
             var response = new GetStateGameResponseView();
 
@@ -142,10 +142,10 @@ namespace BJ.BLL.Services
 
             GetCardGameResponseView response;
 
-            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameStateType.InGame).FirstOrDefault();
-            var usersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
-            var botsPoints = _botsPointsRepository.Find(x => x.GameId == game.Id).ToList();
-            
+            var game = await _gameRepository.GetActiveGameAsync(userId);
+            var usersPoints = await _usersPointsRepository.GetPointsByGameIdAsync(game.Id);
+            var botsPoints = (await _botsPointsRepository.GetPointsByGameIdAsync(game.Id)).ToList();
+
 
             if (game.State == UserGameStateType.Lose)
             {
@@ -166,7 +166,7 @@ namespace BJ.BLL.Services
         private async Task<GetCardGameResponseView> CreateGetCardGameResponseView(string userId, Game game, List<BotsPoints> botsPoints, UsersPoints usersPoints)
         {           
             var user = await _userRepository.GetByIdAsync(userId);
-            var userSteps = _usersStepRepository.Find(x => x.UserId == userId && x.GameId == game.Id).ToList();
+            var userSteps = (await _usersStepRepository.GetStepsByGameIdAsync(game.Id)).ToList();
 
             var response = new GetCardGameResponseView();
 
@@ -209,15 +209,15 @@ namespace BJ.BLL.Services
 
         public async Task<EndGameResponseView> EndGame(string userId)
         {
-            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameStateType.InGame).FirstOrDefault();
-            var usersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
-            var botsPoints = _botsPointsRepository.Find(x => x.GameId == game.Id) as List<BotsPoints>;
+            var game = await _gameRepository.GetActiveGameAsync(userId);
+            var usersPoints = await _usersPointsRepository.GetPointsByGameIdAsync(game.Id);
+            var botsPoints = (await _botsPointsRepository.GetPointsByGameIdAsync(game.Id)).ToList();
 
             await LastCardsDeal(game, usersPoints, botsPoints, game.CountStep);
 
 
 
-            var remainingCards = _deckRepository.Find(x => x.GameId == game.Id);
+            var remainingCards = await _deckRepository.GetCardsByGameIdAsync(game.Id);
             await _deckRepository.RemoveRangeAsync(remainingCards);
 
             int WinningPoints = 0;
@@ -229,7 +229,7 @@ namespace BJ.BLL.Services
                 }
             });
 
-            var resultUsersPoints = _usersPointsRepository.Find(x => x.GameId == game.Id).FirstOrDefault();
+            var resultUsersPoints = await _usersPointsRepository.GetPointsByGameIdAsync(game.Id);
 
             if (resultUsersPoints.Points > WinningPoints && resultUsersPoints.Points <= Constants.GameSettings.WinningNumber)
             {
@@ -251,7 +251,7 @@ namespace BJ.BLL.Services
         {
             
             var user = await _userRepository.GetByIdAsync(userId);
-            var userSteps = _usersStepRepository.Find(x => x.UserId == userId && x.GameId == game.Id).ToList();
+            var userSteps = (await _usersStepRepository.GetStepsByGameIdAsync(game.Id)).ToList();
 
             var response = new EndGameResponseView();
 
@@ -293,7 +293,7 @@ namespace BJ.BLL.Services
 
         public async Task<HasActiveGameGameResponseView> HasActiveGame(string userId)
         {
-            var game = _gameRepository.Find(x => x.UserId == userId && (int)x.State == (int)UserGameStateType.InGame).FirstOrDefault();
+            var game = await _gameRepository.GetActiveGameAsync(userId);
             var response = new HasActiveGameGameResponseView();
             if (game == null)
             {
@@ -467,3 +467,4 @@ namespace BJ.BLL.Services
         }
     }
 }
+

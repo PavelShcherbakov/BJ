@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BJ.DAL.Repositories.EF
 {
@@ -12,9 +13,10 @@ namespace BJ.DAL.Repositories.EF
         public EFBotsPointsRepository(ApplicationDbContext context) : base(context)
         {
         }
-        override public IEnumerable<BotsPoints> Find(Func<BotsPoints, bool> predicate)
+
+        public async Task<IEnumerable<BotsPoints>> GetPointsByGameIdAsync(Guid gameId)
         {
-            var result = _dbSet.AsNoTracking().Include(x => x.Bot).Where(predicate).ToList();
+            var result = await _dbSet.Where(x => x.GameId == gameId).Include(x => x.Bot).ToListAsync();
             return result;
         }
     }

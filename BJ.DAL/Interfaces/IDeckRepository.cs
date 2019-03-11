@@ -9,5 +9,6 @@ namespace BJ.DAL.Interfaces
     {
         Task<IEnumerable<Card>> GetRandomCardsByGameId(Guid gameId, int numOfCards);
         Task<int> GetCountCardsAsync(Guid gameId);
+        Task<IEnumerable<Card>> GetCardsByGameIdAsync(Guid gameId);
     }
 }
