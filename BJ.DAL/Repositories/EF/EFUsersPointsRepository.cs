@@ -2,7 +2,6 @@
 using BJ.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,9 +9,7 @@ namespace BJ.DAL.Repositories.EF
 {
     public class EFUsersPointsRepository : EFGenericRepository<UsersPoints, Guid>, IUsersPointsRepository
     {
-        public EFUsersPointsRepository(ApplicationDbContext context) : base(context)
-        {
-        }
+        public EFUsersPointsRepository(ApplicationDbContext context) : base(context) { }
 
         public async Task<UsersPoints> GetPointsByGameIdAsync(Guid gameId)
         {

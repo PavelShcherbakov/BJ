@@ -10,11 +10,9 @@ namespace BJ.DAL.Repositories.EF
 {
     public class EFDeckRepository : EFGenericRepository<Card, Guid>, IDeckRepository
     {
-        public EFDeckRepository(ApplicationDbContext context) : base(context)
-        {
-        }
+        public EFDeckRepository(ApplicationDbContext context) : base(context) { }
 
-        public async Task<IEnumerable<Card>> GetRandomCardsByGameId(Guid gameId, int numOfCards)
+        public async Task<IEnumerable<Card>> GetRandomCardsByGameIdAsync(Guid gameId, int numOfCards)
         {
             var decks = await _dbSet.Where(x => x.GameId == gameId).OrderBy(r => Guid.NewGuid()).Take(numOfCards).ToListAsync();
             return decks;

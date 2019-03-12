@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BJ.DAL.Interfaces;
+﻿using BJ.DAL.Interfaces;
 using BJ.Entities;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace BJ.DAL.Repositories.Dapper
 {
-    public class DapperGameRepository : DapperGenericRepository<Game,Guid>, IGameRepository
+    public class DapperGameRepository : DapperGenericRepository<Game, Guid>, IGameRepository
     {
-        public DapperGameRepository(IConfiguration config) : base(config)
-        {
-        }
- 
+        public DapperGameRepository(IConfiguration config) : base(config) { }
+
         public async Task<Game> GetActiveGameAsync(string userId)
         {
             using (IDbConnection conn = Connection)
@@ -26,7 +22,7 @@ namespace BJ.DAL.Repositories.Dapper
                 var result = await conn.QueryFirstOrDefaultAsync<Game>(sql, new { UserId = userId });
                 return result;
             }
-        }      
+        }
 
         public async Task<IEnumerable<Game>> GetСompletedGamesAsync(string userId)
         {
@@ -38,6 +34,6 @@ namespace BJ.DAL.Repositories.Dapper
                 return result;
             }
         }
-        
+
     }
 }

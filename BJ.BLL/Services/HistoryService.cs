@@ -1,18 +1,15 @@
 ﻿using BJ.BLL.Commons;
 using BJ.BLL.Services.Interfaces;
 using BJ.DAL.Interfaces;
-using BJ.DAL.Repositories;
-using BJ.Entities;
 using BJ.Entities.Enums;
 using BJ.ViewModels.HistoryView;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BJ.BLL.Services
 {
-    public class HistoryService: IHistoryService
+    public class HistoryService : IHistoryService
     {
         private readonly IDeckRepository _deckRepository;
         private readonly IUserRepository _userRepository;
@@ -78,7 +75,7 @@ namespace BJ.BLL.Services
 
 
             response.Steps = new List<StepGetGameInfoHistoryResponseViewItem>(game.CountStep);
-            for(int i=0;i< game.CountStep; i++)
+            for (int i = 0; i < game.CountStep; i++)
             {
                 response.Steps.Add(new StepGetGameInfoHistoryResponseViewItem());
             }
@@ -101,7 +98,7 @@ namespace BJ.BLL.Services
                         Name = userName,
                         Card = new CardGetGameInfoHistoryResponseView()
                         {
-                            Suit =new SuitGetGameInfoHistoryResponseView()
+                            Suit = new SuitGetGameInfoHistoryResponseView()
                             {
                                 Suit = (int)x.Suit,
                                 SuitAsString = x.Suit.ToString()

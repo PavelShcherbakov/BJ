@@ -10,10 +10,7 @@ namespace BJ.DAL.Repositories.EF
 {
     public class EFBotsStepRepository : EFGenericRepository<BotsStep, Guid>, IBotsStepRepository
     {
-        public EFBotsStepRepository(ApplicationDbContext context) : base(context)
-        {
-
-        }
+        public EFBotsStepRepository(ApplicationDbContext context) : base(context) { }
 
         public async Task<IEnumerable<BotsStep>> GetStepsByGameIdAsync(Guid gameId)
         {

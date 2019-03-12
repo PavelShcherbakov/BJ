@@ -1,28 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
-using System.Threading.Tasks;
-using BJ.DAL.Interfaces;
+﻿using BJ.DAL.Interfaces;
 using BJ.Entities;
-using DapperExtensions;
+using Dapper;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BJ.DAL.Repositories.Dapper
 {
     public class DapperBotsStepRepository : DapperGenericRepository<BotsStep, Guid>, IBotsStepRepository
     {
-        public DapperBotsStepRepository(IConfiguration config) : base(config)
-        {
-        }
+        public DapperBotsStepRepository(IConfiguration config) : base(config) { }
 
         public async Task<IEnumerable<BotsStep>> GetStepsByGameIdAsync(Guid gameId)
         {
-            using (IDbConnection conn = Connection)
+            string sql = @"SELECT 
+                                bs.Id, bs.CreationDate, bs.StepNumder, bs.GameId, bs.BotId, bs.Rank, bs.Suit, 
+                                b.Id, b.CreationDate, b.Name  
+                            FROM BotsSteps AS bs LEFT JOIN Bots AS b ON bs.BotId = b.Id 
+                            WHERE bs.GameId=@gameId";
+
+            using (var conn = Connection)
             {
-                var predicate = Predicates.Field<BotsStep>(f => f.GameId, Operator.Eq, gameId);
-                conn.Open();
-                var result = await conn.GetListAsync<BotsStep>(predicate);
+                var result = await conn.QueryAsync<BotsStep, Bot, BotsStep>(
+                        sql,
+                        (bs, bot) =>
+                        {
+                            bs.Bot = bot;
+                            return bs;
+                        },
+                        param: new { gameId });
                 return result;
             }
         }

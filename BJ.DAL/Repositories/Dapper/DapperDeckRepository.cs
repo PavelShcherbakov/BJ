@@ -1,32 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using BJ.DAL.Interfaces;
+﻿using BJ.DAL.Interfaces;
 using BJ.Entities;
+using Dapper;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BJ.DAL.Repositories.Dapper
 {
     public class DapperDeckRepository : DapperGenericRepository<Card, Guid>, IDeckRepository
     {
-        public DapperDeckRepository(IConfiguration config) : base(config)
+        public DapperDeckRepository(IConfiguration config) : base(config) { }
+
+        public async Task<IEnumerable<Card>> GetCardsByGameIdAsync(Guid gameId)
         {
+            using (IDbConnection conn = Connection)
+            {
+                string sql = "SELECT * FROM Decks WHERE GameId = @gameId;";
+                var result = await conn.QueryAsync<Card>(sql, new { gameId });
+                return result;
+            }
         }
 
-        public Task<IEnumerable<Card>> GetCardsByGameIdAsync(Guid gameId)
+        public async Task<int> GetCountCardsAsync(Guid gameId)
         {
-            throw new NotImplementedException();
+            using (IDbConnection conn = Connection)
+            {
+                string sql = "SELECT * FROM Decks WHERE GameId = @gameId;";
+                var result = (await conn.QueryAsync<Card>(sql, new { gameId })).Count();
+                return result;
+            }
         }
 
-        public Task<int> GetCountCardsAsync(Guid gameId)
+        public async Task<IEnumerable<Card>> GetRandomCardsByGameIdAsync(Guid gameId, int numOfCards)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Card>> GetRandomCardsByGameId(Guid gameId, int numOfCards)
-        {
-            throw new NotImplementedException();
+            using (IDbConnection conn = Connection)
+            {
+                string sql = "SELECT TOP (@numOfCards) * FROM Decks ORDER BY newid();";
+                conn.Open();
+                var result = await conn.QueryAsync<Card>(sql, new { numOfCards });
+                return result;
+            }
         }
     }
 }

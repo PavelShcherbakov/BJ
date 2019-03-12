@@ -1,15 +1,12 @@
 ﻿using BJ.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System.IO;
-
 
 namespace BJ.DAL
 {
     public class ApplicationDbContext : IdentityDbContext<User, Role, string>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options) { }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<Game> Games { get; set; }
         public DbSet<Bot> Bots { get; set; }
@@ -18,10 +15,5 @@ namespace BJ.DAL
         public DbSet<Card> Decks { get; set; }
         public DbSet<BotsPoints> BotsPoints { get; set; }
         public DbSet<UsersPoints> UsersPoints { get; set; }
-
-        //protected override void OnModelCreating(ModelBuilder builder)
-        //{
-        //    base.OnModelCreating(builder);
-        //}
     }
 }

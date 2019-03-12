@@ -8,11 +8,9 @@ using System.Threading.Tasks;
 
 namespace BJ.DAL.Repositories.EF
 {
-    public class EFBotRepository : EFGenericRepository<Bot,Guid>, IBotRepository
+    public class EFBotRepository : EFGenericRepository<Bot, Guid>, IBotRepository
     {
-        public EFBotRepository(ApplicationDbContext context) : base(context)
-        {
-        }
+        public EFBotRepository(ApplicationDbContext context) : base(context) { }
 
         public async Task<IEnumerable<Bot>> GetRandomBotsAsync(int numOfBots)
         {

@@ -22,11 +22,6 @@ namespace BJ.WEB
 
         public void ConfigureServices(IServiceCollection services)
         {
-
-
-
-            //services.Configure<JwtOptions>(Configuration.GetSection("JwtOptions"));
-
             services.ConfigureOptions(Configuration);
 
             services.ConfigureDbContext(Configuration);

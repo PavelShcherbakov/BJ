@@ -47,8 +47,6 @@ namespace BJ.BLL.Services
             _deckHelper = deckHelper;
         }
 
-        ///////////////////////////////////Public////////////////////////////////////////////////
-
         public async Task<StartGameResponseView> StartGame(string userId, StartGameView model)
         {
             var game = new Game()
@@ -135,8 +133,6 @@ namespace BJ.BLL.Services
             return response;
         }
 
-
-
         public async Task<GetCardGameResponseView> GetCard(string userId)
         {
 
@@ -153,18 +149,15 @@ namespace BJ.BLL.Services
                 return response;
             }
 
-            
-
             await RoundCardsDeal(game, usersPoints, botsPoints, game.CountStep);
-
+            await _gameRepository.UpdateAsync(game);
             response = await CreateGetCardGameResponseView(userId, game, botsPoints, usersPoints);
 
             return response;
         }
 
-
         private async Task<GetCardGameResponseView> CreateGetCardGameResponseView(string userId, Game game, List<BotsPoints> botsPoints, UsersPoints usersPoints)
-        {           
+        {
             var user = await _userRepository.GetByIdAsync(userId);
             var userSteps = (await _usersStepRepository.GetStepsByGameIdAsync(game.Id)).ToList();
 
@@ -205,7 +198,6 @@ namespace BJ.BLL.Services
 
             return response;
         }
-
 
         public async Task<EndGameResponseView> EndGame(string userId)
         {
@@ -249,7 +241,7 @@ namespace BJ.BLL.Services
 
         private async Task<EndGameResponseView> CreateEndGameResponseView(string userId, Game game, UsersPoints usersPoints, List<BotsPoints> botsPoints)
         {
-            
+
             var user = await _userRepository.GetByIdAsync(userId);
             var userSteps = (await _usersStepRepository.GetStepsByGameIdAsync(game.Id)).ToList();
 
@@ -307,19 +299,14 @@ namespace BJ.BLL.Services
             }
         }
 
-        ///////////////////////////////////Private////////////////////////////////////////////////
-
-        ///////////////////////////////////CardsDeal////////////////////////////////////////////////
-
-
         private async Task InitialCardsDeal(Game game, UsersPoints usersPoints, List<Bot> bots, List<BotsPoints> botsPointsList)
         {
-            
+
             for (int i = 0; i < Constants.GameSettings.InitialNumOfCard; i++)
             {
                 await CardsDeal(game, usersPoints, bots, botsPointsList, true);
             }
-            
+
         }
 
         private async Task RoundCardsDeal(Game game, UsersPoints usersPoints, List<BotsPoints> botsPointsList, int stepNumber)
@@ -327,7 +314,7 @@ namespace BJ.BLL.Services
 
             var playingBots = GetPlayingBots(botsPointsList);
             await CardsDeal(game, usersPoints, playingBots, botsPointsList, true);
-            
+
 
         }
 
@@ -341,7 +328,7 @@ namespace BJ.BLL.Services
                 await CardsDeal(game, usersPoints, playingBots, botsPointsList, false);
                 playingBots = GetPlayingBots(botsPointsList);
             }
-            
+
         }
 
         private async Task CardsDeal(Game game, UsersPoints usersPoints, List<Bot> bots, List<BotsPoints> botsPointsList, bool userPlaying)
@@ -358,7 +345,7 @@ namespace BJ.BLL.Services
                 countCardInDeck = await _deckRepository.GetCountCardsAsync(usersPoints.GameId);
             }
 
-            List<Card> takenСards = (await _deckRepository.GetRandomCardsByGameId(usersPoints.GameId, numOfCards)).ToList();
+            List<Card> takenСards = (await _deckRepository.GetRandomCardsByGameIdAsync(usersPoints.GameId, numOfCards)).ToList();
 
 
             var usersSteps = new List<UsersStep>();
@@ -381,18 +368,13 @@ namespace BJ.BLL.Services
             });
 
 
-            
+
             await _botsPointsRepository.UpdateRangeAsync(modifiedBotsPointsList);
             await _usersStepRepository.AddRangeAsync(usersSteps);
             await _botsStepRepository.AddRangeAsync(botsSteps);
             await _deckRepository.RemoveRangeAsync(takenСards);
-            
+
         }
-
-
-
-
-        ///////////////////////////////////Additional////////////////////////////////////////////////
 
         private async Task AddDeckAsync(Guid gameId)
         {

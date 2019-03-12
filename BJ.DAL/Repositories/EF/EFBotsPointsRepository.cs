@@ -10,9 +10,7 @@ namespace BJ.DAL.Repositories.EF
 {
     public class EFBotsPointsRepository : EFGenericRepository<BotsPoints, Guid>, IBotsPointsRepository
     {
-        public EFBotsPointsRepository(ApplicationDbContext context) : base(context)
-        {
-        }
+        public EFBotsPointsRepository(ApplicationDbContext context) : base(context) { }
 
         public async Task<IEnumerable<BotsPoints>> GetPointsByGameIdAsync(Guid gameId)
         {

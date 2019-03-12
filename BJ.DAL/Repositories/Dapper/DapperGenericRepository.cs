@@ -1,65 +1,29 @@
 ﻿using BJ.DAL.Interfaces;
-using DapperExtensions;
+using Dapper.Contrib.Extensions;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BJ.DAL.Repositories.Dapper
 {
     public class DapperGenericRepository<TEntity, TId> : IRepository<TEntity, TId> where TEntity : class
     {
-        //private readonly IConfiguration _config;
-
-        //public DapperGenericRepository(IConfiguration config)
-        //{
-        //    _config = config;
-        //}
-
-        //public IDbConnection Connection
-        //{
-        //    get
-        //    {
-        //        var connectString = _config.GetConnectionString("DefaultConnection");
-        //        return new SqlConnection(connectString);
-        //    }
-        //}
-
-        private readonly string _connectionString;
-        private IDbConnection _connection;
+        private readonly IConfiguration _config;
 
         public DapperGenericRepository(IConfiguration config)
         {
-            _connectionString = config.GetConnectionString("DefaultConnection");
+            _config = config;
         }
 
         public IDbConnection Connection
         {
             get
             {
-                if (_connection == null)
-                {
-                    _connection = new SqlConnection(_connectionString);
-                }
-
-                if (_connection.State != ConnectionState.Open)
-                {
-                    _connection.Open();
-                }
-
-                return _connection;
-            }
-        }
-
-        public void Dispose()
-        {
-            if (_connection != null && _connection.State == ConnectionState.Open)
-            {
-                _connection.Close();
-                _connection = null;
+                var connectString = _config.GetConnectionString("DefaultConnection");
+                return new SqlConnection(connectString);
             }
         }
 
@@ -67,7 +31,6 @@ namespace BJ.DAL.Repositories.Dapper
         {
             using (IDbConnection conn = Connection)
             {
-                conn.Open();
                 conn.Insert(entities);
             }
         }
@@ -76,18 +39,15 @@ namespace BJ.DAL.Repositories.Dapper
         {
             using (IDbConnection conn = Connection)
             {
-                conn.Open();
                 await conn.InsertAsync(entities);
             }
         }
 
-        public Task CreateAsync(TEntity entity)
+        public async Task CreateAsync(TEntity entity)
         {
             using (IDbConnection conn = Connection)
             {
-                conn.Open();
-                var result = conn.Insert(entity);
-                return result;
+                var result = await conn.InsertAsync(entity);
             }
         }
 
@@ -95,8 +55,7 @@ namespace BJ.DAL.Repositories.Dapper
         {
             using (IDbConnection conn = Connection)
             {
-                //conn.Open();
-                var result = conn.GetList<TEntity>();
+                var result = conn.GetAll<TEntity>();
                 return result;
             }
         }
@@ -105,8 +64,7 @@ namespace BJ.DAL.Repositories.Dapper
         {
             using (IDbConnection conn = Connection)
             {
-                conn.Open();
-                var result = await conn.GetListAsync<TEntity>();
+                var result = await conn.GetAllAsync<TEntity>();
                 return result;
             }
         }
@@ -115,17 +73,15 @@ namespace BJ.DAL.Repositories.Dapper
         {
             using (IDbConnection conn = Connection)
             {
-                conn.Open();
-                var entity = await conn.GetAsync<TEntity>(id);
+                var result = await conn.GetAsync<TEntity>(id);
+                return result;
             }
-            return null;
         }
 
         public async Task RemoveAsync(TEntity entity)
         {
             using (IDbConnection conn = Connection)
             {
-                conn.Open();
                 await conn.DeleteAsync(entity);
             }
         }
@@ -134,7 +90,6 @@ namespace BJ.DAL.Repositories.Dapper
         {
             using (IDbConnection conn = Connection)
             {
-                conn.Open();
                 await conn.DeleteAsync(entities);
             }
         }
@@ -143,7 +98,6 @@ namespace BJ.DAL.Repositories.Dapper
         {
             using (IDbConnection conn = Connection)
             {
-                conn.Open();
                 await conn.UpdateAsync(entity);
             }
         }
@@ -152,20 +106,15 @@ namespace BJ.DAL.Repositories.Dapper
         {
             using (IDbConnection conn = Connection)
             {
-                conn.Open();
                 await conn.UpdateAsync(entities);
             }
         }
 
         public async Task<int> GetTotalCount()
         {
-
-
-
             using (IDbConnection conn = Connection)
             {
-                //conn.Open();
-                var result = await conn.CountAsync<TEntity>();
+                var result = (await conn.GetAllAsync<TEntity>()).Count();
                 return result;
             }
         }

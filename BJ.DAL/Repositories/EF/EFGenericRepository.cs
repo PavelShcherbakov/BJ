@@ -1,9 +1,7 @@
 ﻿using BJ.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace BJ.DAL.Repositories.EF
@@ -31,12 +29,6 @@ namespace BJ.DAL.Repositories.EF
             await _context.SaveChangesAsync();
         }
 
-        //public virtual IEnumerable<TEntity> Find(Func<TEntity, bool> predicate)
-        //{
-        //    var result = _dbSet.Where(predicate).ToList();
-        //    return result;
-        //}
-
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             var result = await _dbSet.ToListAsync();
@@ -45,7 +37,7 @@ namespace BJ.DAL.Repositories.EF
 
         public IEnumerable<TEntity> GetAll()
         {
-            var result =  _dbSet.ToList();
+            var result = _dbSet.ToList();
             return result;
         }
 
@@ -85,8 +77,8 @@ namespace BJ.DAL.Repositories.EF
 
         public void AddRange(IEnumerable<TEntity> entities)
         {
-             _dbSet.AddRange(entities);
-             _context.SaveChanges();
+            _dbSet.AddRange(entities);
+            _context.SaveChanges();
         }
 
         private void DeleteTrackedEntities()
@@ -101,6 +93,7 @@ namespace BJ.DAL.Repositories.EF
         public async Task<int> GetTotalCount()
         {
             var result = await _dbSet.CountAsync();
+            //var result = _dbSet.Count();
             return result;
         }
     }

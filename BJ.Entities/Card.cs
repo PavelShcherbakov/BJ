@@ -1,15 +1,20 @@
 ﻿using BJ.Entities.Enums;
+using Dapper.Contrib.Extensions;
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace BJ.Entities
 {
+    [Table("Decks")]
     public class Card : BaseEntity
     {
         public Guid GameId { get; set; }
-        [ForeignKey("GameId")]
+        [System.ComponentModel.DataAnnotations.Schema.ForeignKey("GameId")]
+        [Write(false)]
         public virtual Game Game { get; set; }
+
         public RankType Rank { get; set; }
+
         public SuitType Suit { get; set; }
     }
     

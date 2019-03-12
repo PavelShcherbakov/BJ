@@ -1,13 +1,16 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using Dapper.Contrib.Extensions;
+using System;
 
 namespace BJ.Entities
 {
     public class BaseEntity
     {
-        [Key]
+        [ExplicitKey]
+        [System.ComponentModel.DataAnnotations.Key]
         public Guid Id { get; set; }
+
         public DateTime CreationDate { get; set; }
+
         public BaseEntity()
         {
             Id = Guid.NewGuid();
