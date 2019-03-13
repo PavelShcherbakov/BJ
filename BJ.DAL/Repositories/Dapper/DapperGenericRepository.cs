@@ -1,10 +1,12 @@
 ﻿using BJ.DAL.Interfaces;
+using Dapper;
 using Dapper.Contrib.Extensions;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace BJ.DAL.Repositories.Dapper
@@ -110,13 +112,13 @@ namespace BJ.DAL.Repositories.Dapper
             }
         }
 
-        public async Task<int> GetTotalCount()
+        public int GetTotalCount()
         {
             using (IDbConnection conn = Connection)
             {
-                var result = (await conn.GetAllAsync<TEntity>()).Count();
+                var result = conn.GetAll<TEntity>().Count();
                 return result;
             }
-        }
+        }       
     }
 }

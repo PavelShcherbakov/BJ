@@ -8,7 +8,7 @@ namespace BJ.DAL.Interfaces
     {
         Task<IEnumerable<T>> GetAllAsync();
         IEnumerable<T> GetAll();
-        Task<int> GetTotalCount();
+        int GetTotalCount();
         Task<T> GetByIdAsync(TId id);    
         Task CreateAsync(T entity);
         Task AddRangeAsync(IEnumerable<T> entities);

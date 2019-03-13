@@ -90,10 +90,9 @@ namespace BJ.DAL.Repositories.EF
             }
         }
 
-        public async Task<int> GetTotalCount()
+        public int GetTotalCount()
         {
-            var result = await _dbSet.CountAsync();
-            //var result = _dbSet.Count();
+            var result = _dbSet.Count();
             return result;
         }
     }

@@ -19,7 +19,6 @@ export class CreateGameComponent implements OnInit {
     this.startGameForm = this.fb.group({
       numberOfBots: [1, [Validators.required, Validators.min(1), Validators.max(100), Validators.pattern('^[0-9]+$')]]
     });
-
   }
 
   isControlInvalid(controlName: string): boolean {
@@ -28,11 +27,17 @@ export class CreateGameComponent implements OnInit {
     return result;
   }
 
-
   onSubmit() {
     let startGameView = new StartGameView();
     startGameView = { ...this.startGameForm.value };
-    this.dataService.startGame(startGameView).subscribe(x => this.router.navigate(['/game/table']));
-
+    this.dataService.startGame(startGameView).subscribe(
+      x => {
+        if (x.state === 0) {
+          this.router.navigate(['/game/table']);
+        } else {
+          this.router.navigate(['/history/game', x.gameId]);
+        }
+      }
+    );
   }
 }

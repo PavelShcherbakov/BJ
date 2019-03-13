@@ -1,9 +1,11 @@
 ﻿using BJ.DAL.Interfaces;
 using BJ.Entities;
 using Dapper;
+using Dapper.Contrib.Extensions;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace BJ.DAL.Repositories.Dapper
@@ -14,9 +16,7 @@ namespace BJ.DAL.Repositories.Dapper
 
         public async Task<IEnumerable<BotsPoints>> GetPointsByGameIdAsync(Guid gameId)
         {
-            string sql = @"SELECT 
-                                bp.Id,bp.CreationDate,bp.GameId,bp.BotId,bp.Points,bp.CardsInHand,
-                                b.Id,b.CreationDate,b.Name 
+            string sql = @"SELECT *                                 
                             FROM BotsPoints AS bp LEFT JOIN Bots AS b ON bp.BotId = b.Id
                             WHERE bp.GameId=@gameId";
 

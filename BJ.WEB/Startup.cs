@@ -30,7 +30,7 @@ namespace BJ.WEB
 
             services.ConfigureDependencyInjection(Configuration);
 
-            services.InitializeDatabase();
+            services.InitializeDatabaseAsync();
 
             services.AddMvc(options =>
             {

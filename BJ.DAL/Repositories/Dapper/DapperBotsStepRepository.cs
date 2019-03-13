@@ -14,9 +14,7 @@ namespace BJ.DAL.Repositories.Dapper
 
         public async Task<IEnumerable<BotsStep>> GetStepsByGameIdAsync(Guid gameId)
         {
-            string sql = @"SELECT 
-                                bs.Id, bs.CreationDate, bs.StepNumder, bs.GameId, bs.BotId, bs.Rank, bs.Suit, 
-                                b.Id, b.CreationDate, b.Name  
+            string sql = @"SELECT * 
                             FROM BotsSteps AS bs LEFT JOIN Bots AS b ON bs.BotId = b.Id 
                             WHERE bs.GameId=@gameId";
 

@@ -7,17 +7,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BJ.BLL.Configrutions
 {
     public static class DbInitiolazeConfig
     {
-        public static void InitializeDatabase(this IServiceCollection services)
+        public static void InitializeDatabaseAsync(this IServiceCollection services)
         {
-            BotInitialize(services.BuildServiceProvider());
+            BotInitializeAsync(services.BuildServiceProvider());
         }
 
-        public static void BotInitialize(IServiceProvider service)
+        public static void BotInitializeAsync(IServiceProvider service)
         {
             using (var serviceScope = service.CreateScope())
             {
@@ -33,9 +34,9 @@ namespace BJ.BLL.Configrutions
         private static string[] _botsName = new string[] { "Olivia","Amelia","Isla","Emily","Ava","Lily","Mia", "Sofia", "Isabella","Grace",
                                                            "Oliver","Harry","Jack","George","Noah","Charlie", "Jacob","Alfie","Freddie","Oscar"};
 
-        public static async void Initialize(IBotRepository botRepository)
+        public static void Initialize(IBotRepository botRepository)
         {
-            var totalCount = await botRepository.GetTotalCount();
+            var totalCount = botRepository.GetTotalCount();
             if (totalCount == 0)
             {
                 List<Bot> bots = new List<Bot>(Constants.GameSettings.MaxCountBots);
