@@ -1,3 +1,3 @@
-export class LoginAccountResponseView {
+export class LoginResponseAccountView {
     public token: string;
 }

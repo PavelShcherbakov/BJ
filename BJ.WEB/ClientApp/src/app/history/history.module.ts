@@ -5,7 +5,7 @@ import { HistoryComponent } from './history.component';
 import { SharedModule } from '../shared/shared.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { GameInfoComponent } from './game-info/game-info.component';
-import { SuitPipe } from '../shared/pipes/suit.pipe';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 const routes: Routes = [
   {
@@ -21,7 +21,8 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    SharedModule
+    SharedModule,
+    NgbModule
   ],
   exports: [
     RouterModule

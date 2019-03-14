@@ -6,20 +6,18 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class OnlyLoginGuard implements CanActivate {
 
+  constructor(private authService: AuthService, private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
     boolean |
     import('@angular/router').UrlTree |
-    Observable<boolean |
-    import('@angular/router').UrlTree> |
+    Observable<boolean | import('@angular/router').UrlTree> |
     Promise<boolean | import('@angular/router').UrlTree> {
 
-      if (this.authService.isAuth()) {
+    if (this.authService.isAuth()) {
       return true;
     }
     this.router.navigate(['/account/login']);
-
   }
 
-  constructor(private authService: AuthService, private router: Router) { }
 }

@@ -5,24 +5,37 @@
 </div>
 
 <ng-template #thenBlock>
-  <table class="table table-hover">
+  <table class="table table-hover text-nowrap no-gutters table-responsive">
     <thead class="thead-light">
       <tr>
-        <th class ="index" scope="col">#</th>
-        <th class ="create-data" scope="col">Data creation</th>
-        <th class ="num-of-player" scope="col">Number of players</th>
-        <th class ="result" scope="col">Result</th>
+        <!-- <th scope="col" class="index col-1">#</th> -->
+        <th scope="col" class="create-data col-5">Data creation</th>
+        <th scope="col" class="num-of-player col-3">Number of players</th>
+        <th scope="col" class="result col-3">Result</th>
       </tr>
+
     </thead>
     <tbody>
-      <tr *ngFor="let game of model.games,let i = index" (click)='goToGame(game.gameId)'>
-        <th class ="index" scope="row">{{i+1}}</th>
-        <td class ="create-data">{{game.creationDate| date:'short'}}</td>
-        <td class ="num-of-player">{{game.numberOfPlayers}}</td>
-        <td class ="result" >{{game.result.stateAsString}}</td>
+      <tr *ngFor="let game of games" (click)='goToGame(game.gameId)'>
+        <!-- <th class="index" scope="row">{{i+1}}</th> -->
+        <td class="create-data">{{game.creationDate| date:'short'}}</td>
+        <td class="num-of-player">{{game.numberOfPlayers}}</td>
+        <td class="result">{{game.result.stateAsString}}</td>
       </tr>
     </tbody>
   </table>
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize" [maxSize]="3"
+      [rotate]="true">
+    </ngb-pagination>
+
+    <select class="custom-select" style="width: auto" [(ngModel)]="pageSize">
+      <option [ngValue]="5">5 games per page</option>
+      <option [ngValue]="10">10 games per page</option>
+      <option [ngValue]="15">15 games per page</option>
+    </select>
+  </div>
+  
 </ng-template>
 
 <ng-template #elseBlock>

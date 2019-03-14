@@ -7,7 +7,6 @@ export class TableModel {
 
     constructor() {
         this.bots = [];
-        // tslint:disable-next-line: no-use-before-declare
         this.user = new User();
     }
 }

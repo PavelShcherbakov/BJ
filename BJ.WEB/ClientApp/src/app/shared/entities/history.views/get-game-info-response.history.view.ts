@@ -1,47 +1,47 @@
-export class GetGameInfoHistoryResponseView {
-    public steps: StepGetGameInfoHistoryResponseViewItem[];
-    public summary: PlayersSummaryGetGameInfoHistoryResponseViewItem[];
+export class GetGameInfoResponseHistoryView {
+    public steps: StepGetGameInfoResponseHistoryViewItem[];
+    public summary: PlayersSummaryGetGameInfoResponseHistoryViewItem[];
     constructor() {
         this.steps = [];
         this.summary = [];
     }
 }
 
-export class StepGetGameInfoHistoryResponseViewItem {
-    public playerInfo: PlayerInfoGetGameInfoHistoryResponseViewItem[];
+export class StepGetGameInfoResponseHistoryViewItem {
+    public playerInfo: PlayerInfoGetGameInfoResponseHistoryViewItem[];
     constructor() {
         this.playerInfo = [];
     }
 }
 
-export class PlayerInfoGetGameInfoHistoryResponseViewItem {
+export class PlayerInfoGetGameInfoResponseHistoryViewItem {
     public name: string;
-    public card: CardGetGameInfoHistoryResponseView;
+    public card: CardGetGameInfoResponseHistoryView;
 
 }
 
-export class CardGetGameInfoHistoryResponseView {
-    public suit: SuitGetGameInfoHistoryResponseView;
-    public rank: RankGetGameInfoHistoryResponseView;
+export class CardGetGameInfoResponseHistoryView {
+    public suit: SuitGetGameInfoResponseHistoryView;
+    public rank: RankGetGameInfoResponseHistoryView;
 }
 
-export class SuitGetGameInfoHistoryResponseView {
+export class SuitGetGameInfoResponseHistoryView {
     public suit: number;
     public suitAsString: string;
 }
 
-export class RankGetGameInfoHistoryResponseView {
+export class RankGetGameInfoResponseHistoryView {
     public rank: number;
     public rankAsString: string;
 }
 
-export class PlayersSummaryGetGameInfoHistoryResponseViewItem {
+export class PlayersSummaryGetGameInfoResponseHistoryViewItem {
     public name: string;
     public points: number;
-    public state: StateGetGameInfoHistoryResponseView;
+    public state: StateGetGameInfoResponseHistoryView;
 }
 
-export class StateGetGameInfoHistoryResponseView {
+export class StateGetGameInfoResponseHistoryView {
     public state: number;
     public stateAsString: string;
 }

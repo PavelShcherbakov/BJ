@@ -2,7 +2,6 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse
 import { Observable, throwError } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { catchError, map } from 'rxjs/internal/operators';
-import { Router } from '@angular/router';
 
 
 @Injectable(
@@ -11,15 +10,17 @@ import { Router } from '@angular/router';
     })
 export class ErrorInterceptor implements HttpInterceptor {
 
-    constructor(private router: Router) { }
+    constructor() { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req)
             .pipe(
-                catchError((error: HttpErrorResponse) => {
-                    const err = new Error(error.error.error);
-                    return throwError(err);
-                })
+                catchError(
+                    (error: HttpErrorResponse) => {
+                        const err = new Error(error.error.error);
+                        return throwError(err);
+                    }
+                )
             );
     }
 }

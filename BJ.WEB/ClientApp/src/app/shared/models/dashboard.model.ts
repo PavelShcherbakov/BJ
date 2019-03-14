@@ -16,6 +16,6 @@ export class Game {
 }
 
 export class Result {
-    public State: number;
-    public StateAsString: string;
+    public state: number;
+    public stateAsString: string;
 }

@@ -1,3 +1,3 @@
-export class GetAllUserAccountResponseView {
+export class GetAllUserResponseAccountView {
     public userNames: string[];
 }

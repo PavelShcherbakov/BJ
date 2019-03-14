@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { HistoryDataService } from 'src/app/shared/services/history/history-data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { GetGameInfoHistoryView } from 'src/app/shared/entities/history.views/get-game-nfo.history.view';
+import { GetGameInfoHistoryView } from 'src/app/shared/entities/history.views/get-game-info.history.view';
 import { GameInfo } from 'src/app/shared/models/game-info';
 
 @Component({

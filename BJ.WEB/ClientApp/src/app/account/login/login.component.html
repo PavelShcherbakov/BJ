@@ -1,11 +1,11 @@
-<div class='container-fluid'>
+<div class='container-fluid center-content'>
 
-  <div class='row justify-content-center align-items-center'>
-    <div class='col-4'>
+  <!-- <div class='row justify-content-center align-items-center'> -->
+    <!-- <div class='col-4'> -->
 
       <form class="form-signin" [formGroup]="loginForm" (submit)="onSubmit()">
-        <div class="container-fluid">
-          <h1 class=' row justify-content-center form-signin-heading'>BlackJack</h1>
+        <!-- <div class="container-fluid"> -->
+          <h1 class=' row justify-content-center'>BlackJack</h1>
 
           <div class='row justify-content-center'><img  src="../../assets/images/deck/1_11.png"></div>
           
@@ -18,12 +18,12 @@
           <div *ngIf="isControlInvalid('password')" class="alert alert-danger">Invalid password.</div>
           <input type="password" id="password" name="password" formControlName="password"
             placeholder="Еnter your password">
-          <button class="btn btn-primary btn-block justify-content-center" type="submit" [disabled]="loginForm.invalid">Sign in</button>
-        </div>
+          <button type="submit" class="btn btn-primary btn-block justify-content-center"  [disabled]="loginForm.invalid">Sign in</button>
+        <!-- </div> -->
       </form>
       
-    </div>
-  </div>
+    <!-- </div> -->
+  <!-- </div> -->
 
 </div>
 

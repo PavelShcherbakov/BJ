@@ -11,11 +11,10 @@ export class OnlyLogoutGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
     boolean |
     import('@angular/router').UrlTree |
-    Observable<boolean |
-    import('@angular/router').UrlTree> |
+    Observable<boolean | import('@angular/router').UrlTree> |
     Promise<boolean | import('@angular/router').UrlTree> {
 
-      if (!this.authService.isAuth()) {
+    if (!this.authService.isAuth()) {
       return true;
     }
     this.router.navigate(['/game/create']);

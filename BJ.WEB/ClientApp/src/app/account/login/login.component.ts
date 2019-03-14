@@ -16,9 +16,13 @@ import { ConfirmRegistrationModalComponent } from '../confirm-registration-modal
 })
 export class LoginComponent implements OnInit {
 
-  // tslint:disable-next-line: max-line-length
-  constructor(private dataService: AccountDataService, private router: Router, private authService: AuthService, private fb: FormBuilder, private modalService: BsModalService) {
-  }
+  constructor(
+    private dataService: AccountDataService,
+    private router: Router,
+    private authService: AuthService,
+    private fb: FormBuilder,
+    private modalService: BsModalService
+  ) { }
 
   bsModalRef: BsModalRef;
   private userNames: string[];
@@ -26,7 +30,6 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
 
-    // загрузка данных при старте компонента
     this.loadUserNames();
     this.loginForm = this.fb.group({
       email: ['2WE3qwe@mail.com', Validators.required],
@@ -54,17 +57,18 @@ export class LoginComponent implements OnInit {
     let loginView = new LoginAccountView();
     loginView = { ...this.loginForm.value };
 
-
     const isExistUser = this.userNames.findIndex(x => x === loginView.email);
     if (isExistUser > -1) {
-      this.authService.login(loginView).subscribe(data => {
-        this.router.navigate(['/game/create']);
-
-      }, (err) => {
-        this.loginForm.controls.password.setErrors({ 'incorrect': true });
-      });
+      this.authService.login(loginView).subscribe(
+        data => {
+          this.router.navigate(['/game/create']);
+        },
+        (err) => {
+          this.loginForm.controls.password.setErrors({ 'incorrect': true });
+        });
       return;
     }
+
     const initialState = {
       loginView: loginView
     };

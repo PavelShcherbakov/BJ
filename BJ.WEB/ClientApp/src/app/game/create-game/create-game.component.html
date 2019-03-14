@@ -1,14 +1,15 @@
-<div class='container-fluid'>
-  <div class='row justify-content-center align-items-center'>
-    <div class='col-4'>
+<div class='container-fluid center-content'>
+  <!-- <div class='row justify-content-center align-items-center'> -->
+    <!-- <div class='col-4'> -->
       <form [formGroup]="startGameForm" (submit)="onSubmit()">
         <div class="form-group">
-          <label class=' row justify-content-center form-signin-heading text-nowrap'>Enter number of bots</label>
+          <label class=' row justify-content-center text-nowrap'>Enter number of bots</label>
           <div class="alert alert-danger" *ngIf="isControlInvalid('numberOfBots')">
             Enter a number between 1 and 100!
           </div>
-          <input name="NumberOfBots" formControlName="numberOfBots" />
+          <input for="time" name="NumberOfBots" formControlName="numberOfBots" />
         </div>
+        <input type="range" min="1" max="100" value= "1" #ranger (input)="yourMethod(ranger.value)">
         <div class="form-group">
           <!-- <button class="btn btn-primary btn-block justify-content-center" [disabled]="myForm.invalid"> -->
           <button class="btn btn-primary btn-block justify-content-center text-nowrap" type="submit" [disabled]="startGameForm.invalid" >
@@ -16,6 +17,6 @@
           </button>
         </div>
       </form>
-    </div>
-  </div>
+    <!-- </div> -->
+  <!-- </div> -->
 </div>

@@ -8,7 +8,7 @@
   
   
   
-  input {
+  input,button {
     border: 1px solid transparent;
     background-color: #f1f1f1;
     padding: 10px;
@@ -22,7 +22,7 @@
     width: 100%;
   }
   
-  input[type=submit] {
+  button[type=submit] {
     background-color: DodgerBlue;
     color: #fff;
   }
@@ -30,5 +30,12 @@
   input.ng-touched.ng-invalid{
     border-color: red;
    }
+
+   .center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
 
    
