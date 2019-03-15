@@ -1,5 +1,4 @@
 ﻿using BJ.BLL.Configrutions;
-using BJ.BLL.Configrutions.Options;
 using BJ.WEB.Filters;
 using BJ.WEB.Middlewares;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Filters;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace BJ.WEB
 {
@@ -38,6 +39,28 @@ namespace BJ.WEB
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc(
+                    "v1",
+                    new Info
+                    {
+                        Title = "BJ",
+                        Version = "v1"
+                    }
+                );
+
+                c.OperationFilter<SecurityRequirementsOperationFilter>();
+
+                c.AddSecurityDefinition("oauth2", new ApiKeyScheme
+                {
+                    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+                    In = "header",
+                    Name = "Authorization",
+                    Type = "apiKey"
+                });
+            });
+
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
@@ -65,6 +88,14 @@ namespace BJ.WEB
                 routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action}/{id?}");
+            });
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "BJ V1");
+                c.RoutePrefix = "api";
             });
 
             app.UseSpa(spa =>

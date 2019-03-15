@@ -26,15 +26,13 @@ namespace BJ.WEB.Controllers
             var response = new GenericResponseView<GetAllGamesHistoryResponseView>();
             response.Model = await _historyService.GetAllGames(UserId);
             return response;
-            //return await Execute(() => _historyService.GetAllGames(UserId));
         }
         [HttpPost]
-        public async Task<GenericResponseView<GetGameInfoHistoryResponseView>> GetGameInfo(GetGameInfoHistoryView model)
+        public async Task<GenericResponseView<GetGameInfoHistoryResponseView>> GetGameInfo([FromBody]GetGameInfoHistoryView model)
         {
             var response = new GenericResponseView<GetGameInfoHistoryResponseView>();
             response.Model = await _historyService.GetGameInfo(UserId, model);
             return response;
-            //return await Execute(() => _historyService.GetGameInfo(UserId, model));
         }
     }
 }

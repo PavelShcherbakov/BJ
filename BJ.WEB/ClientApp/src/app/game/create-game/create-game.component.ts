@@ -41,7 +41,7 @@ export class CreateGameComponent implements OnInit {
     );
   }
 
-  yourMethod(range: number) {
+  setControl(range: number) {
     this.startGameForm.controls.numberOfBots.setValue(range);
   }
 

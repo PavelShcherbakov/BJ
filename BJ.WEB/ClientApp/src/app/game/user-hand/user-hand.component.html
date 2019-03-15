@@ -1,10 +1,9 @@
 <br>
 <p>Your name: {{user.name}}</p>
-<div class ="row">
-<div *ngFor="let card of user.cards" class="col">
-  <!-- <p>Card № {{i+1}}</p> -->
-  <img  src="assets/images/deck/{{card.suit}}_{{card.rank}}.png">
-</div>
+<div class="row">
+  <div *ngFor="let card of user.cards" class="col">
+    <img src="assets/images/deck/{{card.suit}}_{{card.rank}}.png" alt="Loading...">
+  </div>
 </div>
 <p>State:{{user.state.stateAsString}}</p>
 <br>

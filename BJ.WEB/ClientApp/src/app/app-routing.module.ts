@@ -7,7 +7,6 @@ import { OnlyLogoutGuard } from './shared/guards/only-logout.guard';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/account/login', pathMatch: 'full' },
-
   { path: 'account', canActivate: [OnlyLogoutGuard], loadChildren: './account/account.module#AccountModule' },
   { path: 'game', canActivate: [OnlyLoginGuard], loadChildren: './game/game.module#GameModule' },
   { path: 'history', canActivate: [OnlyLoginGuard], loadChildren: './history/history.module#HistoryModule' },

@@ -1,6 +1,5 @@
-
 <div class="row">
-<app-bot-hand *ngFor="let bot of model.bots" [bot]="bot" class="col-3" ></app-bot-hand>
+    <app-bot-hand *ngFor="let bot of model.bots" [bot]="bot" class="col-3"></app-bot-hand>
 </div>
 
 <app-user-hand [user]="model.user"></app-user-hand>
@@ -13,4 +12,3 @@
     <button class='btn-dark' [routerLink]="['/game/create']">New game</button>
     <button class='btn-dark' (click)='goToGame()'>Details</button>
 </div>
-

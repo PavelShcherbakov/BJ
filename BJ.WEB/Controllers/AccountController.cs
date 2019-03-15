@@ -4,6 +4,7 @@ using BJ.ViewModels.AccountViews;
 using BJ.WEB.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace BJ.WEB.Controllers
 {
@@ -18,7 +19,7 @@ namespace BJ.WEB.Controllers
         {
             _accountService = accountService;
         }
-
+        
         [HttpPost]
         public async Task<GenericResponseView<LoginAccountResponseView>> Login([FromBody] LoginAccountView model)
         {

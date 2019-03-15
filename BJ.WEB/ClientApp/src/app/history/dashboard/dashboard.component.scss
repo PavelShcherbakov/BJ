@@ -1,29 +1,21 @@
 
 table {
-  table-layout: fixed;
+  width: 100%;
   word-wrap: break-word;
   margin-top: 2rem;
 }
 
-.index {
-  width: 15%;
-  min-width: 6rem;
-  column-rule-width: 6rem;
-}
+
 .create-data {
-  width: 35%;
-  min-width: 14rem;
+  width: 40%;
 }
 .num-of-player {
-  width: 25%;
-  min-width: 10rem;
+  width: 30%;
 }
 .result{
-  width: 25%;
-  min-width: 10rem;
+  width: 30%;
 }
 
 .index,.create-data ,.num-of-player,.result{
     text-align: center;
-    word-wrap : break-word;
 }

@@ -14,14 +14,7 @@ export class NavMenuComponent {
 
   bsModalRef: BsModalRef;
 
-  // navbarOpen = false;
-
   openModalWithComponent() {
     this.bsModalRef = this.modalService.show(ConfirmLogoutModalComponent);
   }
-
-  // toggleNavbar() {
-  //   this.navbarOpen = !this.navbarOpen;
-  // }
-
 }

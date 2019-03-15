@@ -101,14 +101,16 @@ namespace BJ.BLL.Services
             response.GameId = game.Id;
 
             var bots = new List<BotGetStateGameResponseViewItem>();
-            foreach (var bp in botsPoints)
-            {
-                bots.Add(new BotGetStateGameResponseViewItem()
+            botsPoints.ForEach(
+                bp =>
                 {
-                    CardsInHand = bp.CardsInHand,
-                    Name = bp.Bot.Name
-                });
-            };
+                    bots.Add(new BotGetStateGameResponseViewItem()
+                    {
+                        CardsInHand = bp.CardsInHand,
+                        Name = bp.Bot.Name
+                    });
+                }
+            );
             response.Bots = bots;
 
             var userName = user.UserName;
@@ -162,14 +164,16 @@ namespace BJ.BLL.Services
             response.GameId = game.Id;
 
             var bots = new List<BotGetCardGameResponseViewItem>();
-            foreach (var bp in botsPoints)
-            {
-                bots.Add(new BotGetCardGameResponseViewItem()
+            botsPoints.ForEach(
+                bp =>
                 {
-                    CardsInHand = bp.CardsInHand,
-                    Name = bp.Bot.Name
-                });
-            };
+                    bots.Add(new BotGetCardGameResponseViewItem()
+                    {
+                        CardsInHand = bp.CardsInHand,
+                        Name = bp.Bot.Name
+                    });
+                }
+            );
             response.Bots = bots;
             var userName = user.UserName;
             var cards = new List<CardGetCardGameResponseViewItem>();
@@ -204,13 +208,15 @@ namespace BJ.BLL.Services
             await LastCardsDeal(game, usersPoints, botsPoints);
 
             int WinningPoints = 0;
-            botsPoints.ForEach(bp =>
-            {
-                if (bp.Points > WinningPoints && bp.Points <= Constants.GameSettings.WinningNumber)
+            botsPoints.ForEach(
+                bp =>
                 {
-                    WinningPoints = bp.Points;
+                    if (bp.Points > WinningPoints && bp.Points <= Constants.GameSettings.WinningNumber)
+                    {
+                        WinningPoints = bp.Points;
+                    }
                 }
-            });
+           );
 
             var resultUsersPoints = await _usersPointsRepository.GetPointsByGameIdAsync(game.Id);
 
@@ -241,14 +247,18 @@ namespace BJ.BLL.Services
             response.GameId = game.Id;
 
             var bots = new List<BotEndGameResponseViewItem>();
-            foreach (var bp in botsPoints)
-            {
-                bots.Add(new BotEndGameResponseViewItem()
+
+            botsPoints.ForEach(
+                bp =>
                 {
-                    CardsInHand = bp.CardsInHand,
-                    Name = bp.Bot.Name
-                });
-            };
+                    bots.Add(new BotEndGameResponseViewItem()
+                    {
+                        CardsInHand = bp.CardsInHand,
+                        Name = bp.Bot.Name
+                    });
+                }
+            );
+
             response.Bots = bots;
             var userName = user.UserName;
             var cards = new List<CardEndGameResponseViewItem>();
@@ -358,17 +368,17 @@ namespace BJ.BLL.Services
 
             var botsSteps = new List<BotsStep>();
             var modifiedBotsPointsList = new List<BotsPoints>();
-            bots.ForEach(bot =>
-            {
-                var botsPoints = botsPointsList.Where(x => x.BotId == bot.Id).FirstOrDefault();
+            bots.ForEach(
+                bot =>
+                {
+                    var botsPoints = botsPointsList.Where(x => x.BotId == bot.Id).FirstOrDefault();
 
-                var botInfo = BotGetCard(takenСards, botsPoints, game.CountStep, --numOfCards);
+                    var botInfo = BotGetCard(takenСards, botsPoints, game.CountStep, --numOfCards);
 
-                botsSteps.Add(botInfo.botsStep);
-                modifiedBotsPointsList.Add(botInfo.botsPoints);
-            });
-
-
+                    botsSteps.Add(botInfo.botsStep);
+                    modifiedBotsPointsList.Add(botInfo.botsPoints);
+                }
+            );
 
             await _botsPointsRepository.UpdateRangeAsync(modifiedBotsPointsList);
             await _usersStepRepository.AddRangeAsync(usersSteps);
@@ -438,13 +448,15 @@ namespace BJ.BLL.Services
         private List<Bot> GetPlayingBots(List<BotsPoints> botsPointsList)
         {
             var playingBots = new List<Bot>();
-            botsPointsList.ForEach(botsPoints =>
-            {
-                if (botsPoints.Points < Constants.GameSettings.BotStopGame)
+            botsPointsList.ForEach(
+                botsPoints =>
                 {
-                    playingBots.Add(botsPoints.Bot);
+                    if (botsPoints.Points < Constants.GameSettings.BotStopGame)
+                    {
+                        playingBots.Add(botsPoints.Bot);
+                    }
                 }
-            });
+            );
 
             return playingBots;
         }

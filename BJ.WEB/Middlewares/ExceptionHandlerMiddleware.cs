@@ -1,4 +1,5 @@
-﻿using BJ.BLL.Exceptions;
+﻿using BJ.BLL.Commons;
+using BJ.BLL.Exceptions;
 using BJ.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -43,8 +44,7 @@ namespace BJ.WEB.Middlewares
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 var response = new GenericResponseView<string>();
-                response.Error = ex.Message;
-                //response.Error = Constants.Messages.ServerError;
+                response.Error = Constants.Messages.ServerError;
                 await context.Response.WriteAsync(
                     JsonConvert.SerializeObject(response,
                     new JsonSerializerSettings
