@@ -139,9 +139,6 @@ namespace BJ.BLL.Services
 
         public async Task<GetCardGameResponseView> GetCard(string userId)
         {
-
-            GetCardGameResponseView response;
-
             var game = await _gameRepository.GetActiveGameAsync(userId);
             var usersPoints = await _usersPointsRepository.GetPointsByGameIdAsync(game.Id);
             var botsPoints = (await _botsPointsRepository.GetPointsByGameIdAsync(game.Id)).ToList();
@@ -149,7 +146,7 @@ namespace BJ.BLL.Services
             await RoundCardsDeal(game, usersPoints, botsPoints);
 
             await _gameRepository.UpdateAsync(game);
-            response = await CreateGetCardGameResponseView(userId, game, botsPoints, usersPoints);
+            var response = await CreateGetCardGameResponseView(userId, game, botsPoints, usersPoints);
 
             return response;
         }
@@ -207,20 +204,20 @@ namespace BJ.BLL.Services
 
             await LastCardsDeal(game, usersPoints, botsPoints);
 
-            int WinningPoints = 0;
+            int winningPoints = 0;
             botsPoints.ForEach(
                 bp =>
                 {
-                    if (bp.Points > WinningPoints && bp.Points <= Constants.GameSettings.WinningNumber)
+                    if (bp.Points > winningPoints && bp.Points <= Constants.GameSettings.WinningNumber)
                     {
-                        WinningPoints = bp.Points;
+                        winningPoints = bp.Points;
                     }
                 }
            );
 
             var resultUsersPoints = await _usersPointsRepository.GetPointsByGameIdAsync(game.Id);
 
-            if (resultUsersPoints.Points >= WinningPoints && resultUsersPoints.Points <= Constants.GameSettings.WinningNumber)
+            if (resultUsersPoints.Points >= winningPoints && resultUsersPoints.Points <= Constants.GameSettings.WinningNumber)
             {
                 game.State = UserGameStateType.Win;
             }
@@ -288,16 +285,9 @@ namespace BJ.BLL.Services
         {
             var game = await _gameRepository.GetActiveGameAsync(userId);
             var response = new HasActiveGameGameResponseView();
-            if (game == null)
-            {
-                response.HasActiveGame = false;
-                return response;
-            }
-            else
-            {
-                response.HasActiveGame = true;
-                return response;
-            }
+
+            response.HasActiveGame = (game == null) ? false : true;
+            return response;
         }
 
         private async Task InitialCardsDeal(Game game, UsersPoints usersPoints, List<Bot> bots, List<BotsPoints> botsPoints)

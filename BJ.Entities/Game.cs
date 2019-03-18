@@ -17,5 +17,5 @@ namespace BJ.Entities
 
         public UserGameStateType State { get; set; }
     }
-    
+
 }

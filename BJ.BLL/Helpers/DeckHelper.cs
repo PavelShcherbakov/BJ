@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace BJ.BLL.Helpers
 {
-    public class DeckHelper: IDeckHelper
+    public class DeckHelper : IDeckHelper
     {
         private readonly List<RankType> _ranks;
         private readonly List<SuitType> _suits;

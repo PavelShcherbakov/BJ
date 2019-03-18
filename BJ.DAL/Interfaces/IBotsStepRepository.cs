@@ -9,5 +9,5 @@ namespace BJ.DAL.Interfaces
     {
         Task<IEnumerable<BotsStep>> GetStepsByGameIdAsync(Guid gameId);
     }
-    
+
 }

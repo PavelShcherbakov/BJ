@@ -1,5 +1,4 @@
-﻿using BJ.BLL.Services;
-using BJ.BLL.Services.Interfaces;
+﻿using BJ.BLL.Services.Interfaces;
 using BJ.ViewModels;
 using BJ.ViewModels.HistoryView;
 using Microsoft.AspNetCore.Authorization;

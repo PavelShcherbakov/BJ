@@ -79,6 +79,7 @@ namespace BJ.BLL.Services
             {
                 response.Steps.Add(new StepGetGameInfoHistoryResponseViewItem());
             }
+
             response.Steps.ForEach(
                 x =>
                 {

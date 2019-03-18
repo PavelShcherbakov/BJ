@@ -22,4 +22,7 @@
   .navbar-container .navbar-nav {
     flex-direction: column !important;
   }
+  .nav-link:hover{
+    cursor: pointer;
+   }
 }

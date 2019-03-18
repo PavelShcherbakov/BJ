@@ -13,21 +13,21 @@ export class CreateGameComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private dataService: GameDataService, private router: Router) { }
 
-  startGameForm: FormGroup;
+  private startGameForm: FormGroup;
 
-  ngOnInit() {
+  public ngOnInit() {
     this.startGameForm = this.fb.group({
       numberOfBots: [1, [Validators.required, Validators.min(1), Validators.max(100), Validators.pattern('^[0-9]+$')]]
     });
   }
 
-  isControlInvalid(controlName: string): boolean {
+  private isControlInvalid(controlName: string): boolean {
     const control = this.startGameForm.controls[controlName];
     const result = control.invalid && control.touched;
     return result;
   }
 
-  onSubmit() {
+  private onSubmit(): void {
     let startGameView = new StartGameView();
     startGameView = { ...this.startGameForm.value };
     this.dataService.startGame(startGameView).subscribe(
@@ -41,7 +41,7 @@ export class CreateGameComponent implements OnInit {
     );
   }
 
-  setControl(range: number) {
+  private setControl(range: number): void {
     this.startGameForm.controls.numberOfBots.setValue(range);
   }
 

@@ -12,9 +12,9 @@ export class NavMenuComponent {
 
   constructor(private modalService: BsModalService) { }
 
-  bsModalRef: BsModalRef;
+  private bsModalRef: BsModalRef;
 
-  openModalWithComponent() {
+  private openModalWithComponent(): void {
     this.bsModalRef = this.modalService.show(ConfirmLogoutModalComponent);
   }
 }

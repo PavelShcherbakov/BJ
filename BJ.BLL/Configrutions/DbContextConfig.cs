@@ -3,7 +3,6 @@ using BJ.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
 
 namespace BJ.BLL.Configrutions
 {

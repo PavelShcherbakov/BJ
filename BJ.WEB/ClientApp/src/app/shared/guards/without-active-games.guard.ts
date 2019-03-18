@@ -9,7 +9,7 @@ export class WithoutActiveGamesGuard implements CanActivate {
 
     constructor(private gameDataService: GameDataService, private router: Router) { }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
+    public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
         boolean |
         import('@angular/router').UrlTree |
         Observable<boolean | import('@angular/router').UrlTree> |

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BJ.DAL.Interfaces
 {
-    public interface IBotRepository:IRepository<Bot, Guid>
+    public interface IBotRepository : IRepository<Bot, Guid>
     {
         Task<IEnumerable<Bot>> GetRandomBotsAsync(int numOfBots);
     }

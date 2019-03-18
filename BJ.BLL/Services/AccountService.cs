@@ -1,18 +1,16 @@
-﻿using BJ.ViewModels.AccountViews;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using System.Linq;
-using System.Threading.Tasks;
-using BJ.BLL.Providers;
-using BJ.BLL.Exceptions;
-using BJ.Entities;
-using System.Collections.Generic;
+﻿using BJ.BLL.Exceptions;
 using BJ.BLL.Providers.Interfaces;
 using BJ.BLL.Services.Interfaces;
+using BJ.Entities;
+using BJ.ViewModels.AccountViews;
+using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BJ.BLL.Services
 {
-    public class AccountService: IAccountService
+    public class AccountService : IAccountService
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
@@ -39,7 +37,7 @@ namespace BJ.BLL.Services
                 throw new CustomServiceException("Invalid login attempt");
             }
 
-            var user =await  _userManager.FindByEmailAsync(model.Email);
+            var user = await _userManager.FindByEmailAsync(model.Email);
             var token = _jwtTokentHelper.GenerateJwtToken(model.Email, user);
             var response = new LoginAccountResponseView()
             {
@@ -71,7 +69,7 @@ namespace BJ.BLL.Services
                 Token = token
             };
             return response;
-  
+
         }
 
         public async Task<GetAllUserAccountResponseView> GetAllUsers()

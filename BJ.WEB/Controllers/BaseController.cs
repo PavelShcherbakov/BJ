@@ -1,16 +1,10 @@
-﻿using BJ.BLL.Commons;
-using BJ.BLL.Exceptions;
-using BJ.BLL.Extensions;
-using BJ.ViewModels;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace BJ.WEB.Controllers
 {
-    public class BaseController:Controller
+    public class BaseController : Controller
     {
         public string UserId
         {

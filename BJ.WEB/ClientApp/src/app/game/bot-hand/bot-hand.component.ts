@@ -10,11 +10,11 @@ export class BotHandComponent implements OnInit {
 
   constructor() { }
 
-  loop: boolean[];
+  private loop: boolean[];
 
   @Input() bot: Bot;
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.loop = new Array<boolean>(this.bot.cardsInHand);
   }
 

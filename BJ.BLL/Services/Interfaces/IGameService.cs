@@ -1,7 +1,4 @@
 ﻿using BJ.ViewModels.GameViews;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BJ.BLL.Services.Interfaces

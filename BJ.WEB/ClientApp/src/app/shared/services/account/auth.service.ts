@@ -1,3 +1,4 @@
+import { environment } from './../../../../environments/environment.prod';
 import { Injectable } from '@angular/core';
 import { tokenNotExpired } from 'jwt-decode';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -7,8 +8,8 @@ import { LoginResponseAccountView } from '../../entities/account.views/login-res
 import { GenericResponseView } from '../../entities/generic-response.view';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { Config } from '../../configure/config';
 import { RegisterAccountView } from '../../entities/account.views/register.account.view';
+
 
 @Injectable()
 export class AuthService {
@@ -24,15 +25,8 @@ export class AuthService {
     return tokenNotExpired(token);
   }
 
-  public async login1(model: LoginAccountView): Promise<LoginResponseAccountView> {
-
-    const result = await this.http.post<GenericResponseView<LoginResponseAccountView>>(Config.baseUrl + '/Account/Login', model)
-      .toPromise();
-    return result.model;
-  }
-
   public login(loginView: LoginAccountView): Observable<LoginResponseAccountView> {
-    return this.http.post<GenericResponseView<LoginResponseAccountView>>(Config.baseUrl + '/Account/Login', loginView)
+    return this.http.post<GenericResponseView<LoginResponseAccountView>>(environment.apiUrl + '/Account/Login', loginView)
       .pipe(
         map(
           data => {
@@ -49,7 +43,7 @@ export class AuthService {
   }
 
   public register(registerView: RegisterAccountView): Observable<LoginResponseAccountView> {
-    return this.http.post<GenericResponseView<LoginResponseAccountView>>(Config.baseUrl + '/Account/Register', registerView)
+    return this.http.post<GenericResponseView<LoginResponseAccountView>>(environment.apiUrl + '/Account/Register', registerView)
       .pipe(
         map(
           data => {
@@ -64,14 +58,14 @@ export class AuthService {
       );
   }
 
-  isAuth(): boolean {
+  public isAuth(): boolean {
     if (localStorage.getItem('accesToken') === null) {
       return false;
     }
     return true;
   }
 
-  logout() {
+  public logout() {
     localStorage.removeItem('accesToken');
   }
 }

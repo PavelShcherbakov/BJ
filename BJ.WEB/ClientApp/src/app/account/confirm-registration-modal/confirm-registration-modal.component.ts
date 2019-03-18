@@ -11,23 +11,22 @@ import { LoginAccountView } from 'src/app/shared/entities/account.views/login.ac
 })
 export class ConfirmRegistrationModalComponent {
 
-  loginView: LoginAccountView;
+  private loginView: LoginAccountView;
 
   constructor(private authService: AuthService, private router: Router, public bsModalRef: BsModalRef) { }
 
-  confirm(): void {
-    this.authService.register(this.loginView).subscribe(data => {
-      this.router.navigate(['/game/create']);
-
-    }, (err) => {
-
-      alert(err.message);
-    });
+  private confirm(): void {
+    this.authService.register(this.loginView).subscribe(
+      data => {
+        this.router.navigate(['/game/create']);
+      },
+      (err) => {
+        alert(err.message);
+      });
     this.bsModalRef.hide();
   }
 
-  decline(): void {
+  private decline(): void {
     this.bsModalRef.hide();
   }
-
 }

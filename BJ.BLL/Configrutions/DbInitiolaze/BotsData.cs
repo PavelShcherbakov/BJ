@@ -1,34 +1,11 @@
 ﻿using BJ.BLL.Commons;
 using BJ.DAL.Interfaces;
 using BJ.Entities;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BJ.BLL.Configrutions
+namespace BJ.BLL.Configrutions.DbInitiolaze
 {
-    public static class DbInitiolazeConfig
-    {
-        public static void InitializeDatabaseAsync(this IServiceCollection services)
-        {
-            BotInitializeAsync(services.BuildServiceProvider());
-        }
-
-        public static void BotInitializeAsync(IServiceProvider service)
-        {
-            using (var serviceScope = service.CreateScope())
-            {
-                var scopeServiceProvider = serviceScope.ServiceProvider;
-                var botRepository = scopeServiceProvider.GetService<IBotRepository>();
-                BotsData.Initialize(botRepository);
-            }
-        }
-    }
-
     static class BotsData
     {
         private static string[] _botsName = new string[] { "Olivia","Amelia","Isla","Emily","Ava","Lily","Mia", "Sofia", "Isabella","Grace",

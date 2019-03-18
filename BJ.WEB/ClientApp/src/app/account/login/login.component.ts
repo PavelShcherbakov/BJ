@@ -24,11 +24,11 @@ export class LoginComponent implements OnInit {
     private modalService: BsModalService
   ) { }
 
-  bsModalRef: BsModalRef;
+  private bsModalRef: BsModalRef;
   private userNames: string[];
-  loginForm: FormGroup;
+  private loginForm: FormGroup;
 
-  ngOnInit() {
+  public ngOnInit(): void {
 
     this.loadUserNames();
     this.loginForm = this.fb.group({
@@ -38,13 +38,13 @@ export class LoginComponent implements OnInit {
 
   }
 
-  isControlInvalid(controlName: string): boolean {
+  private isControlInvalid(controlName: string): boolean {
     const control = this.loginForm.controls[controlName];
     const result = control.invalid && control.touched;
     return result;
   }
 
-  loadUserNames() {
+  private loadUserNames(): void {
 
     this.dataService.getUserNames().subscribe(data => {
       this.userNames = data.userNames;
@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
 
   }
 
-  onSubmit() {
+  private onSubmit(): void {
 
     let loginView = new LoginAccountView();
     loginView = { ...this.loginForm.value };

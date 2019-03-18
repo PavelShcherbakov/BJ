@@ -21,12 +21,12 @@ export class DashboardComponent implements OnInit {
       .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
 
-  model: Dashboard = new Dashboard();
-  page = 1;
-  pageSize = 5;
-  collectionSize = 0;
+  private model: Dashboard = new Dashboard();
+  private page = 1;
+  private pageSize = 5;
+  private collectionSize = 0;
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.dataService.getAllGames().subscribe(
       x => {
         this.model.games = this.sortGamesByData(x.games);
@@ -34,11 +34,16 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-  sortGamesByData(games: Game[]): Game[] {
-    return games.sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+  private sortGamesByData(games: Game[]): Game[] {
+    return games.sort(
+      (a, b) => {
+        const result = new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime();
+        return result;
+      }
+    );
   }
 
-  goToGame(gameId: Guid) {
+  private goToGame(gameId: Guid): void {
     this.router.navigate(['/history/game', gameId]);
   }
 }

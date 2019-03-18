@@ -28,7 +28,7 @@ namespace BJ.BLL.Configrutions
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-            
+
             var jwtOption = configuration.GetSection("JwtOptions").Get<JwtOptions>();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();

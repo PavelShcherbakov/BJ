@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace BJ.ViewModels.GameViews
 {
@@ -35,5 +34,5 @@ namespace BJ.ViewModels.GameViews
         public int Suit { get; set; }
         public int Rank { get; set; }
     }
-    
+
 }

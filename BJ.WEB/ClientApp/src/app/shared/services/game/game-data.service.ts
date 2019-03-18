@@ -1,3 +1,4 @@
+import { environment } from './../../../../environments/environment.prod';
 import { HasActiveGameResponseGameView } from '../../entities/game.views/has-active-game-response.game.view';
 import { GetCardResponseGameView } from './../../entities/game.views/get-card-response.game.view';
 import { Injectable } from '@angular/core';
@@ -5,7 +6,6 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { StartResponseGameView } from '../../entities/game.views/start-response.game.view';
 import { GenericResponseView } from '../../entities/generic-response.view';
-import { Config } from '../../configure/config';
 import { map, catchError } from 'rxjs/operators';
 import { StartGameView } from '../../entities/game.views/start.game.view';
 import { GetStateResponseGameView } from '../../entities/game.views/get-state-response.game.view';
@@ -19,7 +19,7 @@ export class GameDataService {
   constructor(private http: HttpClient) { }
 
   public startGame(startGameView: StartGameView): Observable<StartResponseGameView> {
-    return this.http.post<GenericResponseView<StartResponseGameView>>(Config.baseUrl + '/Game/Start', startGameView)
+    return this.http.post<GenericResponseView<StartResponseGameView>>(environment.apiUrl + '/Game/Start', startGameView)
       .pipe(
         map(
           data => {
@@ -33,7 +33,7 @@ export class GameDataService {
   }
 
   public getState(): Observable<GetStateResponseGameView> {
-    return this.http.get<GenericResponseView<GetStateResponseGameView>>(Config.baseUrl + '/Game/GetState')
+    return this.http.get<GenericResponseView<GetStateResponseGameView>>(environment.apiUrl + '/Game/GetState')
       .pipe(
         map(
           data => {
@@ -47,7 +47,7 @@ export class GameDataService {
   }
 
   public getCard(): Observable<GetCardResponseGameView> {
-    return this.http.post<GenericResponseView<GetCardResponseGameView>>(Config.baseUrl + '/Game/GetCard', {})
+    return this.http.post<GenericResponseView<GetCardResponseGameView>>(environment.apiUrl + '/Game/GetCard', {})
       .pipe(
         map(
           data => {
@@ -61,7 +61,7 @@ export class GameDataService {
   }
 
   public endGame(): Observable<EndResponseGameView> {
-    return this.http.post<GenericResponseView<EndResponseGameView>>(Config.baseUrl + '/Game/End', {})
+    return this.http.post<GenericResponseView<EndResponseGameView>>(environment.apiUrl + '/Game/End', {})
       .pipe(
         map(
           data => {
@@ -75,7 +75,7 @@ export class GameDataService {
   }
 
   public hasActiveGame(): Observable<HasActiveGameResponseGameView> {
-    return this.http.get<GenericResponseView<HasActiveGameResponseGameView>>(Config.baseUrl + '/Game/HasActiveGame')
+    return this.http.get<GenericResponseView<HasActiveGameResponseGameView>>(environment.apiUrl + '/Game/HasActiveGame')
       .pipe(
         map(
           data => {

@@ -1,4 +1,5 @@
 ﻿using BJ.BLL.Configrutions;
+using BJ.BLL.DbInitiolaze.Configrutions;
 using BJ.WEB.Filters;
 using BJ.WEB.Middlewares;
 using Microsoft.AspNetCore.Builder;

@@ -1,7 +1,6 @@
 ﻿using BJ.BLL.Configrutions.Options;
 using BJ.BLL.Providers.Interfaces;
 using BJ.Entities;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;

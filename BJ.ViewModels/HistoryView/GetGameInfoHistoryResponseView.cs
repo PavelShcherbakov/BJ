@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace BJ.ViewModels.HistoryView
 {
@@ -44,7 +42,7 @@ namespace BJ.ViewModels.HistoryView
     {
         public string Name { get; set; }
         public int Points { get; set; }
-        public StateGetGameInfoHistoryResponseView State{ get; set; }
+        public StateGetGameInfoHistoryResponseView State { get; set; }
     }
 
     public class StateGetGameInfoHistoryResponseView

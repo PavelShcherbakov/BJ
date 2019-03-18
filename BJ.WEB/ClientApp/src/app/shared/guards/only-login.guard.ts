@@ -8,7 +8,7 @@ export class OnlyLoginGuard implements CanActivate {
 
   constructor(private authService: AuthService, private router: Router) { }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
+  public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
     boolean |
     import('@angular/router').UrlTree |
     Observable<boolean | import('@angular/router').UrlTree> |

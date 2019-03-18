@@ -12,13 +12,13 @@ export class ConfirmLogoutModalComponent {
 
   constructor(private authService: AuthService, private router: Router, public bsModalRef: BsModalRef) { }
 
-  confirm(): void {
+  private confirm(): void {
     this.authService.logout();
     this.router.navigate(['/account/login']);
     this.bsModalRef.hide();
   }
 
-  decline(): void {
+  private decline(): void {
     this.bsModalRef.hide();
   }
 

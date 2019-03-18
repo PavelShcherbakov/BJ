@@ -23,7 +23,7 @@ export class GameInfoComponent implements OnInit {
 
 
 
-  ngOnInit() {
+  public ngOnInit(): void {
 
     const request: GetGameInfoHistoryView = new GetGameInfoHistoryView();
     request.gameId = this.id;
